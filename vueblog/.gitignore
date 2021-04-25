@@ -25,3 +25,4 @@ pnpm-debug.log*
 docker-compose.yml
 Dockerfile
 application-pro.yml
+nginx.conf

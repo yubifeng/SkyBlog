@@ -1,0 +1,28 @@
+version: "3"
+services:
+  nginx: # 服务名称，用户自定义
+    image: nginx:latest  # 镜像版本
+    ports:
+      - 443:443  # 暴露端口
+    volumes: # 挂载
+      - /root/nginx/html:/usr/share/nginx/html
+      - /root/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /root/nginx/cert:/etc/nginx/cert
+    privileged: true # 这个必须要，解决nginx的文件调用的权限问题
+  mysql:
+    image: mysql:5.7.27
+    ports:
+      - 3306:3306
+    environment: # 指定用户root的密码
+      - MYSQL_ROOT_PASSWORD=1111
+  redis:
+    image: redis:latest
+    password: 111111
+  vueblog:
+    image: vueblog:latest
+    build: . # 表示以当前目录下的Dockerfile开始构建镜像
+    ports:
+      - 8083:8083
+    depends_on: # 依赖与mysql、redis，其实可以不填，默认已经表示可以
+      - mysql
+      - redis

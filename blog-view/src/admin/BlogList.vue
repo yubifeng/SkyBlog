@@ -1,0 +1,162 @@
+<template>
+  <div class="bloglist-contain">
+    <!--搜索-->
+    <el-row>
+      <el-col :span="8">
+        <el-input placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small" style="min-width: 500px">
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+        </el-input>
+      </el-col>
+    </el-row>
+    <el-table :data="blogList">
+      <el-table-column label="序号" type="index" width="50"></el-table-column>
+      <el-table-column label="标题" prop="title" show-overflow-tooltip></el-table-column>
+      <el-table-column label="分类" prop="typeName" width="150"></el-table-column>
+      <el-table-column label="创建时间" width="170">
+        <template v-slot="scope">{{ scope.row.createTime }}</template>
+      </el-table-column>
+      <el-table-column label="最近更新" width="170">
+        <template v-slot="scope">{{ scope.row.updateTime }}</template>
+      </el-table-column>
+      <el-table-column label="可见性" width="170">
+        <template v-slot="scope">{{ !scope.row.status?'公开':'私密'}}</template>
+      </el-table-column>
+      <el-table-column label="用户id" width="170">
+        <template v-slot="scope">{{ scope.row.userId }}</template>
+      </el-table-column>
+
+I
+      <el-table-column label="操作" width="200">
+        <template v-slot="scope">
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="goBlogEditPage(scope.row.id)">编辑</el-button>
+          <el-popconfirm title="确定删除吗？" icon="el-icon-delete" iconColor="red" @confirm="deleteBlogById(scope.row.id)">
+            <el-button size="mini" type="danger" icon="el-icon-delete" slot="reference">删除</el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="home-page" v-if="pageShow">
+    <!--分页-->
+    <el-pagination @size-change="handleSizeChange" @current-change="page" :current-page="currentPage"
+                   :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" :total="total"
+                   layout="total, sizes, prev, pager, next, jumper" background>
+    </el-pagination>
+    </div>
+
+
+
+
+
+  </div>
+
+</template>
+
+<script>
+export default {
+  name: "BlogList",
+  data() {
+    return {
+      queryInfo: {
+        title: '',
+        categoryId: null,
+        pageNum: 1,
+        pageSize: 10
+      },
+
+      blogList: [],
+      currentPage: 1,
+      total: 0,
+      pageSize: 10,
+      pageShow: 0,
+      types: []
+    }
+  },
+  created() {
+    this.getTypes()
+    this.page(1);
+
+  },
+  methods: {
+
+    goBlogEditPage(blogId) {
+      this.$router.push(`/blog/edit/${blogId}`)
+    },
+    getTypes() {
+      const _this = this
+      this.$axios.get('/types').then(res => {
+        _this.types = res.data.data
+      })
+      console.log(this.types)
+    },
+    page(currentPage) {
+      const _this = this
+      this.$axios.get('/blogList?currentPage=' + currentPage).then((res) => {
+
+        _this.blogList = res.data.data.records
+        _this.currentPage = res.data.data.current
+        _this.total = res.data.data.total
+        _this.pageSize = res.data.data.size
+        _this.pageShow = 1;
+        for(var i in _this.blogList) {
+          for(var j in _this.types){
+            if(_this.blogList[i].typeId == _this.types[j].id){
+              _this.blogList[i].typeName = _this.types[j].typeName
+            }
+          }
+
+
+        }
+        console.log(_this.blogList)
+
+
+
+
+
+
+
+      })
+
+
+
+    },
+
+    deleteBlogById(blogId) {
+      const _this = this
+      this.$axios.get('/blogDelete/'+blogId ,{
+        headers: {
+          "Authorization": localStorage.getItem("token")
+        }}).then((res) => {
+
+        _this.$alert('操作成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            _this.page(1)
+            //_this.$router.push("/blogList")
+          }
+        })
+
+
+      })
+
+    },
+    search(){
+
+    },
+    handleSizeChange() {
+
+    }
+
+
+
+
+
+  }
+}
+
+</script>
+
+<style scoped>
+.el-button + span {
+  margin-left: 10px;
+}
+</style>

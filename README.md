@@ -78,6 +78,6 @@ markdown：
 
 ## 致谢
 项目开发过程中参考了很多大佬的博客，比如[NBlog](https://github.com/Naccl/NBlog)
-、[MyBlog](https://github.com/zhyocean/MyBlog)等等，也感谢[MarkerHub的视频](https://www.bilibili.com/video/BV17A411E7aE?t=39&p=9),ra
+、[MyBlog](https://github.com/zhyocean/MyBlog)等等，也感谢[MarkerHub的视频](https://www.bilibili.com/video/BV17A411E7aE?t=39&p=9),
 让我开始了解怎么做一个springboot的项目。
 

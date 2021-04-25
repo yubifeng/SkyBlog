@@ -24,3 +24,4 @@ pnpm-debug.log*
 *.sw?
 docker-compose.yml
 Dockerfile
+application-pro.yml

@@ -45,7 +45,7 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setOutputDir(projectPath + "/vueblog/src/main/java");
         //  gc.setOutputDir("D:\\test");
         gc.setAuthor("fanfanli");
         gc.setOpen(false);
@@ -68,7 +68,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(null);
-        pc.setParent("com.markerhub");
+        pc.setParent("com.danli");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -104,7 +104,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/"
+                return projectPath + "/vueblog/src/main/resources/mapper/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });

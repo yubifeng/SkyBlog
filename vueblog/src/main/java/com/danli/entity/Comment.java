@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @since 2021-04-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,6 +42,11 @@ public class Comment implements Serializable {
     private String content;
 
     /**
+     * 头像(图片路径)
+     */
+    private String avatar;
+
+    /**
      * 评论时间
      */
     private LocalDateTime createTime;
@@ -54,12 +59,7 @@ public class Comment implements Serializable {
     /**
      * 博主回复
      */
-    private Boolean isAdminComment;
-
-    /**
-     * 0普通文章，1关于我页面
-     */
-    private Integer page;
+    private Integer isAdminComment;
 
     /**
      * 所属的文章
@@ -70,6 +70,11 @@ public class Comment implements Serializable {
      * 父评论id，-1为根评论
      */
     private Long parentCommentId;
+
+    /**
+     * 如果评论昵称为QQ号，则将昵称和头像置为QQ昵称和QQ头像，并将此字段置为QQ号备份
+     */
+    private String qq;
 
 
 }

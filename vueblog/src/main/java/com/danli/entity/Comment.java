@@ -70,11 +70,15 @@ public class Comment implements Serializable {
      * 父评论id，-1为根评论
      */
     private Long parentCommentId;
-
+    /**
+     * 个人网站
+     */
+    private String website;
     /**
      * 如果评论昵称为QQ号，则将昵称和头像置为QQ昵称和QQ头像，并将此字段置为QQ号备份
      */
     private String qq;
+
 
 
 }

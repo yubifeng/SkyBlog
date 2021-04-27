@@ -111,17 +111,17 @@ CREATE TABLE `comment`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 INSERT INTO `comment` VALUES ('1','醉墨','8949048964@qq.com','测试1','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-22 22:05:49','101,2,2,1','11','19','-1','894904866');
+                              '2020-05-22 22:05:49','101,2,2,1','0','19','-1','894904866');
 INSERT INTO `comment` VALUES ('2','醉墨','8949048964@qq.com','测试11','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-23 22:05:49','101,2,2,1','11','19','1','894904866');
+                              '2020-05-23 22:05:49','101,2,2,1','1','19','1','894904866');
 INSERT INTO `comment` VALUES ('3','醉墨','8949048964@qq.com','测试12','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-24 22:05:49','101,2,2,1','11','19','1','894904866');
+                              '2020-05-24 22:05:49','101,2,2,1','0','19','1','894904866');
 INSERT INTO `comment` VALUES ('4','醉墨','8949048964@qq.com','测试2','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-25 22:05:49','101,2,2,1','11','19','-1','894904866');
+                              '2020-05-25 22:05:49','101,2,2,1','1','19','-1','894904866');
 INSERT INTO `comment` VALUES ('5','醉墨','8949048964@qq.com','测试21','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-26 22:05:49','101,2,2,1','11','19','4','894904866');
+                              '2020-05-26 22:05:49','101,2,2,1','0','19','4','894904866');
 INSERT INTO `comment` VALUES ('6','醉墨','8949048964@qq.com','测试3','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-27 22:05:49','101,2,2,1','11','19','-1','894904866');
+                              '2020-05-27 22:05:49','101,2,2,1','1','19','-1','894904866');
 
 
 

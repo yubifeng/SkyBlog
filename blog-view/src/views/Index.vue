@@ -91,7 +91,7 @@ export default {
     if (this.getIsPhone()) {
       this.focusMode = true
     }
-    var a_idx = 0;
+    let a_idx = 0;
 
     jQuery(document).ready(function ($) {
 

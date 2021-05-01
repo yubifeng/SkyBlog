@@ -1,7 +1,7 @@
 <template>
   <div class="ui top segment" style="text-align: center">
     <h2 class="m-text-500">分类 {{ categoryName }} 下的文章</h2>
-    <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card">
+    <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" :key="blog.id" class="home-main-column-middle-card">
       <div class="home-title">
         <h2>
           <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}

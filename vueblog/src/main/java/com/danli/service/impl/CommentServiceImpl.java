@@ -27,7 +27,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
 
     @Override
+    public List<PageComment> getPageCommentListByDesc(Long blogId, Long parentCommentId){
+        return commentMapper.getPageCommentListByPageAndParentCommentIdByDesc(blogId, parentCommentId);
+    }
+    @Override
     public List<PageComment> getPageCommentList(Long blogId, Long parentCommentId){
         return commentMapper.getPageCommentListByPageAndParentCommentId(blogId, parentCommentId);
     }
+
+
 }

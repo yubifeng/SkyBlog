@@ -7,7 +7,7 @@
     </div>
     <div class="card-middle">
       <div style="max-width: 40px;margin-left: 40px">
-      <el-image :fit="fit" src="https://img2.baidu.com/it/u=3446602327,1182419120&fm=26&fmt=auto&gp=0.jpg" style="cursor:pointer" @click="goToGithub" ></el-image>
+      <el-image :fit="fit" src="https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/githubLogo.webp" style="cursor:pointer" @click="goToGithub" ></el-image>
       </div>
     </div>
     <div class="card-footer">
@@ -42,7 +42,7 @@ export default {
 
       user: {
 
-        avatar: "https://hbimg.huabanimg.com/1497d4de2bee08389e89ae53d21ea440f62f8dd212a29-1jqA9S_fw658/format/webp"
+        avatar: "https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/websiteAvatar.webp"
       },
 
 

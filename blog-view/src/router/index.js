@@ -14,6 +14,57 @@ import Friends from "../views/Friends";
 import Category from "../views/Category";
 Vue.use(VueRouter)
 const routes = [
+
+
+
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: '登录'
+    }
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+      title: '后台管理',
+      //requireAuth: true
+    },
+    children: [
+      {
+        path: '/writeBlog', // 注意放在 path: '/blog/:blogId'之前
+        name: 'BlogWrite',
+        component: BlogEdit,
+        meta: {
+          requireAuth: true,
+          title: '写博客'
+        }
+      },
+      {
+        path: '/blogList', // 注意放在 path: '/blog/:blogId'之前
+        name: 'blogList',
+        component: BlogList,
+        meta: {
+          requireAuth: true,
+          title: '文章管理'
+        }
+      },
+      {
+        path: '/blog/edit/:blogId',
+        name: 'BlogEdit',
+        meta: {
+          requireAuth: true
+        },
+        component: BlogEdit
+      },
+
+    ]
+
+  },
+
   {
     path: '/',
     name: 'Index',
@@ -72,55 +123,6 @@ const routes = [
       },
 
 
-
-    ]
-
-  },
-
-
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: {
-      title: '登录'
-    }
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin,
-    meta: {
-      title: '后台管理',
-      //requireAuth: true
-    },
-    children: [
-      {
-        path: '/writeBlog', // 注意放在 path: '/blog/:blogId'之前
-        name: 'BlogWrite',
-        component: BlogEdit,
-        meta: {
-          requireAuth: true,
-          title: '写博客'
-        }
-      },
-      {
-        path: '/blogList', // 注意放在 path: '/blog/:blogId'之前
-        name: 'blogList',
-        component: BlogList,
-        meta: {
-          requireAuth: true,
-          title: '文章管理'
-        }
-      },
-      {
-        path: '/blog/edit/:blogId',
-        name: 'BlogEdit',
-        meta: {
-          requireAuth: true
-        },
-        component: BlogEdit
-      },
 
     ]
 

@@ -25,8 +25,8 @@
           <mavon-editor v-model="ruleForm.description"/>
         </el-form-item>
 
-        <el-form-item label="文章正文" prop="content">
-          <mavon-editor v-model="ruleForm.content"></mavon-editor>
+        <el-form-item label="文章正文"   prop="content">
+          <mavon-editor  v-model="ruleForm.content"></mavon-editor>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -48,7 +48,8 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="字数" prop="words">
-              <el-input v-model="ruleForm.words" placeholder="请输入文章字数" type="number"></el-input>
+              <!-- 双击计算文章字数-->
+              <el-input @dblclick.native="computeWords" v-model="ruleForm.words" placeholder="请输入文章字数" type="number"></el-input>
             </el-form-item>
           </el-col>
 
@@ -116,7 +117,7 @@ export default {
 
       rules: {
         title: [
-          { required: true, message: '请输入标题', trigger: 'blur' },
+          { required: true, message: '请输入标题',trigger: 'blur'  },
           { min: 2, max: 45, message: '长度在 3 到 45 个字符', trigger: 'blur' }
         ],
         description: [
@@ -132,9 +133,24 @@ export default {
     }
   },
   methods: {
+
+
+
+
+
+    computeWords(){
+      var contents = this.ruleForm.content
+      this.ruleForm.words = contents.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').length
+    },
+
+
+
+
     submitForm(formName) {
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
 
           const _this = this
           this.$axios.post('/blog/edit', this.ruleForm, {

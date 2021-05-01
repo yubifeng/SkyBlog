@@ -58,6 +58,7 @@
 
 
 <script>
+
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
@@ -66,10 +67,11 @@ import Calendar from "@/components/Calendar";
 import {mapState} from 'vuex'
 export default {
   name: "Index",
-  components: {RightCard, Footer, Navbar, Card,Calendar },
+  components: {RightCard, Footer, Navbar, Card, Calendar},
   data() {
     return {
       focusMode: false,
+
 
     }
 
@@ -81,29 +83,39 @@ export default {
       this.scrollToTop()
     }
   },
-  methods:{
+  methods: {
     getIsPhone() {
 
       let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
       return flag;
-    }
-
-  },
-  computed: {
+    },
 
 
 
 
   },
+  computed: {},
   mounted() {
-    if(this.getIsPhone()){
+    if (this.getIsPhone()) {
       this.focusMode = true
     }
 
   }
-
 }
+
+
 </script>
+
+
+
+
+
+
+
+
+
+
+
 
 <style scoped>
 .index-container {

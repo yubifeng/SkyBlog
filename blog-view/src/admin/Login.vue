@@ -4,7 +4,7 @@
 
       <el-header>
         <router-link to="/admin">
-          <img class="mlogo" src="https://hbimg.huabanimg.com/1497d4de2bee08389e89ae53d21ea440f62f8dd212a29-1jqA9S_fw658/format/webp" alt="">
+          <img class="mlogo" src="https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/website/static/websiteAvatar.webp" alt="">
         </router-link>
       </el-header>
 

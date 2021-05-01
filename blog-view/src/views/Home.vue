@@ -11,11 +11,17 @@
           <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0]}}  </span>
           <span style="font-size: small;color: blue">更新时间：{{ blog.updateTime.split(' ')[0] }}   </span>
           <span style="font-size: small;color: blue">分类：{{ blog.typeName }}</span>
+          <span style="font-size: small;color: blue"> 字数：{{ blog.words }}</span>
+
+
         </div>
         <img  :src= blog.firstPicture  class="image">
 
         <div class="home-description-markdown-body" v-html="blog.descriptionMd"></div>
-
+        <!--阅读全文按钮-->
+        <div class="div-btn">
+          <a href="javascript:;" @click.prevent="toBlog(blog)" class="color-btn">阅读全文</a>
+        </div>
       </el-card>
        <div class="home-page" v-if="pageShow">
       <el-pagination background
@@ -49,7 +55,10 @@ export default {
     }
   },
   methods: {
-
+    toBlog(blog) {
+      this.$router.push(`/blog/${blog.id}`)
+    },
+    //获取分类表
     getTypes() {
       const _this = this
       this.$axios.get('/types').then(res => {
@@ -139,5 +148,20 @@ export default {
 .home-page {
   text-align: center;
 }
+.color-btn {
 
+  text-decoration-line: none;
+  padding: 11px 20px;
+  color: white;
+  font-size: 13px;
+  background: linear-gradient(to right, #56ccf2, #2f80ed);
+  border-radius:15px;
+  min-width: 90px;
+
+}
+.div-btn {
+  padding: 14px 5px 30px 5px;
+  margin-top: 7px;
+
+}
 </style>

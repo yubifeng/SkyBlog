@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -49,6 +51,7 @@ public class Comment implements Serializable {
     /**
      * 评论时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**
@@ -65,6 +68,12 @@ public class Comment implements Serializable {
      * 所属的文章
      */
     private Long blogId;
+
+
+    /**
+     * 父评论昵称
+     */
+    private String parentCommentNickname;
 
     /**
      * 父评论id，-1为根评论

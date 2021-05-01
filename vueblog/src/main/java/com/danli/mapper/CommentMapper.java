@@ -23,7 +23,10 @@ import java.util.List;
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {
     //通过select注解实现查询
-    @Select("select id, nickname, content, avatar, create_time, is_admin_comment  from comment where blog_id=#{blogId} and parent_comment_id=#{parentCommentId} order by create_time desc")
+    @Select("select id, nickname, content, website,avatar, create_time, is_admin_comment,parent_comment_nickname  from comment where blog_id=#{blogId} and parent_comment_id=#{parentCommentId} order by create_time desc")
+    List<PageComment> getPageCommentListByPageAndParentCommentIdByDesc(@Param("blogId") long blogId, @Param("parentCommentId") long  parentCommentId);
+    @Select("select id, nickname, content, website,avatar, create_time, is_admin_comment,parent_comment_nickname  from comment where blog_id=#{blogId} and parent_comment_id=#{parentCommentId} order by create_time")
     List<PageComment> getPageCommentListByPageAndParentCommentId(@Param("blogId") long blogId, @Param("parentCommentId") long  parentCommentId);
+
 
 }

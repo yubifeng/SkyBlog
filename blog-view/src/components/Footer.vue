@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       input: "",
-      src: 'https://hbimg.huabanimg.com/d84fc4c6c67350dfcd5715a05df985bbf1df5a6927bb9-4HOr60_fw658/format/webp'
+      src: 'https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/footPict.webp'
     }
   }
 }

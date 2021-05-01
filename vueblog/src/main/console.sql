@@ -107,24 +107,23 @@ CREATE TABLE `comment`  (
                             `blog_id` bigint(255) NULL DEFAULT NULL COMMENT '所属的文章',
                             `parent_comment_id` bigint(0) NULL DEFAULT NULL COMMENT '父评论id，-1为根评论',
                             `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '个人网站',
+                            `parent_comment_nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被回复昵称',
                             `qq` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '如果评论昵称为QQ号，则将昵称和头像置为QQ昵称和QQ头像，并将此字段置为QQ号备份',
                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 INSERT INTO `comment` VALUES ('1','醉墨','8949048964@qq.com','测试1','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-22 22:05:49','101,2,2,1','0','19','-1','32','894904866');
+                              '2020-05-22 22:05:49','101,2,2,1','0','19','-1','32','范德萨','894904866');
 INSERT INTO `comment` VALUES ('2','醉墨','8949048964@qq.com','测试11','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-23 22:05:49','101,2,2,1','1','19','1','32','894904866');
+                              '2020-05-23 22:05:49','101,2,2,1','1','19','1','32','范德萨','894904866');
 INSERT INTO `comment` VALUES ('3','醉墨','8949048964@qq.com','测试12','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-24 22:05:49','101,2,2,1','0','19','1','32','894904866');
+                              '2020-05-24 22:05:49','101,2,2,1','0','19','1','32','范德萨','894904866');
 INSERT INTO `comment` VALUES ('4','醉墨','8949048964@qq.com','测试2','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-25 22:05:49','101,2,2,1','1','19','-1','32','894904866');
+                              '2020-05-25 22:05:49','101,2,2,1','1','19','-1','32','范德萨','894904866');
 INSERT INTO `comment` VALUES ('5','醉墨','8949048964@qq.com','测试21','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-26 22:05:49','101,2,2,1','0','19','4','32','894904866');
+                              '2020-05-26 22:05:49','101,2,2,1','0','19','4','32','范德萨','894904866');
 INSERT INTO `comment` VALUES ('6','醉墨','8949048964@qq.com','测试3','https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-                              '2020-05-27 22:05:49','101,2,2,1','1','19','-1','32','894904866');
-
-
+                              '2020-05-27 22:05:49','101,2,2,1','1','19','-1','32','范德萨','894904866');
 
 
 

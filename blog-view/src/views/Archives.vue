@@ -2,7 +2,7 @@
   <div class="archives-container">
 
           <el-timeline class="archives-timeline">
-            <el-timeline-item id="timeline"  color="deepskyblue" v-bind:timestamp="blog.createTime" placement="top" v-for="blog in blogs">
+            <el-timeline-item id="timeline"  color="deepskyblue" v-bind:timestamp="blog.createTime" placement="top" v-for="blog in blogs" :key="blog.id">
               <div class="blog-box-card">
 
                 <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{blog.title}}</router-link>

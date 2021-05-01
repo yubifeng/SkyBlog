@@ -10,10 +10,9 @@ Vue.prototype.$axios = axios //
 Vue.use(Element)
 Vue.config.productionTip = false
 // 全局注册
-
+import $ from 'jquery'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-
 // use
 Vue.use(mavonEditor)
 

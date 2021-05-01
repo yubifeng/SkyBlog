@@ -151,8 +151,8 @@ export default {
             _this.commentForm.nickname = res.data.data.name
             _this.commentForm.avatar = res.data.data.avatar
             _this.commentForm.qq = res.data.data.qq
-            console.log(JSON.stringify(_this.commentForm))
-            console.log("哈哈哈哈哈")
+            //console.log(JSON.stringify(_this.commentForm))
+            //console.log("哈哈哈哈哈")
           }
         })
 
@@ -161,7 +161,7 @@ export default {
         //根据昵称随机头像
         var randomNum = this.hashFunc(this.commentForm.nickname,20)
         this.commentForm.avatar = "https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/2021/avatar/avatar"+randomNum+".webp"
-        console.log(JSON.stringify(this.commentForm))
+        //console.log(JSON.stringify(this.commentForm))
       }
 
     },
@@ -171,7 +171,7 @@ export default {
       if(this.commentForm.avatar == ""){
         this.onInputBlur()
       }
-      console.log("sdaf ")
+      //console.log("sdaf ")
 
     },
 

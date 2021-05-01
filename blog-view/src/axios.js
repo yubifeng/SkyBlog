@@ -2,7 +2,8 @@ import axios from 'axios'
 import Element from "element-ui";
 import store from "./store";
 import router from "./router";
-axios.defaults.baseURL="http://localhost:8083"
+
+axios.defaults.baseURL = "http://localhost:8083"
 axios.interceptors.request.use(config => {
     console.log("前置拦截")
     // 可以统一设置请求头
@@ -27,8 +28,8 @@ axios.interceptors.response.use(response => {
     },
     error => {
         console.log('err' + error)// for debug
-        if(error.response.data){
-            error.message=error.response.data.msg
+        if (error.response.data) {
+            error.message = error.response.data.msg
         }
         // 根据请求状态觉得是否登录或者提示其他
         if (error.response.status === 401) {

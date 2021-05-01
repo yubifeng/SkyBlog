@@ -2,46 +2,44 @@
   <div class="home-container">
 
 
-      <el-card :body-style="{padding: '0px'}" class="home-main-column-middle-card" v-for="blog in blogs">
-        <div class="home-title">
-          <h2>
+    <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card">
+      <div class="home-title">
+        <h2>
           <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}
           </router-link>
-          </h2>
-          <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0]}}  </span>
-          <span style="font-size: small;color: blue">更新时间：{{ blog.updateTime.split(' ')[0] }}   </span>
-          <span style="font-size: small;color: blue">分类：{{ blog.typeName }}</span>
-          <span style="font-size: small;color: blue"> 字数：{{ blog.words }}</span>
+        </h2>
+        <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0] }}  </span>
+        <span style="font-size: small;color: blue">更新时间：{{ blog.updateTime.split(' ')[0] }}   </span>
+        <span style="font-size: small;color: blue">分类：{{ blog.typeName }}</span>
+        <span style="font-size: small;color: blue"> 字数：{{ blog.words }}</span>
 
 
-        </div>
-        <img  :src= blog.firstPicture  class="image">
-
-        <div class="home-description-markdown-body" v-html="blog.descriptionMd"></div>
-        <!--阅读全文按钮-->
-        <div class="div-btn">
-          <a href="javascript:;" @click.prevent="toBlog(blog)" class="color-btn">阅读全文</a>
-        </div>
-      </el-card>
-       <div class="home-page" v-if="pageShow">
-      <el-pagination background
-                     layout="prev, pager, next"
-                     :current-page=currentPage
-                     :page-size=pageSize
-                     @current-change=page
-                     :total="total">
-      </el-pagination>
       </div>
+      <img :src=blog.firstPicture class="image">
+
+      <div class="home-description-markdown-body" v-html="blog.descriptionMd"></div>
+      <!--阅读全文按钮-->
+      <div class="div-btn">
+        <a class="color-btn" href="javascript:;" @click.prevent="toBlog(blog)">阅读全文</a>
+      </div>
+    </el-card>
+    <div v-if="pageShow" class="home-page">
+      <el-pagination :current-page=currentPage
+                     :page-size=pageSize
+                     :total="total"
+                     background
+                     layout="prev, pager, next"
+                     @current-change=page>
+      </el-pagination>
+    </div>
 
 
   </div>
 </template>
 
 <script>
-import Navbar from "../components/Navbar";
-
-
 import 'github-markdown-css'
+
 export default {
   name: "Home",
   data() {
@@ -80,13 +78,13 @@ export default {
         var md = new MardownIt()
 
 
-        for(var i in _this.blogs) {
+        for (var i in _this.blogs) {
           var result = md.render(_this.blogs[i].description)
           _this.blogs[i].descriptionMd = result
         }
-        for(var i in _this.blogs) {
-          for(var j in _this.types){
-            if(_this.blogs[i].typeId == _this.types[j].id){
+        for (var i in _this.blogs) {
+          for (var j in _this.types) {
+            if (_this.blogs[i].typeId == _this.types[j].id) {
               _this.blogs[i].typeName = _this.types[j].typeName
             }
           }
@@ -112,6 +110,7 @@ export default {
 
 
 }
+
 .home-description-markdown-body {
   text-align: left;
 }
@@ -130,6 +129,7 @@ export default {
 
 
 }
+
 .home-title {
   margin-bottom: 20px;
 }
@@ -140,14 +140,17 @@ export default {
 
 
 }
+
 .home-main-column-middle-card:hover {
   -webkit-box-shadow: #ccc 0px 10px 10px;
   -moz-box-shadow: #ccc 0px 10px 10px;
   box-shadow: #ccc 0px 10px 10px;
 }
+
 .home-page {
   text-align: center;
 }
+
 .color-btn {
 
   text-decoration-line: none;
@@ -155,10 +158,11 @@ export default {
   color: white;
   font-size: 13px;
   background: linear-gradient(to right, #56ccf2, #2f80ed);
-  border-radius:15px;
+  border-radius: 15px;
   min-width: 90px;
 
 }
+
 .div-btn {
   padding: 14px 5px 30px 5px;
   margin-top: 7px;

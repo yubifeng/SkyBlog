@@ -22,8 +22,9 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
+ *
  * @@Description 博客相关
  * @Author Danli
  * @Date 2021-04-05
@@ -40,20 +41,17 @@ public class BlogController {
      * @return
      */
     @GetMapping("/blogs")
-    public Result blogs(@RequestParam(defaultValue = "1")Integer currentPage) {
+    public Result blogs(@RequestParam(defaultValue = "1") Integer currentPage) {
 
         Page page = new Page(currentPage, 5);
-        IPage pageData = blogService.page(page,  new QueryWrapper<Blog>().eq("status",0).orderByDesc("create_time"));
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 0).orderByDesc("create_time"));
 
         return Result.succ(pageData);
     }
 
 
-
-
-
     @GetMapping("/blogsByType")
-    public Result blogsByType(@RequestParam(defaultValue = "1")Integer currentPage,@RequestParam String typeName) {
+    public Result blogsByType(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam String typeName) {
         List<BlogInfo> list = blogService.getBlogInfoListByCategoryName(typeName);
 
         int pageSize = 5;
@@ -61,14 +59,14 @@ public class BlogController {
         Page page = new Page();
         int size = list.size();
 
-        if(pageSize > size) {
+        if (pageSize > size) {
             pageSize = size;
         }
 
         // 求出最大页数，防止currentPage越界
         int maxPage = size % pageSize == 0 ? size / pageSize : size / pageSize + 1;
 
-        if(currentPage > maxPage) {
+        if (currentPage > maxPage) {
             currentPage = maxPage;
         }
 
@@ -78,36 +76,24 @@ public class BlogController {
         List pageList = new ArrayList();
 
         // 将当前页的数据放进pageList
-        for(int i = 0; i < pageSize && curIdx + i < size; i++) {
+        for (int i = 0; i < pageSize && curIdx + i < size; i++) {
             pageList.add(list.get(curIdx + i));
         }
 
         page.setCurrent(currentPage).setSize(pageSize).setTotal(list.size()).setRecords(pageList);
 
 
-
-
         return Result.succ(page);
     }
 
 
-
-
-
-
     @GetMapping("/blogList")
-    public Result blogList(@RequestParam(defaultValue = "1")Integer currentPage) {
+    public Result blogList(@RequestParam(defaultValue = "1") Integer currentPage) {
 
         Page page = new Page(currentPage, 10);
-        IPage pageData = blogService.page(page,  new QueryWrapper<Blog>().orderByDesc("create_time"));
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("create_time"));
         return Result.succ(pageData);
     }
-
-
-
-
-
-
 
 
     @GetMapping("/friends")
@@ -115,15 +101,12 @@ public class BlogController {
         List<Blog> list = blogService.lambdaQuery().eq(Blog::getStatus, 1).eq(Blog::getTitle, "友情链接").list();
 
 
-
-
         return Result.succ(list.get(0));
     }
+
     @GetMapping("/about")
     public Result aboutMe() {
         List<Blog> list = blogService.lambdaQuery().eq(Blog::getId, 1).list();
-
-
 
 
         return Result.succ(list.get(0));
@@ -133,7 +116,7 @@ public class BlogController {
     @GetMapping("/blogsIndex")
     public Result blogs() {
 
-        List<Blog> list= blogService.list(new QueryWrapper<Blog>().ne("status", 1).orderByDesc("create_time"));
+        List<Blog> list = blogService.list(new QueryWrapper<Blog>().ne("status", 1).orderByDesc("create_time"));
         return Result.succ(list);
     }
 
@@ -141,11 +124,9 @@ public class BlogController {
     @GetMapping("/search")
     public Result search(@RequestParam String queryString) {
 
-        List<Blog> list= blogService.list(new QueryWrapper<Blog>().like("content", queryString).ne("status", 1).orderByDesc("create_time"));
+        List<Blog> list = blogService.list(new QueryWrapper<Blog>().like("content", queryString).ne("status", 1).orderByDesc("create_time"));
         return Result.succ(list);
     }
-
-
 
 
     @GetMapping("/blog/{id}")
@@ -155,18 +136,16 @@ public class BlogController {
         return Result.succ(blog);
 
     }
+
     @RequiresAuthentication
     @GetMapping("/blogDelete/{id}")
     public Result delete(@PathVariable(name = "id") Long id) {
 
-        if(blogService.removeById(id)) {
+        if (blogService.removeById(id)) {
             return Result.succ(null);
-        }
-        else {
+        } else {
             return Result.fail("删除失败");
         }
-
-
 
 
     }
@@ -176,7 +155,7 @@ public class BlogController {
     public Result edit(@Validated @RequestBody Blog blog) {
         System.out.println(blog.toString());
         Blog temp = null;
-        if(blog.getId() != null) {
+        if (blog.getId() != null) {
             temp = blogService.getById(blog.getId());
             Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
         } else {
@@ -186,7 +165,7 @@ public class BlogController {
             temp.setStatus(0);
         }
         temp.setUpdateTime(LocalDateTime.now());
-        BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime","updateTime");
+        BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime", "updateTime");
         blogService.saveOrUpdate(temp);
         return Result.succ(null);
     }

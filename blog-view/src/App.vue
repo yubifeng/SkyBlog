@@ -7,12 +7,10 @@
 
 <script>
 
-export default {
-
-}
+export default {}
 </script>
 <style>
-html,body,#app {
+html, body, #app {
   /*设置内部填充为0，几个布局元素之间没有间距*/
   padding: 0;
   /*外部间距也是如此设置*/

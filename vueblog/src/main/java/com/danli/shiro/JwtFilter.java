@@ -1,8 +1,8 @@
 package com.danli.shiro;
 
 import cn.hutool.json.JSONUtil;
-import com.danli.util.JwtUtils;
 import com.danli.common.lang.Result;
+import com.danli.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -24,32 +24,35 @@ import java.io.IOException;
 public class JwtFilter extends AuthenticatingFilter {
     @Autowired
     JwtUtils jwtUtils;
+
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         // 获取 token
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String jwt = request.getHeader("Authorization");
-        if(StringUtils.isEmpty(jwt)){
+        if (StringUtils.isEmpty(jwt)) {
             return null;
         }
         return new JwtToken(jwt);
     }
+
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader("Authorization");
-        if(StringUtils.isEmpty(token)) {
+        if (StringUtils.isEmpty(token)) {
             return true;
         } else {
             // 判断是否已过期
             Claims claim = jwtUtils.getClaimByToken(token);
-            if(claim == null || jwtUtils.isTokenExpired(claim.getExpiration())) {
+            if (claim == null || jwtUtils.isTokenExpired(claim.getExpiration())) {
                 throw new ExpiredCredentialsException("token已失效，请重新登录！");
             }
         }
         // 执行自动登录
         return executeLogin(servletRequest, servletResponse);
     }
+
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -63,6 +66,7 @@ public class JwtFilter extends AuthenticatingFilter {
         }
         return false;
     }
+
     /**
      * 对跨域提供支持
      */

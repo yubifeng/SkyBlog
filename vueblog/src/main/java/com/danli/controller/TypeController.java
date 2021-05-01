@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author fanfanli
@@ -24,10 +24,11 @@ import java.util.List;
 public class TypeController {
     @Autowired
     TypeService typeService;
+
     @GetMapping("/types")
     public Result blogs() {
 
-        List<Type> list= typeService.list(new QueryWrapper<Type>());
+        List<Type> list = typeService.list(new QueryWrapper<Type>());
         return Result.succ(list);
     }
 }

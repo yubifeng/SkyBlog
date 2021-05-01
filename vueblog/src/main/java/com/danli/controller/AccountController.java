@@ -23,16 +23,16 @@ public class AccountController {
     JwtUtils jwtUtils;
     @Autowired
     UserService userService;
+
     /**
      * 默认账号密码：user / 111111
-     *
      */
     @CrossOrigin
     @PostMapping("/login")
     public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在");
-        if(!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
+        if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
             return Result.fail("密码错误！");
         }
         String jwt = jwtUtils.generateToken(user.getId());

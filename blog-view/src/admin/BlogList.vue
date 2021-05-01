@@ -3,7 +3,8 @@
     <!--搜索-->
     <el-row>
       <el-col :span="8">
-        <el-input placeholder="请输入标题" v-model="queryInfo.title" :clearable="true" @clear="search" @keyup.native.enter="search" size="small" style="min-width: 500px">
+        <el-input v-model="queryInfo.title" :clearable="true" placeholder="请输入标题" size="small"
+                  style="min-width: 500px" @clear="search" @keyup.native.enter="search">
           <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </el-col>
@@ -19,32 +20,29 @@
         <template v-slot="scope">{{ scope.row.updateTime }}</template>
       </el-table-column>
       <el-table-column label="可见性" width="170">
-        <template v-slot="scope">{{ !scope.row.status?'公开':'私密'}}</template>
+        <template v-slot="scope">{{ !scope.row.status ? '公开' : '私密' }}</template>
       </el-table-column>
       <el-table-column label="用户id" width="170">
         <template v-slot="scope">{{ scope.row.userId }}</template>
       </el-table-column>
 
-I
+      I
       <el-table-column label="操作" width="200">
         <template v-slot="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="goBlogEditPage(scope.row.id)">编辑</el-button>
-          <el-popconfirm title="确定删除吗？" icon="el-icon-delete" iconColor="red" @confirm="deleteBlogById(scope.row.id)">
-            <el-button size="mini" type="danger" icon="el-icon-delete" slot="reference">删除</el-button>
+          <el-button icon="el-icon-edit" size="mini" type="primary" @click="goBlogEditPage(scope.row.id)">编辑</el-button>
+          <el-popconfirm icon="el-icon-delete" iconColor="red" title="确定删除吗？" @confirm="deleteBlogById(scope.row.id)">
+            <el-button slot="reference" icon="el-icon-delete" size="mini" type="danger">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
-    <div class="home-page" v-if="pageShow">
-    <!--分页-->
-    <el-pagination @size-change="handleSizeChange" @current-change="page" :current-page="currentPage"
-                   :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" :total="total"
-                   layout="total, sizes, prev, pager, next, jumper" background>
-    </el-pagination>
+    <div v-if="pageShow" class="home-page">
+      <!--分页-->
+      <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 30, 50]"
+                     :total="total" background layout="total, sizes, prev, pager, next, jumper"
+                     @size-change="handleSizeChange" @current-change="page">
+      </el-pagination>
     </div>
-
-
-
 
 
   </div>
@@ -97,9 +95,9 @@ export default {
         _this.total = res.data.data.total
         _this.pageSize = res.data.data.size
         _this.pageShow = 1;
-        for(var i in _this.blogList) {
-          for(var j in _this.types){
-            if(_this.blogList[i].typeId == _this.types[j].id){
+        for (var i in _this.blogList) {
+          for (var j in _this.types) {
+            if (_this.blogList[i].typeId == _this.types[j].id) {
               _this.blogList[i].typeName = _this.types[j].typeName
             }
           }
@@ -109,23 +107,18 @@ export default {
         console.log(_this.blogList)
 
 
-
-
-
-
-
       })
-
 
 
     },
 
     deleteBlogById(blogId) {
       const _this = this
-      this.$axios.get('/blogDelete/'+blogId ,{
+      this.$axios.get('/blogDelete/' + blogId, {
         headers: {
           "Authorization": localStorage.getItem("token")
-        }}).then((res) => {
+        }
+      }).then((res) => {
 
         _this.$alert('操作成功', '提示', {
           confirmButtonText: '确定',
@@ -139,15 +132,12 @@ export default {
       })
 
     },
-    search(){
+    search() {
 
     },
     handleSizeChange() {
 
     }
-
-
-
 
 
   }

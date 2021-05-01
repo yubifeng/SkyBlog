@@ -1,11 +1,11 @@
 package com.danli.service;
 
-import com.danli.entity.Type;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.danli.entity.Type;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author fanfanli

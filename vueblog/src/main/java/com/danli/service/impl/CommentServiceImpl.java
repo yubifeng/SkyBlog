@@ -1,11 +1,10 @@
 package com.danli.service.impl;
 
-import com.danli.common.lang.vo.PageComment;
-import com.danli.mapper.CommentMapper;
-import com.danli.entity.Comment;
-import com.danli.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.ibatis.annotations.Select;
+import com.danli.common.lang.vo.PageComment;
+import com.danli.entity.Comment;
+import com.danli.mapper.CommentMapper;
+import com.danli.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author fanfanli
@@ -25,13 +24,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     CommentMapper commentMapper;
 
 
-
     @Override
-    public List<PageComment> getPageCommentListByDesc(Long blogId, Long parentCommentId){
+    public List<PageComment> getPageCommentListByDesc(Long blogId, Long parentCommentId) {
         return commentMapper.getPageCommentListByPageAndParentCommentIdByDesc(blogId, parentCommentId);
     }
+
     @Override
-    public List<PageComment> getPageCommentList(Long blogId, Long parentCommentId){
+    public List<PageComment> getPageCommentList(Long blogId, Long parentCommentId) {
         return commentMapper.getPageCommentListByPageAndParentCommentId(blogId, parentCommentId);
     }
 

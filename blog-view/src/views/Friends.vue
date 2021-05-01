@@ -9,14 +9,13 @@
       </div>
 
 
-      <el-link icon="el-icon-edit" v-if="ownBlog">
-        <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}" >
+      <el-link v-if="ownBlog" icon="el-icon-edit">
+        <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}">
           编辑
         </router-link>
       </el-link>
       <el-divider></el-divider>
       <div class="markdown-body" v-html="blog.content"></div>
-
 
 
     </div>
@@ -25,11 +24,13 @@
     <div class="author-message">
       <ul class="list">
         <li>作者：fanli
-          <router-link to="/about" style="text-decoration-line: none;">（联系作者）</router-link>
+          <router-link style="text-decoration-line: none;" to="/about">（联系作者）</router-link>
         </li>
-        <li>发表时间：{{ blog.createTime}}</li>
+        <li>发表时间：{{ blog.createTime }}</li>
         <li>最后修改：{{ blog.updateTime }}</li>
-        <li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" style="text-decoration-line: none;" target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。</li>
+        <li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" style="text-decoration-line: none;"
+                    target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。
+        </li>
       </ul>
     </div>
     <div>
@@ -57,7 +58,7 @@ export default {
   created() {
 
     const _this = this
-    this.$axios.get('/friends' ).then(res => {
+    this.$axios.get('/friends').then(res => {
       _this.blog = res.data.data
 
 
@@ -66,7 +67,7 @@ export default {
 
       var result = md.render(_this.blog.content)
       _this.blog.content = result
-      if(_this.$store.getters.getUser){
+      if (_this.$store.getters.getUser) {
         _this.ownBlog = (_this.blog.userId === _this.$store.getters.getUser.id)
       }
 
@@ -88,6 +89,7 @@ export default {
 .home-title {
   margin-bottom: 40px;
 }
+
 .markdown-body {
   text-align: left;
 }
@@ -96,6 +98,7 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: white;
 }
+
 .author-message {
   text-align: left;
   background-color: honeydew;
@@ -103,6 +106,7 @@ export default {
   font-size: 14px;
 
 }
+
 .el-divider {
   margin: 1rem 0 !important;
 }

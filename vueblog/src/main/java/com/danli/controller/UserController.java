@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author 关注公众号：MarkerHub
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
  */
 
 
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     UserService userService;
+
     @RequiresAuthentication
     @GetMapping("/index")
     public Object index() {

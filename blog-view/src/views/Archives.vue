@@ -1,21 +1,21 @@
 <template>
   <div class="archives-container">
 
-          <el-timeline class="archives-timeline">
-            <el-timeline-item id="timeline"  color="deepskyblue" v-bind:timestamp="blog.createTime" placement="top" v-for="blog in blogs" :key="blog.id">
-              <div class="blog-box-card">
+    <el-timeline class="archives-timeline">
+      <el-timeline-item v-for="blog in blogs" id="timeline" :key="blog.id" color="deepskyblue"
+                        placement="top" v-bind:timestamp="blog.createTime">
+        <div class="blog-box-card">
 
-                <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{blog.title}}</router-link>
+          <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}</router-link>
 
 
-              </div>
-            </el-timeline-item>
-          </el-timeline>
+        </div>
+      </el-timeline-item>
+    </el-timeline>
 
   </div>
 </template>
 <script>
-
 
 
 export default {
@@ -35,7 +35,7 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.page()
 
   }
@@ -46,9 +46,6 @@ export default {
 <style scoped>
 
 
-
-
-
 .blog-box-card {
   background-color: white;
   padding-bottom: 0px;
@@ -56,19 +53,19 @@ export default {
 }
 
 
-
-.blog-link:link, .blog-link:visited{
+.blog-link:link, .blog-link:visited {
   text-decoration: none;
   color: black;
 
 }
-.blog-link{
+
+.blog-link {
   height: 20px;
   font-weight: bold;
   line-height: 50px;
 }
 
-.blog-box-card:hover{
+.blog-box-card:hover {
   -webkit-box-shadow: #ccc 0px 10px 10px;
   -moz-box-shadow: #ccc 0px 10px 10px;
   box-shadow: #ccc 0px 10px 10px;

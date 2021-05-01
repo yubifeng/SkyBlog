@@ -1,26 +1,25 @@
 <template>
 
-<div class="blog-detail">
+  <div class="blog-detail">
 
     <div class="mblog">
 
       <div class="home-title">
         <h2>{{ blog.title }}</h2>
-        <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0]}}  </span>
+        <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0] }}  </span>
         <span style="font-size: small;color: blue">更新时间：{{ blog.updateTime.split(' ')[0] }}  </span>
         <span style="font-size: small;color: blue">分类：{{ blog.typeName }}</span>
         <span style="font-size: small;color: blue"> 字数：{{ blog.words }}</span>
 
       </div>
 
-      <el-link icon="el-icon-edit" v-if="ownBlog">
-        <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}" >
+      <el-link v-if="ownBlog" icon="el-icon-edit">
+        <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}">
           编辑
         </router-link>
       </el-link>
 
       <div class="markdown-body" v-html="blog.content"></div>
-
 
 
     </div>
@@ -29,20 +28,22 @@
     <div class="author-message">
 
       <ul class="list">
-         <li>作者：fanli
-        <router-link to="/about" style="text-decoration-line: none;">（联系作者）</router-link>
-         </li>
-         <li>发表时间：{{ blog.createTime}}</li>
-         <li>最后修改：{{ blog.updateTime }}</li>
-         <li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" style="text-decoration-line: none;" target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。</li>
+        <li>作者：fanli
+          <router-link style="text-decoration-line: none;" to="/about">（联系作者）</router-link>
+        </li>
+        <li>发表时间：{{ blog.createTime }}</li>
+        <li>最后修改：{{ blog.updateTime }}</li>
+        <li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" style="text-decoration-line: none;"
+                    target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。
+        </li>
       </ul>
     </div>
     <div>
-        <Comment></Comment>
+      <Comment></Comment>
 
     </div>
 
-</div>
+  </div>
 </template>
 
 <script>
@@ -99,19 +100,18 @@ export default {
 
         var result = md.render(blog.content)
         _this.blog.content = result
-        if(_this.$store.getters.getUser){
+        if (_this.$store.getters.getUser) {
           _this.ownBlog = (blog.userId === _this.$store.getters.getUser.id)
-        }
-        else {
-          _this.ownBlog =false
+        } else {
+          _this.ownBlog = false
         }
 
 
-          for(var i in _this.types){
-            if(blog.typeId == _this.types[i].id){
-              _this.blog.typeName = _this.types[i].typeName
-            }
+        for (var i in _this.types) {
+          if (blog.typeId == _this.types[i].id) {
+            _this.blog.typeName = _this.types[i].typeName
           }
+        }
 
       })
     }
@@ -136,6 +136,7 @@ export default {
 .home-title {
   margin-bottom: 40px;
 }
+
 .markdown-body {
   text-align: left;
 }
@@ -144,6 +145,7 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   background-color: white;
 }
+
 .author-message {
   text-align: left;
   background-color: honeydew;
@@ -151,6 +153,7 @@ export default {
   font-size: 14px;
 
 }
+
 .el-divider {
   margin: 1rem 0 !important;
 }

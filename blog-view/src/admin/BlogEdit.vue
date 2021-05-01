@@ -4,7 +4,8 @@
 
     <div class="m-content">
 
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="demo-ruleForm" label-position="top"
+               label-width="100px">
 
 
         <el-row :gutter="20">
@@ -25,21 +26,23 @@
           <mavon-editor v-model="ruleForm.description"/>
         </el-form-item>
 
-        <el-form-item label="文章正文"   prop="content">
-          <mavon-editor  v-model="ruleForm.content"></mavon-editor>
+        <el-form-item label="文章正文" prop="content">
+          <mavon-editor v-model="ruleForm.content"></mavon-editor>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="分类" prop="cate">
-              <el-select v-model="ruleForm.typeId" placeholder="请选择分类（输入可添加新分类）" :allow-create="true" :filterable="true" style="width: 100%;">
-                <el-option v-for="type in types" :label="type.typeName" :value="type.id"  :key="type.id"></el-option>
+              <el-select v-model="ruleForm.typeId" :allow-create="true" :filterable="true" placeholder="请选择分类（输入可添加新分类）"
+                         style="width: 100%;">
+                <el-option v-for="type in types" :key="type.id" :label="type.typeName" :value="type.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="标签" prop="tagList">
-              <el-select v-model="ruleForm.tagList" placeholder="请选择标签（输入可添加新标签）" :allow-create="true" :filterable="true" :multiple="true" style="width: 100%;">
-                <el-option :label="item.name" :value="item.id" v-for="item in tagList" :key="item.id"></el-option>
+              <el-select v-model="ruleForm.tagList" :allow-create="true" :filterable="true"
+                         :multiple="true" placeholder="请选择标签（输入可添加新标签）" style="width: 100%;">
+                <el-option v-for="item in tagList" :key="item.id" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -49,7 +52,8 @@
           <el-col :span="12">
             <el-form-item label="字数" prop="words">
               <!-- 双击计算文章字数-->
-              <el-input @dblclick.native="computeWords" v-model="ruleForm.words" placeholder="请输入文章字数" type="number"></el-input>
+              <el-input v-model="ruleForm.words" placeholder="请输入文章字数" type="number"
+                        @dblclick.native="computeWords"></el-input>
             </el-form-item>
           </el-col>
 
@@ -65,8 +69,8 @@
                 <el-switch
                     v-model="ruleForm.status"
 
-                    :active-value= "0"
-                    :inactive-value= "1">
+                    :active-value="0"
+                    :inactive-value="1">
                 </el-switch>
               </el-tooltip>
             </el-form-item>
@@ -80,7 +84,6 @@
       </el-form>
 
     </div>
-
 
 
   </div>
@@ -117,14 +120,14 @@ export default {
 
       rules: {
         title: [
-          { required: true, message: '请输入标题',trigger: 'blur'  },
-          { min: 2, max: 45, message: '长度在 3 到 45 个字符', trigger: 'blur' }
+          {required: true, message: '请输入标题', trigger: 'blur'},
+          {min: 2, max: 45, message: '长度在 3 到 45 个字符', trigger: 'blur'}
         ],
         description: [
-          { required: true, message: '请输入摘要', trigger: 'blur' }
+          {required: true, message: '请输入摘要', trigger: 'blur'}
         ],
         content: [
-          { trequired: true, message: '请输入内容', trigger: 'blur' }
+          {trequired: true, message: '请输入内容', trigger: 'blur'}
         ],
 
         words: [{required: true, message: '请输入文章字数', trigger: 'change'}],
@@ -135,15 +138,10 @@ export default {
   methods: {
 
 
-
-
-
-    computeWords(){
+    computeWords() {
       var contents = this.ruleForm.content
       this.ruleForm.words = contents.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').length
     },
-
-
 
 
     submitForm(formName) {
@@ -188,7 +186,7 @@ export default {
       const blogId = this.$route.params.blogId
 
       const _this = this
-      if(blogId) {
+      if (blogId) {
         this.$axios.get('/blog/' + blogId).then(res => {
           const blog = res.data.data
           _this.ruleForm.id = blog.id
@@ -213,7 +211,6 @@ export default {
   created() {
     this.getTypes();
     this.getBlogById();
-
 
 
   }

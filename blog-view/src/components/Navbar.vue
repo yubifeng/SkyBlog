@@ -2,26 +2,28 @@
   <div class="blog-navbar">
 
 
-    <router-link to="/" style="text-decoration-line: none;color: #333333" >
-      <h3 style="display: inline;padding-left: 60px;padding-right: 20px" :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}" class="ui header item m-blue">Skymo's Blog</h3>
+    <router-link style="text-decoration-line: none;color: #333333" to="/">
+      <h3 :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}"
+          class="ui header item m-blue" style="display: inline;padding-left: 60px;padding-right: 20px">Skymo's
+        Blog</h3>
     </router-link>
 
 
-    <router-link to="/" class="item" :class="{'m-mobile-show': mobileHide,'active':$route.name==='Index'}"
-                 style="text-decoration-line: none;color: #333333;margin-left: 30px;padding-left: 0px;padding-right: 20px">
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Index'}" class="item" style="text-decoration-line: none;color: #333333;margin-left: 30px;padding-left: 0px;padding-right: 20px"
+                 to="/">
       首页
     </router-link>
 
 
-    <el-dropdown trigger="click" @mousedown.native="getTypes" >
+    <el-dropdown trigger="click" @mousedown.native="getTypes">
 
-				<span class="el-dropdown-link item" :class="{'m-mobile-show': mobileHide,'active':$route.name==='Category'}"
+				<span :class="{'m-mobile-show': mobileHide,'active':$route.name==='Category'}" class="el-dropdown-link item"
               style="text-decoration-line: none;color: #333333; font-size: 16px;padding-left: 20px;padding-right: 20px">
 					分类<i class="el-icon-arrow-down el-icon--right"></i>
 				</span>
 
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item @click.native="categoryRoute(type.typeName)" v-for="(type,index) in types" :key="index">
+        <el-dropdown-item v-for="(type,index) in types" :key="index" @click.native="categoryRoute(type.typeName)">
           {{ type.typeName }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -29,25 +31,26 @@
     </el-dropdown>
 
 
-    <router-link to="/archives" class="item" :class="{'m-mobile-show': mobileHide,'active':$route.name==='Archives'}"
-                 style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px">
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Archives'}" class="item" style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px"
+                 to="/archives">
       归档
     </router-link>
 
-    <router-link to="/friends" class="item" :class="{'m-mobile-show': mobileHide,'active':$route.name==='Friends'}"
-                 style="text-decoration-line: none;color: #333333;;padding-left: 20px;padding-right: 20px">
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Friends'}" class="item" style="text-decoration-line: none;color: #333333;;padding-left: 20px;padding-right: 20px"
+                 to="/friends">
       友链
     </router-link>
-    <router-link to="/about" class="item" :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}"
-                 style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px">
-     关于我
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}" class="item" style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px"
+                 to="/about">
+      关于我
     </router-link>
 
 
-    <el-autocomplete style="margin-left: 500px; " v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="请输入内容"
-                     class="right item m-search" suffix-icon="el-icon-search" :class="{'m-mobile-hide': mobileHide}"
-                     popper-class="m-search-item" @select="handleSelect">
-      <i class="search icon el-input__icon" slot="suffix"></i>
+    <el-autocomplete v-model="queryString" :class="{'m-mobile-hide': mobileHide}" :fetch-suggestions="debounceQuery"
+                     class="right item m-search"
+                     placeholder="请输入内容" popper-class="m-search-item" style="margin-left: 500px; "
+                     suffix-icon="el-icon-search" @select="handleSelect">
+      <i slot="suffix" class="search icon el-input__icon"></i>
       <template slot-scope="{ item }">
         <div class="title">{{ item.title }}</div>
         <span class="content">{{ item.content }}</span>
@@ -140,12 +143,11 @@ export default {
 
   },
   mounted() {
-    if(this.getIsPhone()){
+    if (this.getIsPhone()) {
       this.mobileHide = true
     }
 
   },
-
 
 
 }
@@ -245,10 +247,11 @@ export default {
   color: rgba(0, 0, 0, .70);
 }
 
-.m-mobile-hide{
+.m-mobile-hide {
   display: none !important;
 
 }
+
 .m-mobile-show {
   padding: 0px 1px 0px 1px;
   margin: 20px 1px 0px 1px;

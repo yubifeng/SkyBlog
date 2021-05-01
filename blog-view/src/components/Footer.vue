@@ -3,16 +3,18 @@
   <div class="footer">
     <el-row :gutter="12" style="padding-top: 30px">
       <el-col :sm="3" style="font-size: 36px">
-        <router-link to="/"><el-link style="font-size: 26px">Skymo</el-link></router-link>
+        <router-link to="/">
+          <el-link style="font-size: 26px">Skymo</el-link>
+        </router-link>
       </el-col>
-      <el-col :sm="6" :offset="3" style="line-height: 40px">
+      <el-col :offset="3" :sm="6" style="line-height: 40px">
         在变幻的生命里，时间才是最大的小偷
       </el-col>
-      <el-col :sm="9" :offset="3">
+      <el-col :offset="3" :sm="9">
         <el-input
-            placeholder="查找文章"
             v-model="input"
-            clearable>
+            clearable
+            placeholder="查找文章">
         </el-input>
       </el-col>
     </el-row>
@@ -47,7 +49,7 @@
             网站维护不易，如果觉得博客内容不错，愿意请博主喝杯咖啡，可以扫描旁边二维码。有问题也可以联系博主，QQ：894904864
           </el-col>
           <el-col :sm="12">
-            <el-image :src="src"  style="width: 80px; height: 80px"></el-image>
+            <el-image :src="src" style="width: 80px; height: 80px"></el-image>
           </el-col>
         </el-row>
       </el-col>
@@ -83,10 +85,11 @@ export default {
 .footer-content {
   font-size: 12px;
 }
+
 .footer {
-  margin:0 auto;
+  margin: 0 auto;
   text-align: center;
-  width: 60%!important;
+  width: 60% !important;
   height: 20px;
 }
 </style>

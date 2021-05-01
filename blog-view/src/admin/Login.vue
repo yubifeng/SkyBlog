@@ -4,13 +4,15 @@
 
       <el-header>
         <router-link to="/admin">
-          <img class="mlogo" src="https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/website/static/websiteAvatar.webp" alt="">
+          <img alt=""
+               class="mlogo"
+               src="https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/website/static/websiteAvatar.webp">
         </router-link>
       </el-header>
 
 
       <el-main>
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm" status-icon>
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="demo-ruleForm" label-width="100px" status-icon>
 
           <el-form-item label="用户名" prop="username">
             <el-input v-model="ruleForm.username" maxlength="12" type="text"></el-input>
@@ -119,11 +121,12 @@ body > .el-container {
   margin-bottom: 40px;
 }
 
-.mlogo{
+.mlogo {
   height: 60%;
   margin-top: 10px;
 }
-.demo-ruleForm{
+
+.demo-ruleForm {
   max-width: 500px;
   margin: 0 auto;
 }

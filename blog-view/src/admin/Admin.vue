@@ -1,23 +1,22 @@
 <template>
 
 
-
-  <el-container  class="admin-container">
+  <el-container class="admin-container">
     <!--头部-->
     <el-header>
       <div>
-        <img src="../assets/logo.png" alt="" height="60">
+        <img alt="" height="60" src="../assets/logo.png">
         <span>Danli博客后台管理  </span>
-        <span style="margin-left: 20px">   {{user.username}}</span>
+        <span style="margin-left: 20px">   {{ user.username }}</span>
         <el-divider direction="vertical"></el-divider>
         <span><el-link href="/" style="color: white">主页</el-link></span>
         <Header></Header>
       </div>
 
 
-      <el-dropdown trigger="click" class="user" v-if="user" @command="logout">
+      <el-dropdown v-if="user" class="user" trigger="click" @command="logout">
         <div class="el-dropdown-link">
-          <el-avatar shape="circle" :size="45" fit="contain" :src="user.avatar"></el-avatar>
+          <el-avatar :size="45" :src="user.avatar" fit="contain" shape="circle"></el-avatar>
         </div>
 
         <el-dropdown-menu slot="dropdown">
@@ -28,30 +27,30 @@
     </el-header>
 
 
-
-
     <!--页面主体-->
     <el-container>
       <!--侧边栏-->
       <el-aside :width="isCollapse? '64px' : '190px'">
-        <div class="toggle-button" @click="isCollapse=!isCollapse"><i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'"></i></div>
+        <div class="toggle-button" @click="isCollapse=!isCollapse"><i
+            :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'"></i></div>
         <!--菜单-->
-        <el-menu background-color="honeydew" text-color="black" active-text-color="#409eff" :default-openeds="defaultOpeneds"
-                 :unique-opened="false" :collapse="isCollapse" :collapse-transition="false"
-                 :router="true" :default-active="$store.state.activePath">
+        <el-menu :collapse="isCollapse" :collapse-transition="false" :default-active="$store.state.activePath"
+                 :default-openeds="defaultOpeneds"
+                 :router="true" :unique-opened="false" active-text-color="#409eff"
+                 background-color="honeydew" text-color="black">
           <el-menu-item index="/dashboard">
             <i class="iconfont ali-iconfont icon-dashboard"></i>
             <span>仪表盘</span>
           </el-menu-item>
           <!-- 一级菜单 -->
-          <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
+          <el-submenu v-for="item in menuList" :key="item.id" :index="item.id + ''">
             <!-- 一级菜单的模板区域 -->
             <template slot="title">
-              <i class="iconfont" :class="iconsObj[item.id]"></i>
+              <i :class="iconsObj[item.id]" class="iconfont"></i>
               <span>{{ item.title }}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.path">
               <template slot="title">
                 <i :class="iconsObj[subItem.id]"></i>
                 <span>{{ subItem.title }}</span>
@@ -68,8 +67,6 @@
     </el-container>
 
   </el-container>
-
-
 
 
 </template>
@@ -239,11 +236,10 @@ export default {
 
   methods: {
     getUserInfo() {
-      if(this.$store.getters.getUser.username){
+      if (this.$store.getters.getUser.username) {
         this.user.username = this.$store.getters.getUser.username
         this.user.avatar = this.$store.getters.getUser.avatar
-      }
-      else{
+      } else {
         this.$router.push('/login')
       }
     },
@@ -279,6 +275,7 @@ export default {
   font-size: 22px;
   user-select: none;
 }
+
 .el-header div {
   display: flex;
   align-items: center;
@@ -307,17 +304,21 @@ export default {
   overflow-x: hidden;
 
 }
+
 .el-aside .el-menu {
   border-right: none;
 }
+
 .m-el-main-width-190 {
   width: calc(100% - 190px);
 }
+
 .el-dropdown-menu {
   margin: 7px 0 0 0 !important;
   padding: 0 !important;
   border: 0 !important;
 }
+
 .m-el-main-width-64 {
   width: calc(100% - 64px);
 }

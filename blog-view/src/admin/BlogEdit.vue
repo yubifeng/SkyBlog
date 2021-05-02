@@ -23,11 +23,11 @@
 
 
         <el-form-item label="文章描述" prop="description">
-          <mavon-editor v-model="ruleForm.description"/>
+          <mavon-editor @dblclick.native="autoWrite" v-model="ruleForm.description"/>
         </el-form-item>
 
         <el-form-item label="文章正文" prop="content">
-          <mavon-editor v-model="ruleForm.content"></mavon-editor>
+          <mavon-editor  v-model="ruleForm.content"></mavon-editor>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -136,6 +136,15 @@ export default {
     }
   },
   methods: {
+    //双击将正文的内容前100字自动写入当描述中
+    autoWrite() {
+      if(this.ruleForm.content.length<100){
+        this.ruleForm.description = this.ruleForm.content.substring(0,this.ruleForm.content.length)
+      }
+      else{
+        this.ruleForm.description = this.ruleForm.content.substring(0,100)
+      }
+    },
 
 
     computeWords() {

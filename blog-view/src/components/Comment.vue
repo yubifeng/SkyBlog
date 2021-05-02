@@ -42,7 +42,7 @@
           <div class="content">
             <a :href="reply.website!=''&&reply.website!=null?reply.website:null" class="nickname" rel="external nofollow noopener"
                target="_blank">{{ reply.nickname }}</a>
-            <el-tag v-if="comment.isAdminComment==1" class="label" effect="dark" size="mini" type="info">博主</el-tag>
+            <el-tag v-if="reply.isAdminComment==1" class="label" effect="dark" size="mini" type="info">博主</el-tag>
 
             <span class="date">{{ reply.createTime }}</span>
 

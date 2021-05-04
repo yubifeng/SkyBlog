@@ -16,6 +16,7 @@ shiro-redis:
     password: 1234
 markerhub:
   jwt:
+    # 部署上线务必修改此配置，以保证token的安全性
     secret: f4e2e52034348f86b67cde581c0f9eb5
     expire: 604800
     header: token

@@ -57,7 +57,7 @@ public class CommentController {
         System.out.println(comment.toString());
         Comment temp = new Comment();
         temp.setCreateTime(LocalDateTime.now());
-        temp.setIp(request.getRemoteAddr());
+        temp.setIp(request.getHeader("x-forwarded-for"));
         BeanUtil.copyProperties(comment, temp, "id", "ip", "createTime");
         commentService.saveOrUpdate(temp);
         return Result.succ(null);

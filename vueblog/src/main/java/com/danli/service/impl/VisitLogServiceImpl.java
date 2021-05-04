@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.danli.entity.VisitLog;
 import com.danli.mapper.VisitLogMapper;
 import com.danli.service.VisitLogService;
+import com.danli.util.IpAddressUtils;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VisitLogServiceImpl extends ServiceImpl<VisitLogMapper, VisitLog> implements VisitLogService {
+
 
 }

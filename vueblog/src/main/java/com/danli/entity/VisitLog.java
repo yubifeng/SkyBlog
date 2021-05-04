@@ -28,39 +28,20 @@ public class VisitLog implements Serializable {
     private Long id;
 
     /**
-     * 访客标识码
-     */
-    private String uuid;
-
-    /**
      * 请求接口
      */
-    private String uri;
+    private String url;
 
     /**
      * 请求方式
      */
-    private String method;
+    private String classMethod;
 
     /**
      * 请求参数
      */
-    private String param;
+    private String args;
 
-    /**
-     * 访问行为
-     */
-    private String behavior;
-
-    /**
-     * 访问内容
-     */
-    private String content;
-
-    /**
-     * 备注
-     */
-    private String remark;
 
     /**
      * ip
@@ -82,10 +63,6 @@ public class VisitLog implements Serializable {
      */
     private String browser;
 
-    /**
-     * 请求耗时（毫秒）
-     */
-    private Integer times;
 
     /**
      * 访问时间

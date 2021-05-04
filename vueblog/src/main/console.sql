@@ -191,6 +191,22 @@ VALUES ('6', '醉墨', '8949048964@qq.com', '测试3',
         '2020-05-27 22:05:49', '101,2,2,1', '1', '19', '-1', '32', '范德萨', '894904866');
 
 
+-- Table structure for visit_log
+-- ----------------------------
+DROP TABLE IF EXISTS `visit_log`;
+CREATE TABLE `visit_log`  (
+                              `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                              `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求接口',
+                              `class_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求方式',
+                              `args` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求参数',
+                              `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
+                              `ip_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip来源',
+                              `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+                              `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
+                              `create_time` datetime(0) NOT NULL COMMENT '访问时间',
+                              `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 # -- Table structure for blog_tag
 # -- ----------------------------

@@ -1,8 +1,15 @@
 package com.danli.controller;
 
 
+import com.danli.common.lang.Result;
+import com.danli.entity.Blog;
+import com.danli.entity.Friend;
+import com.danli.service.FriendService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,7 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-04-08
  */
 @RestController
-@RequestMapping("/friend")
+
 public class FriendController {
+
+
+    @Autowired
+    FriendService friendService;
+    @RequestMapping("/friendList")
+    public Result getFriendList(){
+        List<Friend> list = friendService.lambdaQuery().eq(Friend::getIsPublished, 1).list();
+
+        return Result.succ(list);
+    }
 
 }

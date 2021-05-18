@@ -208,6 +208,45 @@ CREATE TABLE `visit_log`  (
                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+
+
+
+
+
+
+-- ----------------------------
+-- Table structure for friend
+-- ----------------------------
+DROP TABLE IF EXISTS `friend`;
+CREATE TABLE `friend`  (
+                           `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                           `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '昵称',
+                           `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '描述',
+                           `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
+                           `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
+                           `is_published` bit(1) NOT NULL COMMENT '公开或隐藏',
+                           `views` int(0) NOT NULL COMMENT '点击次数',
+                           `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+                           PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+
+INSERT INTO `friend` VALUES ('1','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/icon-fa-gem.png',1,'0','2020-05-05 08:05:49')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # -- Table structure for blog_tag
 # -- ----------------------------
 # DROP TABLE IF EXISTS `blog_tag`;
@@ -283,22 +322,7 @@ CREATE TABLE `visit_log`  (
 # INSERT INTO `site_setting` VALUES (28, 'friendCommentEnabled', '友链页面评论开关', '1', 4);
 #
 #
-# -- ----------------------------
-# -- Table structure for friend
-# -- ----------------------------
-# DROP TABLE IF EXISTS `friend`;
-# CREATE TABLE `friend`  (
-#                            `id` bigint(0) NOT NULL AUTO_INCREMENT,
-#                            `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '昵称',
-#                            `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '描述',
-#                            `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
-#                            `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
-#                            `is_published` bit(1) NOT NULL COMMENT '公开或隐藏',
-#                            `views` int(0) NOT NULL COMMENT '点击次数',
-#                            `create_time` datetime(0) NOT NULL COMMENT '创建时间',
-#                            PRIMARY KEY (`id`) USING BTREE
-# ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-#
+
 #
 #
 # -- ----------------------------

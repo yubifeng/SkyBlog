@@ -9,6 +9,7 @@ import "./axios"
 // 全局注册
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+
 import $ from 'jquery'
 Vue.prototype.$axios = axios //
 Vue.use(Element)

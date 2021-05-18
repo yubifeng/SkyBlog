@@ -20,6 +20,20 @@
 
     </div>
 
+    <div class="friends-segment">
+
+        <a :href="item.website" target="_blank" rel="external nofollow noopener" class="card" :style="randomRGB()"
+           v-for="(item,index) in friendList" :key="index" @click="addViews(item.nickname)">
+          <div class="image">
+            <img :src="item.avatar" onerror="this.src = '/img/error.png'">
+          </div>
+          <div class="content">
+            <div class="header">{{ item.nickname }}</div>
+            <div class="description">{{ item.description }}</div>
+          </div>
+        </a>
+    </div>
+
     <!--版权信息-->
     <div class="author-message">
       <ul class="list">
@@ -52,34 +66,63 @@ export default {
   data() {
     return {
       blog: {},
-      ownBlog: false
-    }
-  },
-  created() {
-
-    const _this = this
-    this.$axios.get('/friends').then(res => {
-      _this.blog = res.data.data
-
-
-      var MardownIt = require("markdown-it")
-      var md = new MardownIt()
-
-      var result = md.render(_this.blog.content)
-      _this.blog.content = result
-      if (_this.$store.getters.getUser) {
-        _this.ownBlog = (_this.blog.userId === _this.$store.getters.getUser.id)
+      ownBlog: false,
+      friendList: [],
+      bgColor: [
+        '#1abc9c', '#2ecc71', '#3498db', '#9b59b6',
+        '#34495e', '#f1c40f', '#e67e22', '#e74c3c',
+        '#ee5a24', '#9980fa', '#8c7ae6', '#f79f1f'
+      ],
+      info: {
+        content: '',
+        commentEnabled: false
       }
 
+    }
+  },
+  methods:{
+    getFriendBlog(){
+      const _this = this
+      this.$axios.get('/friends').then(res => {
+        _this.blog = res.data.data
 
-    })
+
+        var MardownIt = require("markdown-it")
+        var md = new MardownIt()
+
+        var result = md.render(_this.blog.content)
+        _this.blog.content = result
+        if (_this.$store.getters.getUser) {
+          _this.ownBlog = (_this.blog.userId === _this.$store.getters.getUser.id)
+        }
+      })
+    },
+    getFriendList(){
+      const _this = this
+      this.$axios.get('/friendList').then(res => {
+        _this.friendList = res.data.data
+      })
+
+    },
+
+    randomRGB() {
+      const index = Math.floor((Math.random() * this.bgColor.length))
+      return {backgroundColor: this.bgColor[index]}
+    }
+
+  },
+  created() {
+    this.getFriendBlog()
+    this.getFriendList()
+
+
   }
 }
 </script>
 
 <style scoped>
 .mblog {
-  min-height: 600px;
+  min-height: 250px;
 
 
   padding: 5px 35px 5px 35px;
@@ -110,5 +153,61 @@ export default {
 .el-divider {
   margin: 1rem 0 !important;
 }
+
+
+
+
+
+
+.friends-segment {
+  min-height: 300px;
+
+
+  padding: 5px 35px 5px 35px;
+  text-align: left;
+
+
+}
+
+.image{
+  width: 70px;
+  margin: 10px auto 0px;
+
+}
+.image img{
+  width:100%;
+  height:auto;
+  border-radius: 100% !important;
+
+}
+.card {
+  display: inline-block;
+  width: 250px;
+  margin: 12px 14px;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration-line: none;
+
+}
+
+.card .content .header {
+  font-size: 16px !important;
+}
+.card .content {
+  padding: 10px 14px;
+
+}
+
+.card .content .header {
+  margin: -3px 0px 0px ;
+}
+.card .content .description {
+  font-size: 12px !important;
+  margin: 5px 0px 7px;
+}
+.card .content * {
+  color: #fff !important;
+}
+
 
 </style>

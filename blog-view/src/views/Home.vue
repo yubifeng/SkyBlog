@@ -94,6 +94,10 @@ export default {
         //console.log(_this.blogList)
         //console.log(_this.blogs)
       })
+
+      //改变页号后返回顶部
+      this.scrollToTop()
+
     }
   },
   created() {

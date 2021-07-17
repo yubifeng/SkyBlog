@@ -44,7 +44,7 @@
 
     <!-- 音乐播放器 -->
     <div>
-      <meting-js id="2288127006" fixed="true" mini="true" server="netease" type="playlist"></meting-js>
+      <meting-js server="netease" type="playlist" id="6859965088" fixed="true" mini="true" ></meting-js>
     </div>
 
   </div>

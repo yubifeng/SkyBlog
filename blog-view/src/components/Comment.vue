@@ -120,7 +120,7 @@ export default {
       } else if (this.$route.path == "/about") {
         this.blogId = 1
       } else if (this.$route.path == "/friends") {
-        this.blogId = 11
+        this.blogId = 2
       } else {
         alert("error")
         return false

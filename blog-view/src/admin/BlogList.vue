@@ -1,6 +1,6 @@
 <template>
   <div class="bloglist-contain">
-    <!--搜索-->
+    <!--搜索，暂未实现-->
     <el-row>
       <el-col :span="8">
         <el-input v-model="queryInfo.title" :clearable="true" placeholder="请输入标题" size="small"
@@ -9,6 +9,7 @@
         </el-input>
       </el-col>
     </el-row>
+    <!--博客列表-->
     <el-table :data="blogList">
       <el-table-column label="序号" type="index" width="50"></el-table-column>
       <el-table-column label="标题" prop="title" show-overflow-tooltip></el-table-column>
@@ -25,8 +26,7 @@
       <el-table-column label="用户id" width="170">
         <template v-slot="scope">{{ scope.row.userId }}</template>
       </el-table-column>
-
-      I
+      <!--删除和查看操作-->
       <el-table-column label="操作" width="200">
         <template v-slot="scope">
           <el-button icon="el-icon-edit" size="mini" type="primary" @click="goBlogEditPage(scope.row.id)">编辑</el-button>
@@ -36,17 +36,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--分页-->
     <div v-if="pageShow" class="home-page">
-      <!--分页-->
       <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 30, 50]"
                      :total="total" background layout="total, sizes, prev, pager, next, jumper"
                      @size-change="handleSizeChange" @current-change="page">
       </el-pagination>
     </div>
-
-
   </div>
-
 </template>
 
 <script>
@@ -60,7 +57,6 @@ export default {
         pageNum: 1,
         pageSize: 10
       },
-
       blogList: [],
       currentPage: 1,
       total: 0,
@@ -72,13 +68,13 @@ export default {
   created() {
     this.getTypes()
     this.page(1);
-
   },
   methods: {
-
+    //跳转到博客编辑页
     goBlogEditPage(blogId) {
       this.$router.push(`/blog/edit/${blogId}`)
     },
+    //获取博客类型
     getTypes() {
       const _this = this
       this.$axios.get('/types').then(res => {
@@ -86,10 +82,10 @@ export default {
       })
       console.log(this.types)
     },
+    //获取当前分页的博客
     page(currentPage) {
       const _this = this
       this.$axios.get('/blogList?currentPage=' + currentPage).then((res) => {
-
         _this.blogList = res.data.data.records
         _this.currentPage = res.data.data.current
         _this.total = res.data.data.total
@@ -101,17 +97,11 @@ export default {
               _this.blogList[i].typeName = _this.types[j].typeName
             }
           }
-
-
         }
-        console.log(_this.blogList)
-
-
+        //console.log(_this.blogList)
       })
-
-
     },
-
+    //通过博客id删除博客
     deleteBlogById(blogId) {
       const _this = this
       this.$axios.get('/blogDelete/' + blogId, {
@@ -119,7 +109,6 @@ export default {
           "Authorization": localStorage.getItem("token")
         }
       }).then((res) => {
-
         _this.$alert('操作成功', '提示', {
           confirmButtonText: '确定',
           callback: action => {
@@ -127,24 +116,16 @@ export default {
             //_this.$router.push("/blogList")
           }
         })
-
-
       })
-
     },
+    //未实现
     search() {
-
     },
     handleSizeChange() {
-
     }
-
-
   }
 }
-
 </script>
-
 <style scoped>
 .el-button + span {
   margin-left: 10px;

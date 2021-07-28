@@ -1,13 +1,11 @@
 <template>
   <div class="blog-navbar">
 
-
     <router-link style="text-decoration-line: none;color: #333333" to="/">
       <h3 :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}"
           class="ui header item m-blue" style="display: inline;padding-left: 60px;padding-right: 20px">Skymo's
         Blog</h3>
     </router-link>
-
 
     <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Index'}" class="item" style="text-decoration-line: none;color: #333333;margin-left: 30px;padding-left: 0px;padding-right: 20px"
                  to="/">

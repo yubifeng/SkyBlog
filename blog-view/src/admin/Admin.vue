@@ -1,31 +1,26 @@
 <template>
-
-
   <el-container class="admin-container">
     <!--头部-->
     <el-header>
+      <!--标题-->
       <div>
         <img alt="" height="60" src="../assets/logo.png">
-        <span>Danli博客后台管理  </span>
+        <span>Fanli博客后台管理  </span>
         <span style="margin-left: 20px">   {{ user.username }}</span>
         <el-divider direction="vertical"></el-divider>
         <span><el-link href="/" style="color: white">主页</el-link></span>
         <Header></Header>
       </div>
-
-
+      <!-- 头像 -->
       <el-dropdown v-if="user" class="user" trigger="click" @command="logout">
         <div class="el-dropdown-link">
           <el-avatar :size="45" :src="user.avatar" fit="contain" shape="circle"></el-avatar>
         </div>
-
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item icon="ali-iconfont icon-logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-
     </el-header>
-
 
     <!--页面主体-->
     <el-container>
@@ -65,18 +60,12 @@
         <router-view :key="$route.fullPath"/>
       </el-main>
     </el-container>
-
   </el-container>
-
-
 </template>
 
 <script>
-
 export default {
   name: "Admin",
-
-
   data() {
     return {
       menuList: [
@@ -233,8 +222,8 @@ export default {
       user: {},
     }
   },
-
   methods: {
+    //获取缓存的用户名和头像
     getUserInfo() {
       if (this.$store.getters.getUser.username) {
         this.user.username = this.$store.getters.getUser.username
@@ -243,7 +232,7 @@ export default {
         this.$router.push('/login')
       }
     },
-
+    //登出
     logout() {
       const _this = this
       this.$axios.get('/logout', {
@@ -260,7 +249,6 @@ export default {
   created() {
     this.getUserInfo()
   },
-
 }
 </script>
 
@@ -275,17 +263,13 @@ export default {
   font-size: 22px;
   user-select: none;
 }
-
 .el-header div {
   display: flex;
   align-items: center;
 }
-
 .el-header .title span {
   margin-left: 15px;
-
 }
-
 .el-aside {
   background-color: honeydew;
   position: absolute;
@@ -293,7 +277,6 @@ export default {
   bottom: 0;
   user-select: none;
 }
-
 .el-main {
   background-color: white;
   position: absolute;
@@ -304,30 +287,23 @@ export default {
   overflow-x: hidden;
 
 }
-
 .el-aside .el-menu {
   border-right: none;
 }
-
 .m-el-main-width-190 {
   width: calc(100% - 190px);
 }
-
 .el-dropdown-menu {
   margin: 7px 0 0 0 !important;
   padding: 0 !important;
   border: 0 !important;
 }
-
 .m-el-main-width-64 {
   width: calc(100% - 64px);
 }
-
 .admin-container {
   height: 100%;
 }
-
-
 .toggle-button {
   background-color: honeydew;
   font-size: 20px;
@@ -336,42 +312,34 @@ export default {
   text-align: center;
   cursor: pointer;
 }
-
 .el-dropdown-link {
   outline-style: none !important;
   outline-color: unset !important;
   height: 100%;
   cursor: pointer;
 }
-
 .el-main::-webkit-scrollbar-track-piece {
   background-color: transparent;
 }
-
 .el-main::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px transparent;
   box-shadow: inset 0 0 6px transparent;
   background-color: transparent;
 }
-
 .el-main::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px #48dbfb;
   box-shadow: inset 0 0 6px #48dbfb;
   background-color: #48dbfb;
 }
-
 .el-aside {
   -ms-overflow-style: none; /* IE10 */
   scrollbar-width: none; /* Firefox */
 }
-
 .el-aside::-webkit-scrollbar {
   display: none;
 }
-
 .el-main::-webkit-scrollbar {
   width: 8px;
   height: 5px;
 }
-
 </style>

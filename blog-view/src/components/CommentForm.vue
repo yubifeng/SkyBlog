@@ -112,39 +112,32 @@ export default {
     }
   },
   methods: {
-
-
     //设计哈希函数
     //1>将字符串转成比较大的数字：hashCode
     //2>将大的数字hashCode压缩到数组范围
     hashFunc(str, size) {
       //1.定义hashCode变量
       var hashCode = 0
-
       //2.霍纳算法，来计算 hashCode的值
       for (var i = 0; i < str.length; i++) {
         hashCode = 37 * hashCode + str.charCodeAt(i) //获取编码
       }
       //3.取余状态
       var index = hashCode % size + 1
-
       return index
     },
-
     //取消回复 向父组件传值 并设置评论父id
     toSendParentId() {
       this.$emit('parentEvent', '取消回复了')
       //console.log("取消")
       this.commentForm.parentCommentId = -1
     },
-
     //失去焦点 自动获取qq昵称和头像 或者非qq设置随机头像
     onInputBlur() {
       //判断是否是qq号码
       const _this = this
       var qq = this.commentForm.nickname
       if (!isNaN(Number(qq)) && qq.length > 4 && qq.length < 11) {
-
         this.$axios.get('https://api.usuuu.com/qq/' + qq).then(res => {
           if (res.data) {
             _this.commentForm.nickname = res.data.data.name
@@ -154,17 +147,14 @@ export default {
             //console.log("哈哈哈哈哈")
           }
         })
-
       } else {
         //根据昵称随机头像
         var randomNum = this.hashFunc(this.commentForm.nickname, 20)
         this.commentForm.avatar = "https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/2021/avatar/avatar" + randomNum + ".webp"
         //console.log(JSON.stringify(this.commentForm))
       }
-
     },
-
-
+    //提交之前检查头像地址是否为空
     beforePost() {
       if (this.commentForm.avatar == "") {
         this.onInputBlur()
@@ -173,24 +163,17 @@ export default {
 
     },
 
-
     //提交评论
     postForm() {
-      console.log(JSON.stringify(this.commentForm))
-
-
+      //console.log(JSON.stringify(this.commentForm))
       //表单校验
       this.$refs.formRef.validate((valid) => {
         if (valid) {
-
-
           console.log(JSON.stringify(this.commentForm))
-          //判断是否为管理员
+          //判断是否为管理员(博主)
           if (this.commentForm.isAdminComment == 1) {
             this.commentForm.avatar = "https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/websiteAvatar.webp"
           }
-
-
           const _this = this
           this.$axios.post('/comment/add', this.commentForm).then(res => {
             //console.log(res)
@@ -203,46 +186,29 @@ export default {
                 }
               });
             } else {
-
             }
-
-
           })
-
-
           // //alert('submit!');
           // //成功后清空表单
           // this.$refs.formRef.resetFields();
           // this.commentForm.content = ""
           // this.commentForm.qq = ""
           // this.commentForm.avatar = ""
-
         } else {
           console.log('error submit!!');
           alert('输入数据不合法，请检查');
           return false;
         }
       });
-
-
     }
-
-
   },
-
-
   watch: {
     //监控props 但是好像没用额， 因为为在父类中没改动
     realParentCommentId: function (newVal) {
       this.commentForm.parentCommentId = newVal
       console.log(JSON.stringify(this.commentForm))
-
     }
-
-
   },
-
-
   created() {
     if (this.$route.params.blogId) {
       this.commentForm.blogId = this.$route.params.blogId
@@ -254,15 +220,10 @@ export default {
       alert("error")
       return false
     }
-
     if (this.$store.getters.getUser) {
       this.commentForm.isAdminComment = 1;
     }
-
-
   },
-
-
 }
 </script>
 
@@ -271,25 +232,20 @@ export default {
   margin: 5px;
   font-weight: 500 !important;
 }
-
 .form .m-small {
   margin-left: 5px;
   padding: 4px 5px;
 }
-
 .el-form .textarea {
   margin-top: 5px;
   margin-bottom: 15px;
 }
-
 .el-form textarea {
   padding: 6px 8px;
 }
-
 .el-form textarea, .el-form input {
   color: black;
 }
-
 .el-form .el-form-item__label {
   padding-right: 3px;
 }

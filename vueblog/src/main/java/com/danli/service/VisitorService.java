@@ -12,5 +12,6 @@ import com.danli.entity.Visitor;
  * @since 2021-04-08
  */
 public interface VisitorService extends IService<Visitor> {
+    boolean hasUUID(String uuid);
 
 }

@@ -13,6 +13,7 @@ shiro-redis:
   enabled: true
   redis-manager:
     host: 127.0.0.1:6379
+    timeout: 5000
     password: 1234
 markerhub:
   jwt:

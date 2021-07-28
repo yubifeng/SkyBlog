@@ -3,15 +3,27 @@ import Element from "element-ui";
 import store from "./store";
 import router from "./router";
 
-axios.defaults.baseURL = "https://api.skymo.top:443"
+axios.defaults.baseURL = "http://127.0.0.1:8083"
+//请求拦截
 axios.interceptors.request.use(config => {
-    console.log("前置拦截")
+    //console.log("前置拦截")
     // 可以统一设置请求头
+    const identification = window.localStorage.getItem('identification')
+    //identification存在，且是基于baseURL的请求
+    if (identification && !(config.url.startsWith('http://') || config.url.startsWith('https://'))) {
+        config.headers.identification = identification
+    }
     return config
 })
+//响应拦截
 axios.interceptors.response.use(response => {
         const res = response.data;
-        console.log("后置拦截")
+        const identification = response.headers.identification
+        if (identification) {
+            //保存身份标识到localStorage
+            window.localStorage.setItem('identification', identification)
+        }
+        //console.log("后置拦截")
         // 当结果的code是否为200的情况
         if (res.code === 200) {
             return response

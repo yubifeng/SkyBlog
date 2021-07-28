@@ -28,6 +28,10 @@ public class VisitLog implements Serializable {
     private Long id;
 
     /**
+     * 访客标识码
+     */
+    private String uuid;
+    /**
      * 请求接口
      */
     private String url;

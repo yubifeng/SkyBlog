@@ -43,7 +43,7 @@
       关于我
     </router-link>
 
-
+    <!--自带防抖-->
     <el-autocomplete v-model="queryString" :class="{'m-mobile-hide': mobileHide}" :fetch-suggestions="debounceQuery"
                      class="right item m-search"
                      placeholder="请输入内容" popper-class="m-search-item" style="margin-left: 500px; "

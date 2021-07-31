@@ -55,9 +55,17 @@
       </el-col>
     </el-row>
     <el-divider></el-divider>
-    <el-row :gutter="20" style="height: 60px;margin-top: 35px;font-size: 12px">
+    <el-row :gutter="20" style="height: 5px;margin-top: 25px;font-size: 12px">
       <el-col :span="24">
         Copyright&nbsp;&copy;&nbsp;2021-2022&nbsp;Skymo's&nbsp;Blog.&nbsp;All&nbsp;rights&nbsp;reserved.&nbsp;
+      </el-col>
+    </el-row>
+    <el-row :gutter="4" style="height: 30px;margin-top: 15px;font-size: 12px;">
+      <el-col :span="8" :offset="5">
+        {{'PV: '+pv}}
+      </el-col>
+      <el-col :span="2">
+        {{'UV: '+uv}}
       </el-col>
     </el-row>
   </div>
@@ -68,9 +76,30 @@ export default {
   name: "Footer",
   data() {
     return {
+      pv: 0,
+      uv: 0,
       input: "",
-      src: 'https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/footPict.webp'
+      src: 'https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting//website/static/footPict.webp',
+
     }
+  },
+  methods:{
+    //获取pv和uv
+    getPVAndUV(){
+      const _this = this
+      this.$axios.get('/visitornum').then(res => {
+        _this.uv = res.data.data.uv
+        _this.pv = res.data.data.pv
+      })
+
+    }
+  },
+  // 监听,当路由发生变化的时候执行
+  watch: {
+    '$route':'getPVAndUV'
+  },
+  created() {
+    this.getPVAndUV()
   }
 }
 </script>

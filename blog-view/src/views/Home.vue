@@ -2,22 +2,22 @@
   <div class="home-container">
 
 
-    <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card">
+    <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card" :key="blog.id">
       <div class="home-title">
         <h2>
-          <router-link :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}
+          <router-link @click.native ="addViews(blog.id)" :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}
           </router-link>
         </h2>
         <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0] }}  </span>
-        <span style="font-size: small;color: blue">更新时间：{{ blog.updateTime.split(' ')[0] }}   </span>
-        <span style="font-size: small;color: blue">分类：{{ blog.typeName }}</span>
-        <span style="font-size: small;color: blue"> 字数：{{ blog.words }}</span>
-
+        <span style="font-size: small;color: blue">  更新时间：{{ blog.updateTime.split(' ')[0] }}   </span>
+        <span style="font-size: small;color: blue">  分类：{{ blog.typeName }}</span>
+        <span style="font-size: small;color: blue">  字数：{{ blog.words }}</span>
 
       </div>
-      <img :src=blog.firstPicture class="image">
+      <img :src=blog.firstPicture class="image" v-viewer="{movable: false}">
 
-      <div class="home-description-markdown-body" v-html="blog.descriptionMd"></div>
+<!--      <div class="home-description-markdown-body" v-html="blog.descriptionMd"  v-viewer="{movable: false}"></div>-->
+      <markdown-it-vue-light class="home-description-markdown-body" :content="blog.description" v-viewer="{movable: false}"/>
       <!--阅读全文按钮-->
       <div class="div-btn">
         <a class="color-btn" href="javascript:;" @click.prevent="toBlog(blog)">阅读全文</a>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import 'github-markdown-css'
+
 
 export default {
   name: "Home",
@@ -53,7 +53,14 @@ export default {
     }
   },
   methods: {
+    //增加浏览次数
+    addViews(id){
+      this.$axios.get('/blog/view/'+id).then(res => {
+      })
+    },
+    //跳转到博客详情页
     toBlog(blog) {
+      this.addViews(blog.id)
       this.$router.push(`/blog/${blog.id}`)
     },
     //获取分类表
@@ -64,6 +71,7 @@ export default {
       })
       //console.log(this.types)
     },
+    //分页获取博客
     page(currentPage) {
       const _this = this
       this.$axios.get('/blogs?currentPage=' + currentPage).then((res) => {
@@ -74,14 +82,12 @@ export default {
         _this.pageSize = res.data.data.size
         _this.pageShow = 1
         //console.log(_this.blogs)
-        var MardownIt = require("markdown-it")
-        var md = new MardownIt()
-
-
-        for (var i in _this.blogs) {
-          var result = md.render(_this.blogs[i].description)
-          _this.blogs[i].descriptionMd = result
-        }
+        // var MardownIt = require("markdown-it")
+        // var md = new MardownIt()
+        // for (var i in _this.blogs) {
+        //   // var result = md.render(_this.blogs[i].description)
+        //   _this.blogs[i].descriptionMd = result
+        // }
         for (var i in _this.blogs) {
           for (var j in _this.types) {
             if (_this.blogs[i].typeId == _this.types[j].id) {
@@ -115,10 +121,12 @@ export default {
 
 }
 
-.home-description-markdown-body {
-  text-align: left;
+/*.home-description-markdown-body {*/
+/*  text-align: left;*/
+/*}*/
+home-description-markdown-body{
+  text-align: left!important;
 }
-
 .image {
   width: 100%;
   height: auto;
@@ -129,15 +137,21 @@ export default {
   margin-bottom: 40px;
 
   padding: 20px 41px;
+
+}
+.home-title {
   text-align: center;
-
-
+}
+.home-page{
+  text-align: center;
 }
 
 .home-title {
   margin-bottom: 20px;
 }
-
+.div-btn {
+  text-align: center;
+}
 .blog-link:link, .blog-link:visited {
   text-decoration: none;
   color: black;

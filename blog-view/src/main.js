@@ -1,22 +1,36 @@
+//element-ui
 import Element from 'element-ui'
 import "element-ui/lib/theme-chalk/index.css"
+//axios
 import axios from 'axios'
+//全局拦截
+import "./axios"
+//vue
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import "./axios"
-// 全局注册
+// mavonEditor
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-
+//jquery
 import $ from 'jquery'
-Vue.prototype.$axios = axios //
+//v-viewer
+import 'viewerjs/dist/viewer.css'
+import Viewer from 'v-viewer'
+//directive
+import './util/directive.js'
+
+//markdown-it-vue-light (markdown-it的精简版 去掉流程图渲染)
+import MarkdownItVueLight from 'markdown-it-vue/dist/markdown-it-vue-light.umd.min.js'
+import 'markdown-it-vue/dist/markdown-it-vue-light.css'
+//加载到vue
+Vue.prototype.$axios = axios
 Vue.use(Element)
 Vue.config.productionTip = false
-// use
 Vue.use(mavonEditor)
-
+Vue.use(Viewer)
+Vue.use(MarkdownItVueLight)
 
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value => value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;

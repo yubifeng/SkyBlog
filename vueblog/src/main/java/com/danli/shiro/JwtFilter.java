@@ -30,7 +30,7 @@ public class JwtFilter extends AuthenticatingFilter {
         // 获取 token
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String jwt = request.getHeader("Authorization");
-        if (StringUtils.isEmpty(jwt)) {
+        if (!StringUtils.hasLength(jwt)) {
             return null;
         }
         return new JwtToken(jwt);
@@ -40,7 +40,7 @@ public class JwtFilter extends AuthenticatingFilter {
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader("Authorization");
-        if (StringUtils.isEmpty(token)) {
+        if (!StringUtils.hasLength(token)) {
             return true;
         } else {
             // 判断是否已过期

@@ -19,8 +19,8 @@
         </router-link>
       </el-link>
 
-      <div class="markdown-body" v-html="blog.content"></div>
-
+<!--      <div class="markdown-body" v-html="blog.content" v-viewer="{movable: false}"></div>-->
+      <markdown-it-vue-light class="md-body" :content="blog.content" v-viewer="{movable: false}" />
 
     </div>
 
@@ -47,9 +47,8 @@
 </template>
 
 <script>
-import 'github-markdown-css'
-import Comment from "@/components/Comment";
 
+import Comment from "@/components/Comment";
 
 export default {
   name: "Blog",
@@ -78,7 +77,7 @@ export default {
         _this.types = res.data.data
 
       })
-      console.log(this.types)
+      //console.log(this.types)
 
     },
     getBlog() {
@@ -94,12 +93,11 @@ export default {
         _this.blog.views = blog.views
         _this.blog.words = blog.words
 
+        //maekdown-it 渲染器 开启代码高亮 需要使用Highlight.js 的 CSS
 
-        var MardownIt = require("markdown-it")
-        var md = new MardownIt()
 
-        var result = md.render(blog.content)
-        _this.blog.content = result
+
+        _this.blog.content = blog.content
         if (_this.$store.getters.getUser) {
           _this.ownBlog = (blog.userId === _this.$store.getters.getUser.id)
         } else {
@@ -137,7 +135,7 @@ export default {
   margin-bottom: 40px;
 }
 
-.markdown-body {
+.md-body {
   text-align: left;
 }
 
@@ -157,5 +155,7 @@ export default {
 .el-divider {
   margin: 1rem 0 !important;
 }
-
+.code {
+  background-color: #333333;
+}
 </style>

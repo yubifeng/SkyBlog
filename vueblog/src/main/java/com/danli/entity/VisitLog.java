@@ -2,20 +2,19 @@ package com.danli.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @since 2021-07-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,6 +30,7 @@ public class VisitLog implements Serializable {
      * 访客标识码
      */
     private String uuid;
+
     /**
      * 请求接口
      */
@@ -45,7 +45,6 @@ public class VisitLog implements Serializable {
      * 请求参数
      */
     private String args;
-
 
     /**
      * ip
@@ -66,7 +65,6 @@ public class VisitLog implements Serializable {
      * 浏览器
      */
     private String browser;
-
 
     /**
      * 访问时间

@@ -23,7 +23,7 @@
     <div class="friends-segment">
 
         <a :href="item.website" target="_blank" rel="external nofollow noopener" class="card" :style="randomRGB()"
-           v-for="(item,index) in friendList" :key="index" @click="addViews(item.nickname)">
+           v-for="(item,index) in friendList" :key="index" @click="addViews(item.id)">
           <div class="image">
             <img :src="item.avatar" onerror="this.src = '/img/error.png'">
           </div>
@@ -108,6 +108,11 @@ export default {
     randomRGB() {
       const index = Math.floor((Math.random() * this.bgColor.length))
       return {backgroundColor: this.bgColor[index]}
+    },
+    addViews(id){
+      this.$axios.get('/friend/'+id).then(res => {
+
+      })
     }
 
   },
@@ -171,7 +176,7 @@ export default {
 
 .image{
   width: 70px;
-  margin: 10px auto 0px;
+  margin: 16px auto 0px;
 
 }
 .image img{
@@ -182,7 +187,7 @@ export default {
 }
 .card {
   display: inline-block;
-  width: 250px;
+  width: 253px;
   margin: 12px 14px;
   text-align: center;
   border-radius: 5px;
@@ -192,9 +197,10 @@ export default {
 
 .card .content .header {
   font-size: 16px !important;
+
 }
 .card .content {
-  padding: 10px 14px;
+  padding: 10px 2px;
 
 }
 
@@ -203,7 +209,7 @@ export default {
 }
 .card .content .description {
   font-size: 12px !important;
-  margin: 5px 0px 7px;
+  margin: 5px 0px 9px;
 }
 .card .content * {
   color: #fff !important;

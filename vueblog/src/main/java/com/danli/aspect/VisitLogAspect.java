@@ -1,23 +1,21 @@
 package com.danli.aspect;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.danli.entity.Blog;
 import com.danli.entity.VisitLog;
 import com.danli.entity.Visitor;
 import com.danli.service.RedisService;
 import com.danli.service.VisitLogService;
 import com.danli.service.VisitorService;
 import com.danli.util.IpAddressUtils;
-import com.danli.util.ShiroUtil;
 import com.danli.util.UserAgentUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -39,7 +37,7 @@ import java.util.UUID;
 @Aspect
 public class VisitLogAspect {
 
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     VisitLogService visitLogService;
     @Autowired
@@ -48,7 +46,7 @@ public class VisitLogAspect {
     UserAgentUtils userAgentUtils;
     @Autowired
     RedisService redisService;
-    
+
 
 
 
@@ -100,7 +98,6 @@ public class VisitLogAspect {
     @After("log()")
     public void doAfter() {
 
-
     }
 
 
@@ -123,6 +120,7 @@ public class VisitLogAspect {
         } else {
             //校验Redis中是否存在uuid
             boolean redisHas = redisService.hasValueInSet("identificationSet", identification);
+
             //Redis中不存在uuid
             if (!redisHas) {
                 //校验数据库中是否存在uuid
@@ -130,9 +128,31 @@ public class VisitLogAspect {
                 if (mysqlHas) {
                     //数据库存在，保存至Redis
                     redisService.saveValueToSet("identificationSet", identification);
+                    //更新最后访问时间和pv
+                    Visitor visitor = visitorService.getVisitorByUuid(identification);
+                    visitor.setPv(visitor.getPv()+1);
+                    visitor.setLastTime(LocalDateTime.now());
+                    //Visitor temp = new Visitor();
+                    //BeanUtil.copyProperties(visitor, temp);
+                    visitorService.saveOrUpdate(visitor);
+
                 } else {
                     //数据库不存在，签发新的uuid
                     identification = saveUUID(request);
+                }
+            }
+            else{
+                boolean mysqlHas = visitorService.hasUUID(identification);
+                if (mysqlHas) {
+                    //数据库存在，保存至Redis
+                    redisService.saveValueToSet("identificationSet", identification);
+                    //更新最后时间和pv
+                    Visitor visitor = visitorService.getVisitorByUuid(identification);
+                    visitor.setPv(visitor.getPv()+1);
+                    visitor.setLastTime(LocalDateTime.now());
+                    //Visitor temp = new Visitor();
+                    //BeanUtil.copyProperties(visitor, temp);
+                    visitorService.saveOrUpdate(visitor);
                 }
             }
         }

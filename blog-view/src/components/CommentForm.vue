@@ -41,8 +41,8 @@
 
         <el-col :offset="1" :span="5">
           <el-form-item>
-            <!-- 接口节流 之后增加      -->
-            <el-button size="medium" type="primary" @click="postForm()" @mouseenter.native="beforePost">发表评论</el-button>
+            <!-- 接口节流  -->
+            <el-button size="medium" type="primary"  v-throttle="[postForm,`click`,30000]"  @mouseenter.native="beforePost">发表评论</el-button>
           </el-form-item>
         </el-col>
       </el-row>

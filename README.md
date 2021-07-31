@@ -7,7 +7,7 @@
 </p>
 
 ## 博客预览
-[参见博客](https://www.skymo.top/blog/11)
+[博客地址](https://www.skymo.top)
 
 
 
@@ -25,8 +25,8 @@
 
 markdown：
  - 编辑器：mavon-editor
- - 解析渲染：markdown-it
- - 样式：github-markdown-c
+ - 解析渲染：markdown-it-vue(略作修改，以支持行号和代码黑色背景)
+ - 样式：github-markdown-css （github dark风格的代码高亮）
 
 
 ## 后端
@@ -55,11 +55,11 @@ markdown：
     - 文章发布
     - 文章编辑
     - 文章删除
-### 未来需增加的功能
-- 手机端适配
 - 评论功能
 - 游客统计
+- 手机端适配
 - 样式美化
+### 未来需增加的功能
 - 主题可换
 - 后端优化
 

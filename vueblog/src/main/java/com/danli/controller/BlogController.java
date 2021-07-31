@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.BlogInfo;
 import com.danli.entity.Blog;
+import com.danli.entity.Friend;
 import com.danli.service.BlogService;
 import com.danli.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -153,7 +154,7 @@ public class BlogController {
     @RequiresAuthentication
     @PostMapping("/blog/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
-        System.out.println(blog.toString());
+        //System.out.println(blog.toString());
         Blog temp = null;
         if (blog.getId() != null) {
             temp = blogService.getById(blog.getId());
@@ -167,6 +168,17 @@ public class BlogController {
         temp.setUpdateTime(LocalDateTime.now());
         BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime", "updateTime");
         blogService.saveOrUpdate(temp);
+        return Result.succ(null);
+    }
+
+    //博客浏览次数加一
+    @RequestMapping("/blog/view/{id}")
+    public Result addView(@PathVariable(name = "id")String id){
+        Blog blog = blogService.getById(id);
+        blog.setViews(blog.getViews()+1);
+//        Blog temp = new Blog();
+//        BeanUtil.copyProperties(blog, temp);
+        blogService.saveOrUpdate(blog);
         return Result.succ(null);
     }
 }

@@ -11,7 +11,10 @@ import com.danli.entity.Blog;
 import com.danli.entity.Friend;
 import com.danli.service.BlogService;
 import com.danli.util.ShiroUtil;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -101,7 +104,6 @@ public class BlogController {
     public Result friends() {
         List<Blog> list = blogService.lambdaQuery().eq(Blog::getStatus, 1).eq(Blog::getTitle, "友情链接").list();
 
-
         return Result.succ(list.get(0));
     }
 
@@ -116,7 +118,6 @@ public class BlogController {
 
     @GetMapping("/blogsIndex")
     public Result blogs() {
-
         List<Blog> list = blogService.list(new QueryWrapper<Blog>().ne("status", 1).orderByDesc("create_time"));
         return Result.succ(list);
     }
@@ -124,7 +125,6 @@ public class BlogController {
 
     @GetMapping("/search")
     public Result search(@RequestParam String queryString) {
-
         List<Blog> list = blogService.list(new QueryWrapper<Blog>().like("content", queryString).ne("status", 1).orderByDesc("create_time"));
         return Result.succ(list);
     }
@@ -138,8 +138,10 @@ public class BlogController {
 
     }
 
+    @RequiresRoles("role_root")
+    @RequiresPermissions("user:delete")
     @RequiresAuthentication
-    @GetMapping("/blogDelete/{id}")
+    @GetMapping("/blog/delete/{id}")
     public Result delete(@PathVariable(name = "id") Long id) {
 
         if (blogService.removeById(id)) {
@@ -151,14 +153,16 @@ public class BlogController {
 
     }
 
+
+    @RequiresPermissions("user:update")
     @RequiresAuthentication
-    @PostMapping("/blog/edit")
-    public Result edit(@Validated @RequestBody Blog blog) {
+    @PostMapping("/blog/update")
+    public Result update(@Validated @RequestBody Blog blog) {
         //System.out.println(blog.toString());
         Blog temp = null;
         if (blog.getId() != null) {
             temp = blogService.getById(blog.getId());
-            Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
+//            Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
         } else {
             temp = new Blog();
             temp.setUserId(ShiroUtil.getProfile().getId());
@@ -171,13 +175,33 @@ public class BlogController {
         return Result.succ(null);
     }
 
+
+    @RequiresPermissions("user:create")
+    @RequiresAuthentication
+    @PostMapping("/blog/create")
+    public Result create(@Validated @RequestBody Blog blog) {
+        //System.out.println(blog.toString());
+        Blog temp = null;
+        if (blog.getId() != null) {
+            temp = blogService.getById(blog.getId());
+        } else {
+            temp = new Blog();
+            temp.setUserId(ShiroUtil.getProfile().getId());
+            temp.setCreateTime(LocalDateTime.now());
+        }
+        temp.setUpdateTime(LocalDateTime.now());
+        BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime", "updateTime");
+        blogService.saveOrUpdate(temp);
+        return Result.succ(null);
+    }
+
+
+
     //博客浏览次数加一
     @RequestMapping("/blog/view/{id}")
     public Result addView(@PathVariable(name = "id")String id){
         Blog blog = blogService.getById(id);
         blog.setViews(blog.getViews()+1);
-//        Blog temp = new Blog();
-//        BeanUtil.copyProperties(blog, temp);
         blogService.saveOrUpdate(blog);
         return Result.succ(null);
     }

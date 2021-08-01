@@ -10,6 +10,7 @@ import BlogEdit from '../admin/BlogEdit.vue';
 import BlogList from "../admin/BlogList";
 import Friends from "../views/Friends";
 import Category from "../views/Category";
+import BlogWrite from "@/admin/BlogWrite";
 
 Vue.use(VueRouter)
 const routes = [
@@ -35,7 +36,7 @@ const routes = [
             {
                 path: '/writeBlog', // 注意放在 path: '/blog/:blogId'之前
                 name: 'BlogWrite',
-                component: BlogEdit,
+                component: BlogWrite,
                 meta: {
                     requireAuth: true,
                     title: '写博客'

@@ -80,7 +80,7 @@ export default {
       this.$axios.get('/types').then(res => {
         _this.types = res.data.data
       })
-      console.log(this.types)
+      //console.log(this.types)
     },
     //获取当前分页的博客
     page(currentPage) {
@@ -104,7 +104,7 @@ export default {
     //通过博客id删除博客
     deleteBlogById(blogId) {
       const _this = this
-      this.$axios.get('/blogDelete/' + blogId, {
+      this.$axios.get('/blog/delete/' + blogId, {
         headers: {
           "Authorization": localStorage.getItem("token")
         }

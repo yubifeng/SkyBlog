@@ -3,14 +3,17 @@ package com.danli.common.lang.exception;
 import com.danli.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -19,7 +22,18 @@ import java.io.IOException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // 捕捉shiro的异常
+
+
+
+    // 捕捉shiro的授权异常
+    @ExceptionHandler(value = UnauthorizedException.class)
+    @ResponseBody
+    public Result jsonExceptionHandler(HttpServletRequest req, Exception e) {
+
+        return Result.fail(403, "权限不足！",null);
+    }
+
+    // 捕捉shiro的认证异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public Result handle401(ShiroException e) {

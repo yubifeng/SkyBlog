@@ -69,6 +69,7 @@ public class ShiroConfig {
         shiroFilter.setSecurityManager(securityManager);
 
         Map<String, Filter> filters = new HashMap<>();
+        //使用jwtFilter过滤器
         filters.put("jwt", jwtFilter);
         shiroFilter.setFilters(filters);
 

@@ -78,7 +78,7 @@
 
 <script>
 export default {
-  name: "BlogEdit",
+  name: "BlogWrite",
   data() {
     return {
       types: {},
@@ -131,7 +131,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const _this = this
-          this.$axios.post('/blog/update', this.ruleForm, {
+          this.$axios.post('/blog/create', this.ruleForm, {
             headers: {
               "Authorization": localStorage.getItem("token")
             }
@@ -145,7 +145,7 @@ export default {
             });
           })
         } else {
-          //console.log('error submit!!');
+          console.log('error submit!!');
           return false;
         }
       });
@@ -160,30 +160,9 @@ export default {
       this.$axios.get('/types').then(res => {
         _this.types = res.data.data
       })
-      console.log(this.types)
+      //console.log(this.types)
     },
-    //通过id获取博客
-    getBlogById() {
-      const blogId = this.$route.params.blogId
-      const _this = this
-      if (blogId) {
-        this.$axios.get('/blog/' + blogId).then(res => {
-          const blog = res.data.data
-          _this.ruleForm.id = blog.id
-          _this.ruleForm.title = blog.title
-          _this.ruleForm.firstPicture = blog.firstPicture
-          _this.ruleForm.description = blog.description
-          _this.ruleForm.content = blog.content
-          _this.ruleForm.words = blog.words
-          _this.ruleForm.views = blog.views
-          _this.ruleForm.typeId = blog.typeId
-          _this.ruleForm.status = blog.status
-          _this.ruleForm.userId = blog.userId
-          _this.ruleForm.createTime = blog.createTime
-          _this.ruleForm.updateTime = blog.updateTime
-        })
-      }
-    }
+
   },
   created() {
     this.getTypes();

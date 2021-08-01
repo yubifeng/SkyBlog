@@ -35,7 +35,7 @@ public class AccountController {
         if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
             return Result.fail("密码错误！");
         }
-        String jwt = jwtUtils.generateToken(user.getId());
+        String jwt = jwtUtils.generateToken(user.getId(),user.getUsername());
         response.setHeader("Authorization", jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
         // 用户可以另一个接口

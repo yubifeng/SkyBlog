@@ -30,7 +30,7 @@ public class FriendController {
 
     @Autowired
     FriendService friendService;
-    //获取友链接口
+    //查询所有友链
     @RequestMapping("/friendList")
     public Result getFriendList(){
         List<Friend> list = friendService.lambdaQuery().eq(Friend::getIsPublished, 1).list();
@@ -47,15 +47,37 @@ public class FriendController {
         friendService.saveOrUpdate(friend);
         return Result.succ(null);
     }
-//    @RequiresAuthentication
-//    @PostMapping("/friend/edit")
-//    public Result saveOrUpgrade(@Validated @RequestBody Friend friend){
-//
-//
-//
-//
-//
-//    }
 
 
+
+
+    //增改
+    @RequiresAuthentication
+    @PostMapping("/friend/update")
+    public Result updateFriend(@Validated @RequestBody Friend friend){
+        if(friend==null){
+            return Result.fail("不能为空");
+
+        }
+        else{
+            if (friend.getId()==null){
+                friend.setCreateTime(LocalDateTime.now());
+            }
+            friendService.saveOrUpdate(friend);
+        }
+        return Result.succ(null);
+    }
+    //删除
+    @RequiresAuthentication
+    @GetMapping("/friend/delete/{id}")
+    public Result delete(@PathVariable(name = "id") Long id) {
+
+        if (friendService.removeById(id)) {
+            return Result.succ(null);
+        } else {
+            return Result.fail("删除失败");
+        }
+
+
+    }
 }

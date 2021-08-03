@@ -1,12 +1,17 @@
 package com.danli.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.VisitorNum;
+import com.danli.entity.Friend;
 import com.danli.entity.VisitLog;
 import com.danli.entity.Visitor;
 import com.danli.service.VisitorService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -51,13 +56,36 @@ public class VisitorController {
     //查询所有游客
     @RequiresAuthentication
     @RequestMapping("/visitor")
-    public Result getFriendList(){
+    public Result getAllVisiorList(){
         List<Visitor> list = visitorService.lambdaQuery().list();
 
         return Result.succ(list);
     }
 
+    //分页查询所有游客
+    @RequiresAuthentication
+    @RequiresPermissions("user:read")
+    @GetMapping("/visitorList")
+    public Result getVisitorList(@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
 
+        Page page = new Page(currentPage, pageSize);
+        IPage pageData = visitorService.page(page, new QueryWrapper<Visitor>().orderByDesc("create_time"));
+        return Result.succ(pageData);
+    }
+
+    //分页查询所有游客
+    @RequiresAuthentication
+    @RequiresPermissions("user:read")
+    @GetMapping("/visitor/part")
+    public Result getVisitorListByTime(@RequestParam(defaultValue = "") String time,@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        String[] endStartTime = time.split(",");
+        if(endStartTime.length!=2){
+            return Result.fail("时间设置错误");
+        }
+        Page page = new Page(currentPage, pageSize);
+        IPage pageData = visitorService.page(page, new QueryWrapper<Visitor>().le("last_time",endStartTime[1]).ge("last_time",endStartTime[0]).orderByDesc("create_time"));
+        return Result.succ(pageData);
+    }
 
     //增改某个游客
     @RequiresAuthentication

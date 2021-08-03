@@ -28,7 +28,7 @@
         select b.id, b.title,b.description, b.status,b.first_picture, b.create_time, b.update_time, b.user_id,b.words,b.views,
        b.type_id,  t.id , t.type_name
         from blog as b left join type as t on b.type_id=t.id
-        where t.type_name = #{type Name} and b.status = 0
+        where t.type_name = #{type Name} and b.status = 1
         order by b.create_time DESC
 
     </select>

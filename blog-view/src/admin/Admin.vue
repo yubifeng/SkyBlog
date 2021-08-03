@@ -78,31 +78,31 @@ export default {
               title: '写文章',
               path: '/writeBlog'
             },
-            {
-              id: 12,
-              title: '写动态',
-              path: '/moments/write'
-            },
+            // {
+            //   id: 12,
+            //   title: '写动态',
+            //   path: '/moments/write'
+            // },
             {
               id: 13,
               title: '文章管理',
               path: '/blogList'
             },
-            {
-              id: 14,
-              title: '动态管理',
-              path: '/moments'
-            },
+            // {
+            //   id: 14,
+            //   title: '动态管理',
+            //   path: '/moments'
+            // },
             {
               id: 15,
               title: '分类管理',
-              path: '/categories'
+              path: '/type'
             },
-            {
-              id: 16,
-              title: '标签管理',
-              path: '/tags'
-            },
+            // {
+            //   id: 16,
+            //   title: '标签管理',
+            //   path: '/tags'
+            // },
             {
               id: 17,
               title: '评论管理',
@@ -114,21 +114,21 @@ export default {
           id: 2,
           title: '页面管理',
           children: [
-            {
-              id: 21,
-              title: '站点设置',
-              path: '/siteSettings'
-            },
+            // {
+            //   id: 21,
+            //   title: '站点设置',
+            //   path: '/siteSettings'
+            // },
             {
               id: 22,
               title: '友链管理',
-              path: '/friends'
+              path: '/friendList'
             },
-            {
-              id: 23,
-              title: '关于我',
-              path: '/about'
-            }
+            // {
+            //   id: 23,
+            //   title: '关于我',
+            //   path: '/about'
+            // }
           ]
         },
         {
@@ -136,36 +136,42 @@ export default {
           title: '系统管理',
           children: [
             {
-              id: 31,
-              title: '定时任务',
-              path: '/jobs'
+            id: 31,
+            title: '用户管理',
+            path: '/userManager'
             },
+            // {
+            //   id: 32,
+            //   title: '定时任务',
+            //   path: '/jobs'
+            // }
+
           ]
         },
         {
           id: 4,
           title: '日志管理',
           children: [
-            {
-              id: 41,
-              title: '任务日志',
-              path: '/jobs/logs'
-            },
-            {
-              id: 42,
-              title: '登录日志',
-              path: '/loginLog'
-            },
-            {
-              id: 43,
-              title: '操作日志',
-              path: '/operationLog'
-            },
-            {
-              id: 44,
-              title: '异常日志',
-              path: '/exceptionLog'
-            },
+            // {
+            //   id: 41,
+            //   title: '任务日志',
+            //   path: '/jobs/logs'
+            // },
+            // {
+            //   id: 42,
+            //   title: '登录日志',
+            //   path: '/loginLog'
+            // },
+            // {
+            //   id: 43,
+            //   title: '操作日志',
+            //   path: '/operationLog'
+            // },
+            // {
+            //   id: 44,
+            //   title: '异常日志',
+            //   path: '/exceptionLog'
+            // },
             {
               id: 45,
               title: '访问日志',
@@ -182,11 +188,11 @@ export default {
               title: '访客统计',
               path: '/visitor'
             },
-            {
-              id: 52,
-              title: '受访页面',
-              path: '/visitPage'
-            }
+            // {
+            //   id: 52,
+            //   title: '受访页面',
+            //   path: '/visitPage'
+            // }
           ]
         },
       ],
@@ -204,9 +210,10 @@ export default {
         '16': 'submenu ali-iconfont icon-biaoqian',
         '17': 'el-icon-s-comment',
         '21': 'submenu ali-iconfont icon-bianjizhandian',
-        '22': 'submenu ali-iconfont icon-friend',
+        '22': 'el-icon-share',
         '23': 'el-icon-tickets',
-        '31': 'el-icon-alarm-clock',
+        '31': 'el-icon-user-solid',
+        '32': 'el-icon-alarm-clock',
         '41': 'el-icon-alarm-clock',
         '42': 'el-icon-finished',
         '43': 'el-icon-document-checked',
@@ -235,11 +242,7 @@ export default {
     //登出
     logout() {
       const _this = this
-      this.$axios.get('/logout', {
-        headers: {
-          "Authorization": localStorage.getItem("token")
-        }
-      }).then((res) => {
+      this.$axios.get('/logout').then((res) => {
         _this.$store.commit('REMOVE_INFO')
         _this.$router.push('/login')
       });

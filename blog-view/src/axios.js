@@ -7,12 +7,23 @@ axios.defaults.baseURL = "http://127.0.0.1:8083"
 //请求拦截
 axios.interceptors.request.use(config => {
     //console.log("前置拦截")
-    // 可以统一设置请求头
+
+    //如果有token，统一带上
+    const token = window.localStorage.getItem('token')
+    if (token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
+        config.headers.Authorization = `${token}`;
+    }
+
+    // identification存在，可以统一设置请求头
     const identification = window.localStorage.getItem('identification')
-    //identification存在，且是基于baseURL的请求
+
     if (identification && !(config.url.startsWith('http://') || config.url.startsWith('https://'))) {
         config.headers.identification = identification
     }
+
+
+
+
     return config
 })
 //响应拦截
@@ -44,7 +55,7 @@ axios.interceptors.response.use(response => {
             error.message = error.response.data.msg
         }
         // 根据请求状态觉得是否登录或者提示其他
-        if (error.response.status === 401) {
+        if (error.response.status === 401||error.response.status === 500) {
             store.commit('REMOVE_INFO');
             router.push({
                 path: '/login'

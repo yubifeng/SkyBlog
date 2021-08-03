@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,6 +23,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class VisitLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,17 +40,31 @@ public class VisitLog implements Serializable {
     /**
      * 请求接口
      */
-    private String url;
+    private String uri;
 
     /**
      * 请求方式
      */
-    private String classMethod;
+    private String method;
 
     /**
      * 请求参数
      */
-    private String args;
+    private String param;
+
+    /**
+     * 访问行为
+     */
+    private String behavior;
+
+    /**
+     * 访问内容
+     */
+    private String content;
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * ip
@@ -69,8 +89,13 @@ public class VisitLog implements Serializable {
     /**
      * 访问时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
+    /**
+     * 访问行为
+     */
+    private Integer times;
     /**
      * user-agent用户代理
      */

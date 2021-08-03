@@ -1,6 +1,12 @@
 package com.danli.aspect;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONConverter;
+import cn.hutool.json.JSONObject;
+import com.danli.annotation.VisitLogger;
+import com.danli.common.lang.Result;
+import com.danli.entity.Blog;
 import com.danli.entity.VisitLog;
 import com.danli.entity.Visitor;
 import com.danli.service.RedisService;
@@ -10,18 +16,24 @@ import com.danli.util.IpAddressUtils;
 import com.danli.util.UserAgentUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,6 +59,7 @@ public class VisitLogAspect {
     @Autowired
     RedisService redisService;
 
+    ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
 
 
@@ -54,56 +67,136 @@ public class VisitLogAspect {
     /**
      * 配置切入点
      */
-    //@Pointcut("execution(* com.danli.controller.*.*(..))")
-    @Pointcut("execution(* com.danli.controller.BlogController.*(..))")
-    public void log(){}
+    //@Pointcut("execution(* com.danli.controller.BlogController.*(..))")
+    @Pointcut("@annotation(visitLogger)")
+    public void log(VisitLogger visitLogger){}
 
-    @Before("log()")
-    public void doBeforw(JoinPoint joinPoint) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        String url = request.getRequestURL().toString();
-        String ip = request.getHeader("x-forwarded-for");
-        //System.out.println("ip地址"+ip);
-        String userAgent = request.getHeader("User-Agent");
-        String classMethod = joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName();
-        String args = joinPoint.getArgs().toString();
-        VisitLogAspect.VisitQuestyLog visitQuestyLog =new VisitLogAspect.VisitQuestyLog(url,ip,userAgent,classMethod,args);
+    /**
+     * 配置环绕通知
+     *
+     * @param joinPoint
+	 * @return
+	 */
+    @Around("log(visitLogger)")
+    public Object logAround(ProceedingJoinPoint joinPoint,VisitLogger visitLogger) throws Throwable {
+
+        currentTime.set(System.currentTimeMillis());
+
+        //获取请求对象
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        //让目标方法执行 获取返回的结果
+        Object result = joinPoint.proceed();
+        int times = (int) (System.currentTimeMillis() - currentTime.get());
+        currentTime.remove();
 
 
-        //visitLogService.saveVisitLog(visitLog);
 
         //校验访客标识码
         String identification = checkIdentification(request);
 
-        String ipSource = IpAddressUtils.getCityInfo(visitQuestyLog.getIp());
-        Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(visitQuestyLog.getUserAgent());
+
+        VisitLog visitLog = handleLog(joinPoint, visitLogger, request, result, times, identification);
+        //保存至数据库
+        visitLogService.saveOrUpdate(visitLog);
+
+
+        return result;
+
+    }
+
+    /**
+     * 设置VisitLogger对象属性
+     *
+     * @param joinPoint
+     * @param visitLogger
+     * @param result
+     * @param times
+     * @return
+     */
+    private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
+                               int times, String identification) {
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        String behavior = visitLogger.behavior();
+        String content = visitLogger.content();
+        String ip = request.getHeader("x-forwarded-for");
+        String ipSource = IpAddressUtils.getCityInfo(ip);
+        String userAgent = request.getHeader("User-Agent");
+        Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(userAgent);
         String os = userAgentMap.get("os");
         String browser = userAgentMap.get("browser");
-        //保存至数据库
-        VisitLog temp = temp = new VisitLog();
-        temp.setCreateTime(LocalDateTime.now());
-        temp.setBrowser(browser);
-        temp.setOs(os);
-        temp.setIpSource(ipSource);
-        temp.setUuid(identification);
-        BeanUtil.copyProperties(visitQuestyLog, temp, "id", "createTime","browser","os");
-        visitLogService.saveOrUpdate(temp);
 
 
 
 
+
+        //获取参数名和参数值
+        Map<String, Object> requestParams = new LinkedHashMap<>();
+        String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
+        Object[] args = joinPoint.getArgs();
+        for (int i = 0; i < args.length; i++) {
+            if( args[i] instanceof HttpServletRequest || args[i] instanceof HttpServletResponse || args[i] instanceof MultipartFile){
+                continue;
+            }
+            requestParams.put(parameterNames[i], args[i]);
+        }
+
+        //根据访问内容和返回的结果判断访问的内容并进行备注
+        Map<String, String> map = judgeBehavior(behavior, content, requestParams, result);
+
+        VisitLog log = new VisitLog(null,identification, uri, method, new JSONObject(requestParams).toString(), behavior, map.get("content"),map.get("remark"), ip,ipSource,os,browser,LocalDateTime.now(),times, userAgent);
+        return log;
     }
 
-    @After("log()")
-    public void doAfter() {
 
+
+    /**
+     * 根据访问行为，设置对应的访问内容或备注
+     *
+     * @param behavior
+     * @param content
+     * @param requestParams
+     * @param result
+     * @return
+     */
+    private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
+        Map<String, String> map = new HashMap<>();
+        String remark = "";
+        if (behavior.equals("访问页面") && (content.equals("首页"))) {
+            int pageNum = (int) requestParams.get("currentPage");
+            remark = "第" + pageNum + "页";
+        } else if (behavior.equals("查看博客")) {
+            Result res = (Result) result;
+            if (res.getCode() == 200) {
+                Blog blog = (Blog) res.getData();
+                String title = blog.getTitle();
+                content = title;
+                remark = "文章标题：" + title;
+            }
+        } else if (behavior.equals("搜索博客")) {
+            Result res = (Result) result;
+            if (res.getCode() == 200) {
+                String query = (String) requestParams.get("queryString");
+                content = query;
+                remark = "搜索内容：" + query;
+            }
+        } else if (behavior.equals("查看分类")) {
+            String categoryName = (String) requestParams.get("typeName");
+            int pageNum = (int) requestParams.get("currentPage");
+            content = categoryName;
+            remark = "分类名称：" + categoryName + "，第" + pageNum + "页";
+        } else if (behavior.equals("点击友链")) {
+            String nickname = (String) requestParams.get("nickname");
+            content = nickname;
+            remark = "友链名称：" + nickname;
+        }
+        map.put("remark", remark);
+        map.put("content", content);
+        return map;
     }
 
 
-    @AfterReturning(returning = "result",pointcut = "log()")
-    public void doAfterReturn(Object result) {
-    }
 
 
     /**
@@ -188,15 +281,8 @@ public class VisitLogAspect {
         visitorService.saveOrUpdate(visitor);
         return uuid;
     }
-    @Data
-    @AllArgsConstructor
-    public class VisitQuestyLog {
-        private String url;
-        private String ip;
-        private String userAgent;
-        private String classMethod;
-        private String args;
 
-    }
+
+
 
 }

@@ -105,7 +105,7 @@ export default {
           {required: true, message: '请输入摘要', trigger: 'blur'}
         ],
         content: [
-          {trequired: true, message: '请输入内容', trigger: 'blur'}
+          {required: true, message: '请输入内容', trigger: 'blur'}
         ],
         words: [{required: true, message: '请输入文章字数', trigger: 'change'}],
       }
@@ -131,21 +131,32 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const _this = this
-          this.$axios.post('/blog/update', this.ruleForm, {
-            headers: {
-              "Authorization": localStorage.getItem("token")
-            }
-          }).then(res => {
-            console.log(res)
-            _this.$alert('操作成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-                _this.$router.push("/blogList")
-              }
-            });
-          })
-        } else {
-          //console.log('error submit!!');
+          if(_this.ruleForm.id==""){
+            this.$axios.post('/blog/create', this.ruleForm).then(res => {
+              console.log(res)
+              _this.$alert('操作成功', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  _this.$router.push("/blogList")
+                }
+              });
+            })
+          }
+          else{
+            this.$axios.post('/blog/update', this.ruleForm).then(res => {
+              console.log(res)
+              _this.$alert('操作成功', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  _this.$router.push("/blogList")
+                }
+              });
+            })
+          }
+
+        }
+        else {
+          console.log('error submit!!');
           return false;
         }
       });

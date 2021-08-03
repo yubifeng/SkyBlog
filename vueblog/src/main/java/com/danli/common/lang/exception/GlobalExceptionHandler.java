@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result jsonExceptionHandler(HttpServletRequest req, Exception e) {
 
-        return Result.fail(403, "权限不足！",null);
+        return Result.fail(403, "你的级别还不够高,加油吧！少年。",null);
     }
 
     // 捕捉shiro的认证异常

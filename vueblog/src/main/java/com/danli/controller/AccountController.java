@@ -31,9 +31,12 @@ public class AccountController {
     @PostMapping("/login")
     public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
-        Assert.notNull(user, "用户不存在");
+        Assert.notNull(user, "用户名或密码错误");
         if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
-            return Result.fail("密码错误！");
+            return Result.fail("用户名或密码错误！");
+        }
+        if(user.getStatus()==0){
+            return Result.fail("账户已被禁用");
         }
         String jwt = jwtUtils.generateToken(user.getId(),user.getUsername());
         response.setHeader("Authorization", jwt);
@@ -44,6 +47,7 @@ public class AccountController {
                 .put("username", user.getUsername())
                 .put("avatar", user.getAvatar())
                 .put("email", user.getEmail())
+                .put("role", user.getRole())
                 .map()
         );
     }

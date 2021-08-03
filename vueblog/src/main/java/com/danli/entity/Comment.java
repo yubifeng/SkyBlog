@@ -63,6 +63,10 @@ public class Comment implements Serializable {
      * 博主回复
      */
     private Integer isAdminComment;
+    /**
+     * 公开或隐藏
+     */
+    private Boolean isPublished;
 
     /**
      * 所属的文章

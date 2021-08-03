@@ -11,6 +11,16 @@
 
         </div>
       </el-timeline-item>
+
+      <div  class="home-page" v-if="pageShow===1">
+        <el-pagination :current-page=currentPage
+                       :page-size=pageSize
+                       :total="total"
+                       background
+                       layout="total,prev, pager, next"
+                       @current-change=getData>
+        </el-pagination>
+      </div>
     </el-timeline>
 
   </div>
@@ -23,20 +33,30 @@ export default {
 
   data() {
     return {
-      blogs: {}
+      blogs: {},
+      currentPage: 1,
+      total: 1,
+      pageSize: 10,
+      pageShow:  0
     }
   },
   methods: {
-    page() {
+    getData(currentPage) {
+      this.currentPage = currentPage
       const _this = this
-      this.$axios.get('/blogsIndex').then((res) => {
-        console.log(res.data.data.records)
-        _this.blogs = res.data.data
-      })
+      this.$axios.get('/blog/archives?currentPage='+this.currentPage).then((res) => {
+
+        _this.blogs = res.data.data.records
+        _this.total = res.data.data.total
+        _this.pageSize = res.data.data.size
+        _this.pageShow = 1
+      });
+      //改变页号后返回顶部
+      this.scrollToTop()
     }
   },
   mounted() {
-    this.page()
+    this.getData(1)
 
   }
 }
@@ -69,6 +89,9 @@ export default {
   -webkit-box-shadow: #ccc 0px 10px 10px;
   -moz-box-shadow: #ccc 0px 10px 10px;
   box-shadow: #ccc 0px 10px 10px;
+}
+.home-page {
+  text-align: center;
 }
 
 </style>

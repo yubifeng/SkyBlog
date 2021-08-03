@@ -10,7 +10,13 @@ import BlogEdit from '../admin/BlogEdit.vue';
 import BlogList from "../admin/BlogList";
 import Friends from "../views/Friends";
 import Category from "../views/Category";
-import BlogWrite from "@/admin/BlogWrite";
+import CommentList from "@/admin/CommentList";
+import FriendList from "@/admin/FriendList";
+import VisitLog from "@/admin/VisitLog";
+import VisitorList from "@/admin/VisitorList";
+import CategoryList from "@/admin/CategoryList";
+import UserManager from "@/admin/UserManager";
+
 
 Vue.use(VueRouter)
 const routes = [
@@ -30,13 +36,13 @@ const routes = [
         component: Admin,
         meta: {
             title: '后台管理',
-            //requireAuth: true
+            requireAuth: true
         },
         children: [
             {
                 path: '/writeBlog', // 注意放在 path: '/blog/:blogId'之前
                 name: 'BlogWrite',
-                component: BlogWrite,
+                component: BlogEdit,
                 meta: {
                     requireAuth: true,
                     title: '写博客'
@@ -55,9 +61,58 @@ const routes = [
                 path: '/blog/edit/:blogId',
                 name: 'BlogEdit',
                 meta: {
-                    requireAuth: true
+                    requireAuth: true,
+                    title: '编辑博客'
                 },
                 component: BlogEdit
+            },
+            {
+                path: '/type',
+                component: CategoryList,
+                meta: {
+                    requireAuth: true,
+                    title: '分类管理'
+                }
+            },
+            {
+                path: '/comments',
+                component: CommentList,
+                meta: {
+                    requireAuth: true,
+                    title: '评论管理'
+                }
+            },
+            {
+                path: '/friendList',
+                component: FriendList,
+                meta: {
+                    requireAuth: true,
+                    title: '友链管理'
+                }
+            },
+            {
+                path: '/userManager',
+                component: UserManager,
+                meta: {
+                    requireAuth: true,
+                    title: '用户管理'
+                }
+            },
+            {
+                path: '/visitLog',
+                component: VisitLog,
+                meta: {
+                    requireAuth: true,
+                    title: '访问日志'
+                }
+            },
+            {
+                path: '/visitor',
+                component: VisitorList,
+                meta: {
+                    requireAuth: true,
+                    title: '访客统计'
+                }
             },
 
         ]

@@ -221,7 +221,9 @@ export default {
       return false
     }
     if (this.$store.getters.getUser) {
-      this.commentForm.isAdminComment = 1;
+      if(this.$store.getters.getUser.role==="role_admin"||this.$store.getters.getUser.role==="role_root") {
+        this.commentForm.isAdminComment = 1;
+      }
     }
   },
 }

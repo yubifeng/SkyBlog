@@ -1,10 +1,15 @@
 package com.danli.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.entity.VisitLog;
+import com.danli.entity.Visitor;
 import com.danli.service.VisitLogService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +32,53 @@ public class VisitLogController {
 
     //查询所有游客浏览日志
     @RequiresAuthentication
-    @RequestMapping("/visitLogList")
+    @RequestMapping("/visitLog/all")
     public Result getFriendList(){
         List<VisitLog> list = visitLogService.lambdaQuery().list();
 
         return Result.succ(list);
     }
 
+    //分页查询所有游客
+    @RequiresAuthentication
+    @RequiresPermissions("user:read")
+    @GetMapping("/visitLogList")
+    public Result getVisitorList(@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
 
+        Page page = new Page(currentPage, pageSize);
+        IPage pageData = visitLogService.page(page, new QueryWrapper<VisitLog>().orderByDesc("create_time"));
+        return Result.succ(pageData);
+    }
+
+    //分页查询所有游客日志
+    @RequiresAuthentication
+    @RequiresPermissions("user:read")
+    @GetMapping("/visitLog/part")
+    public Result getVisitorList(@RequestParam(defaultValue = "") String uuid,@RequestParam(defaultValue = "") String time,@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
+        String[] endStartTime = time.split(",");
+        if(time.equals("")&&uuid.equals("")){
+            Page page = new Page(currentPage, pageSize);
+            IPage pageData = visitLogService.page(page, new QueryWrapper<VisitLog>().orderByDesc("create_time"));
+            return Result.succ(pageData);
+        }
+        if(time.equals("")){
+            Page page = new Page(currentPage, pageSize);
+            IPage pageData = visitLogService.page(page, new QueryWrapper<VisitLog>().eq("uuid",uuid ).orderByDesc("create_time"));
+            return Result.succ(pageData);
+        }
+        else if(uuid.equals("")){
+            Page page = new Page(currentPage, pageSize);
+            IPage pageData = visitLogService.page(page, new QueryWrapper<VisitLog>().le("create_time",endStartTime[1]).ge("create_time",endStartTime[0]).orderByDesc("create_time"));
+            return Result.succ(pageData);
+        }
+        else{
+            Page page = new Page(currentPage, pageSize);
+            IPage pageData = visitLogService.page(page, new QueryWrapper<VisitLog>().eq("uuid",uuid ).le("create_time",endStartTime[1]).ge("create_time",endStartTime[0]).orderByDesc("create_time"));
+            return Result.succ(pageData);
+        }
+
+
+    }
 
     //增改某个日志
     @RequiresAuthentication

@@ -87,7 +87,6 @@ public class AccountRealm extends AuthorizingRealm {
         if(!user.getUsername().equals(username)){
             throw new UnknownAccountException("userId与username不一致");
         }
-
         AccountProfile profile = new AccountProfile();
         //知道它的身份 principals
         BeanUtil.copyProperties(user, profile);

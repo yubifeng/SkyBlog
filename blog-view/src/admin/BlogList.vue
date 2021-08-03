@@ -20,9 +20,15 @@
       <el-table-column label="最近更新" width="170">
         <template v-slot="scope">{{ scope.row.updateTime }}</template>
       </el-table-column>
-      <el-table-column label="可见性" width="170">
-        <template v-slot="scope">{{ !scope.row.status ? '公开' : '私密' }}</template>
+
+
+
+      <el-table-column label="可见性" width="100">
+        <template v-slot="scope">
+          <el-switch v-model="scope.row.status"  :active-value="1" :inactive-value="0" @change="blogPublishedChanged(scope.row.id)"></el-switch>
+        </template>
       </el-table-column>
+
       <el-table-column label="用户id" width="170">
         <template v-slot="scope">{{ scope.row.userId }}</template>
       </el-table-column>
@@ -37,10 +43,11 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <div v-if="pageShow" class="home-page">
-      <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 30, 50]"
-                     :total="total" background layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="handleSizeChange" @current-change="page">
+    <div  class="home-page">
+      <!--分页-->
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pageNum"
+                     :page-sizes="[10, 20, 30, 50]" :page-size="queryInfo.pageSize" :total="total"
+                     layout="total, sizes, prev, pager, next, jumper" background>
       </el-pagination>
     </div>
   </div>
@@ -58,16 +65,13 @@ export default {
         pageSize: 10
       },
       blogList: [],
-      currentPage: 1,
       total: 0,
-      pageSize: 10,
-      pageShow: 0,
       types: []
     }
   },
   created() {
     this.getTypes()
-    this.page(1);
+    this.getData();
   },
   methods: {
     //跳转到博客编辑页
@@ -83,14 +87,15 @@ export default {
       //console.log(this.types)
     },
     //获取当前分页的博客
-    page(currentPage) {
+    getData() {
       const _this = this
-      this.$axios.get('/blogList?currentPage=' + currentPage).then((res) => {
+      this.$axios.get('/blogList?currentPage=' + this.queryInfo.pageNum+"&pageSize=" + this.queryInfo.pageSize,{
+        headers: {
+          "Authorization": localStorage.getItem("token")
+        }
+      }).then((res) => {
         _this.blogList = res.data.data.records
-        _this.currentPage = res.data.data.current
         _this.total = res.data.data.total
-        _this.pageSize = res.data.data.size
-        _this.pageShow = 1;
         for (var i in _this.blogList) {
           for (var j in _this.types) {
             if (_this.blogList[i].typeId == _this.types[j].id) {
@@ -98,17 +103,14 @@ export default {
             }
           }
         }
-        //console.log(_this.blogList)
-      })
+
+      });
+
     },
     //通过博客id删除博客
     deleteBlogById(blogId) {
       const _this = this
-      this.$axios.get('/blog/delete/' + blogId, {
-        headers: {
-          "Authorization": localStorage.getItem("token")
-        }
-      }).then((res) => {
+      this.$axios.get('/blog/delete/' + blogId).then((res) => {
         _this.$alert('操作成功', '提示', {
           confirmButtonText: '确定',
           callback: action => {
@@ -121,7 +123,31 @@ export default {
     //未实现
     search() {
     },
-    handleSizeChange() {
+    handleSizeChange(newPageSize) {
+      this.queryInfo.pageSize = newPageSize;
+      this.getData();
+
+    },
+    handleCurrentChange(newPage) {
+      this.queryInfo.pageNum = newPage
+      this.getData()
+    },
+
+
+
+    blogPublishedChanged(blogId){
+      const _this = this
+      this.$axios.get('/blog/publish/'+blogId).then((res) => {
+        _this.$alert('操作成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            _this.page(_this.currentPage)
+            //_this.$router.push("/blogList")
+          }
+        })
+      });
+
+
     }
   }
 }

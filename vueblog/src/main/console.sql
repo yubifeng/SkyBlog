@@ -128,18 +128,21 @@ CREATE TABLE `user`
   COLLATE = utf8mb4_general_ci
   ROW_FORMAT = Dynamic;
 
-
 INSERT INTO `user`
-VALUES ('1', 'admin', '96e79218965eb72c92a549dd5a330112', 'Admin',
+VALUES ('1', 'root', '96e79218965eb72c92a549dd5a330112', 'root',
+        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
+        '2020-04-20 10:44:01', 'role_root');
+INSERT INTO `user`
+VALUES ('2', 'admin', '96e79218965eb72c92a549dd5a330112', 'Admin',
         'https://image-1300566513.cos.ap-guangzhou.myqcloud.com/upload/images/5a9f48118166308daba8b6da7e466aab.jpg',
         'admin@naccl.top', '0', '2020-04-20 10:44:01', '2020-04-20 10:44:01', 'ROLE_admin');
 INSERT INTO `user`
-VALUES ('2', 'visit', '96e79218965eb72c92a549dd5a330112', 'User',
+VALUES ('3', 'user', '96e79218965eb72c92a549dd5a330112', 'User',
         'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
         '2020-04-20 10:44:01', 'ROLE_user');
 
 INSERT INTO `user`
-VALUES ('3', 'visitor', '96e79218965eb72c92a549dd5a330112', 'vistor',
+VALUES ('4', 'visitor', '96e79218965eb72c92a549dd5a330112', 'vistor',
         'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
         '2020-04-20 10:44:01', 'role_guest');
 -- ----------------------------
@@ -156,6 +159,7 @@ CREATE TABLE `comment`
     `create_time`             datetime(0)                                                   NULL DEFAULT NULL COMMENT '评论时间',
     `ip`                      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '评论者ip地址',
     `is_admin_comment`        int(1)                                                        NOT NULL COMMENT '博主回复',
+    `is_published`            bit(1)                                                        NOT NULL DEFAULT TRUE COMMENT '公开或非公开',
     `blog_id`                 bigint(255)                                                   NULL DEFAULT NULL COMMENT '所属的文章',
     `parent_comment_id`       bigint(0)                                                     NULL DEFAULT NULL COMMENT '父评论id，-1为根评论',
     `website`                 varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '个人网站',
@@ -170,52 +174,72 @@ CREATE TABLE `comment`
 INSERT INTO `comment`
 VALUES ('1', '醉墨', '8949048964@qq.com', '测试1',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-22 22:05:49', '101,2,2,1', '0', '19', '-1', '32', '范德萨', '894904866');
+        '2020-05-22 22:05:49', '101,2,2,1', '0',TRUE, '19', '-1', '32', '范德萨', '894904866');
 INSERT INTO `comment`
 VALUES ('2', '醉墨', '8949048964@qq.com', '测试11',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-23 22:05:49', '101,2,2,1', '1', '19', '1', '32', '范德萨', '894904866');
+        '2020-05-23 22:05:49', '101,2,2,1', '1', TRUE,'19', '1', '32', '范德萨', '894904866');
 INSERT INTO `comment`
 VALUES ('3', '醉墨', '8949048964@qq.com', '测试12',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-24 22:05:49', '101,2,2,1', '0', '19', '1', '32', '范德萨', '894904866');
+        '2020-05-24 22:05:49', '101,2,2,1', '0', TRUE,'19', '1', '32', '范德萨', '894904866');
 INSERT INTO `comment`
 VALUES ('4', '醉墨', '8949048964@qq.com', '测试2',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-25 22:05:49', '101,2,2,1', '1', '19', '-1', '32', '范德萨', '894904866');
+        '2020-05-25 22:05:49', '101,2,2,1', '1',TRUE, '19', '-1', '32', '范德萨', '894904866');
 INSERT INTO `comment`
 VALUES ('5', '醉墨', '8949048964@qq.com', '测试21',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-26 22:05:49', '101,2,2,1', '0', '19', '4', '32', '范德萨', '894904866');
+        '2020-05-26 22:05:49', '101,2,2,1', '0',TRUE, '19', '4', '32', '范德萨', '894904866');
 INSERT INTO `comment`
 VALUES ('6', '醉墨', '8949048964@qq.com', '测试3',
         'https://hbimg.huabanimg.com/8c7e98227a291c52e3951931b7a07158eec2acda27a8b-87wdWD_fw658/format/webp',
-        '2020-05-27 22:05:49', '101,2,2,1', '1', '19', '-1', '32', '范德萨', '894904866');
+        '2020-05-27 22:05:49', '101,2,2,1', '1', TRUE,'19', '-1', '32', '范德萨', '894904866');
 
 
+# -- Table structure for visit_log
+# -- ----------------------------
+# DROP TABLE IF EXISTS `visit_log`;
+# CREATE TABLE `visit_log`  (
+#                               `id` bigint(0) NOT NULL AUTO_INCREMENT,
+#                               `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求接口',
+#                               `class_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求方式',
+#                               `args` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求参数',
+#                               `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
+#                               `ip_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip来源',
+#                               `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+#                               `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
+#                               `create_time` datetime(0) NOT NULL COMMENT '访问时间',
+#                               `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
+#                               PRIMARY KEY (`id`) USING BTREE
+# ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+#
+#
+
+
+
+
+-- ----------------------------
 -- Table structure for visit_log
 -- ----------------------------
 DROP TABLE IF EXISTS `visit_log`;
 CREATE TABLE `visit_log`  (
                               `id` bigint(0) NOT NULL AUTO_INCREMENT,
-                              `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求接口',
-                              `class_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求方式',
-                              `args` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求参数',
+                              `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访客标识码',
+                              `uri` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求接口',
+                              `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求方式',
+                              `param` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求参数',
+                              `behavior` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问行为',
+                              `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问内容',
                               `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
                               `ip_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip来源',
                               `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
                               `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
-                              `create_time` datetime(0) NOT NULL COMMENT '访问时间',
+                              `times` int(0) NOT NULL COMMENT '请求耗时（毫秒）',
+                              `create_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
                               `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
-
-
-
-
-
-
 -- ----------------------------
 -- Table structure for friend
 -- ----------------------------

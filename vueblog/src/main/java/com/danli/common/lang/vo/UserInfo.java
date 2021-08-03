@@ -1,4 +1,4 @@
-package com.danli.entity;
+package com.danli.common.lang.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,22 +9,12 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author fanfanli
- * @since 2021-04-08
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class User implements Serializable {
-
+public class UserInfo {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -36,11 +26,6 @@ public class User implements Serializable {
     @NotBlank(message = "用户名不能为空")
     private String username;
 
-    /**
-     * 密码
-     */
-    @NotBlank(message = "密码不能为空")
-    private String password;
 
     /**
      * 昵称
@@ -78,6 +63,4 @@ public class User implements Serializable {
      * 角色访问权限
      */
     private String role;
-
-
 }

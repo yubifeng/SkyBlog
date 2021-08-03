@@ -29,7 +29,7 @@
                      :total="total"
                      background
                      layout="prev, pager, next"
-                     @current-change=page>
+                     @current-change=getData>
       </el-pagination>
     </div>
 
@@ -72,7 +72,7 @@ export default {
       //console.log(this.types)
     },
     //分页获取博客
-    page(currentPage) {
+    getData(currentPage) {
       const _this = this
       this.$axios.get('/blogs?currentPage=' + currentPage).then((res) => {
 
@@ -81,13 +81,7 @@ export default {
         _this.total = res.data.data.total
         _this.pageSize = res.data.data.size
         _this.pageShow = 1
-        //console.log(_this.blogs)
-        // var MardownIt = require("markdown-it")
-        // var md = new MardownIt()
-        // for (var i in _this.blogs) {
-        //   // var result = md.render(_this.blogs[i].description)
-        //   _this.blogs[i].descriptionMd = result
-        // }
+
         for (var i in _this.blogs) {
           for (var j in _this.types) {
             if (_this.blogs[i].typeId == _this.types[j].id) {
@@ -97,8 +91,6 @@ export default {
 
 
         }
-        //console.log(_this.blogList)
-        //console.log(_this.blogs)
       })
 
       //改变页号后返回顶部
@@ -108,7 +100,7 @@ export default {
   },
   created() {
     this.getTypes()
-    this.page(1);
+    this.getData(1);
     //console.log(this.blogs)
   }
 }

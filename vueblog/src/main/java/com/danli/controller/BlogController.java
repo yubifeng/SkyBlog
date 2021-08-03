@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.BlogInfo;
 import com.danli.entity.Blog;
@@ -44,16 +45,17 @@ public class BlogController {
      * @param currentPage 页码
      * @return
      */
+    @VisitLogger(behavior = "访问页面",content = "首页")
     @GetMapping("/blogs")
     public Result blogs(@RequestParam(defaultValue = "1") Integer currentPage) {
 
         Page page = new Page(currentPage, 5);
-        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 0).orderByDesc("create_time"));
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 1).orderByDesc("create_time"));
 
         return Result.succ(pageData);
     }
 
-
+    @VisitLogger(behavior = "查看分类")
     @GetMapping("/blogsByType")
     public Result blogsByType(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam String typeName) {
         List<BlogInfo> list = blogService.getBlogInfoListByCategoryName(typeName);
@@ -90,46 +92,54 @@ public class BlogController {
         return Result.succ(page);
     }
 
-
+    @RequiresPermissions("user:read")
     @GetMapping("/blogList")
-    public Result blogList(@RequestParam(defaultValue = "1") Integer currentPage) {
+    public Result blogList(@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
 
-        Page page = new Page(currentPage, 10);
+        Page page = new Page(currentPage, pageSize);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("create_time"));
         return Result.succ(pageData);
     }
 
-
+    @RequiresPermissions("user:read")
+    @GetMapping("/blog/all")
+    public Result blogAll() {
+        List<Blog> list = blogService.lambdaQuery().list();
+        return Result.succ(list);
+    }
+    @VisitLogger(behavior = "访问页面",content = "友链")
     @GetMapping("/friends")
     public Result friends() {
-        List<Blog> list = blogService.lambdaQuery().eq(Blog::getStatus, 1).eq(Blog::getTitle, "友情链接").list();
+        List<Blog> list = blogService.lambdaQuery().eq(Blog::getTitle, "友情链接").list();
 
         return Result.succ(list.get(0));
     }
 
+    @VisitLogger(behavior = "访问页面",content = "关于我")
     @GetMapping("/about")
     public Result aboutMe() {
-        List<Blog> list = blogService.lambdaQuery().eq(Blog::getId, 1).list();
+        List<Blog> list = blogService.lambdaQuery().eq(Blog::getTitle, "关于我！！").list();
 
 
         return Result.succ(list.get(0));
     }
 
-
-    @GetMapping("/blogsIndex")
-    public Result blogs() {
-        List<Blog> list = blogService.list(new QueryWrapper<Blog>().ne("status", 1).orderByDesc("create_time"));
-        return Result.succ(list);
+    @VisitLogger(behavior = "访问页面",content = "归档")
+    @GetMapping("/blog/archives")
+    public Result getBlogsArchives(@RequestParam(defaultValue = "1") Integer currentPage) {
+        Page page = new Page(currentPage, 15);
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 1).orderByDesc("create_time"));
+        return Result.succ(pageData);
     }
 
-
+    @VisitLogger(behavior = "搜索博客")
     @GetMapping("/search")
     public Result search(@RequestParam String queryString) {
-        List<Blog> list = blogService.list(new QueryWrapper<Blog>().like("content", queryString).ne("status", 1).orderByDesc("create_time"));
+        List<Blog> list = blogService.list(new QueryWrapper<Blog>().like("content", queryString).eq("status", 1).orderByDesc("create_time"));
         return Result.succ(list);
     }
 
-
+    @VisitLogger(behavior = "查看博客")
     @GetMapping("/blog/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
         Blog blog = blogService.getById(id);
@@ -195,7 +205,24 @@ public class BlogController {
         return Result.succ(null);
     }
 
+    @RequiresPermissions("user:update")
+    @RequestMapping("blog/publish/{id}")
+    public Result publish(@PathVariable(name = "id")String id){
+        Blog blog = blogService.getById(id);
+        if (blog.getStatus()==0)
+        {
+            blog.setStatus(1 );
+        }
+        else {
+            blog.setStatus(0);
+        }
 
+//        Friend temp = new Friend();
+//        BeanUtil.copyProperties(friend, temp);
+        blogService.saveOrUpdate(blog);
+        return Result.succ(null);
+
+    }
 
     //博客浏览次数加一
     @RequestMapping("/blog/view/{id}")

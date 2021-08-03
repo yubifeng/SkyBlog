@@ -23,7 +23,7 @@
     <div class="friends-segment">
 
         <a :href="item.website" target="_blank" rel="external nofollow noopener" class="card" :style="randomRGB()"
-           v-for="(item,index) in friendList" :key="index" @click="addViews(item.id)">
+           v-for="(item,index) in friendList" :key="index" @click="addViews(item.nickname)">
           <div class="image">
             <img :src="item.avatar" onerror="this.src = '/img/error.png'">
           </div>
@@ -99,7 +99,7 @@ export default {
     },
     getFriendList(){
       const _this = this
-      this.$axios.get('/friendList').then(res => {
+      this.$axios.get('/friend/all').then(res => {
         _this.friendList = res.data.data
       })
 
@@ -109,8 +109,8 @@ export default {
       const index = Math.floor((Math.random() * this.bgColor.length))
       return {backgroundColor: this.bgColor[index]}
     },
-    addViews(id){
-      this.$axios.get('/friend/'+id).then(res => {
+    addViews(nickname){
+      this.$axios.get('/friend/onclick?nickname='+nickname).then(res => {
 
       })
     }

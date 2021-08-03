@@ -7,7 +7,9 @@
 </p>
 
 ## 博客预览
-[博客地址](https://www.skymo.top)
+博客地址：https://www.skymo.top 
+
+后台：https://www.skymo.top/login 账号`Visitor` 密码`111111`
 
 
 

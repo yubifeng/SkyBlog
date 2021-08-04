@@ -7,14 +7,11 @@ spring:
     url: jdbc:mysql://localhost:3306/vueblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
     username: root
     password: 1234
+  redis:
+      host: localhost
+      timeout: 5000
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
-shiro-redis:
-  enabled: true
-  redis-manager:
-    host: 127.0.0.1:6379
-    timeout: 5000
-    maxTotal: 1000
 fanli:
   jwt:
     # 部署上线务必修改此配置，以保证token的安全性

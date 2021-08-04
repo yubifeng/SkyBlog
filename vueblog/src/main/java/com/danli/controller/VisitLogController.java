@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.entity.VisitLog;
-import com.danli.entity.Visitor;
 import com.danli.service.VisitLogService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +32,7 @@ public class VisitLogController {
 
     //查询所有游客浏览日志
     @RequiresAuthentication
+    @RequiresPermissions("user:read")
     @RequestMapping("/visitLog/all")
     public Result getFriendList(){
         List<VisitLog> list = visitLogService.lambdaQuery().list();
@@ -98,6 +99,8 @@ public class VisitLogController {
     }
 
     //删除某个浏览日志
+    @RequiresRoles("role_root")
+    @RequiresPermissions("user:delete")
     @RequiresAuthentication
     @GetMapping("/visitLog/delete/{id}")
     public Result delete(@PathVariable(name = "id") Long id) {

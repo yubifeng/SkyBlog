@@ -9,10 +9,8 @@ import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.BlogInfo;
 import com.danli.entity.Blog;
-import com.danli.entity.Friend;
 import com.danli.service.BlogService;
 import com.danli.util.ShiroUtil;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -59,19 +57,14 @@ public class BlogController {
     @GetMapping("/blogsByType")
     public Result blogsByType(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam String typeName) {
         List<BlogInfo> list = blogService.getBlogInfoListByCategoryName(typeName);
-
         int pageSize = 5;
-
         Page page = new Page();
         int size = list.size();
-
         if (pageSize > size) {
             pageSize = size;
         }
-
         // 求出最大页数，防止currentPage越界
         int maxPage = size % pageSize == 0 ? size / pageSize : size / pageSize + 1;
-
         if (currentPage > maxPage) {
             currentPage = maxPage;
         }
@@ -85,10 +78,7 @@ public class BlogController {
         for (int i = 0; i < pageSize && curIdx + i < size; i++) {
             pageList.add(list.get(curIdx + i));
         }
-
         page.setCurrent(currentPage).setSize(pageSize).setTotal(list.size()).setRecords(pageList);
-
-
         return Result.succ(page);
     }
 
@@ -216,9 +206,6 @@ public class BlogController {
         else {
             blog.setStatus(0);
         }
-
-//        Friend temp = new Friend();
-//        BeanUtil.copyProperties(friend, temp);
         blogService.saveOrUpdate(blog);
         return Result.succ(null);
 

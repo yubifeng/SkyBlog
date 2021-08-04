@@ -4,9 +4,7 @@ package com.danli.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
-import com.danli.entity.Friend;
 import com.danli.entity.Type;
 import com.danli.service.TypeService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,7 +32,6 @@ public class TypeController {
 
     @GetMapping("/types")
     public Result blogs() {
-
         List<Type> list = typeService.list(new QueryWrapper<Type>());
         return Result.succ(list);
     }

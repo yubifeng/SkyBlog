@@ -10,11 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
-import java.lang.reflect.Method;
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.net.InetAddress;
+import java.lang.reflect.Method;
 
 @Slf4j
 @Component

@@ -3,7 +3,6 @@ package com.danli.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.danli.common.lang.vo.UserInfo;
 import com.danli.entity.User;
-import com.danli.mapper.BlogMapper;
 import com.danli.mapper.UserMapper;
 import com.danli.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

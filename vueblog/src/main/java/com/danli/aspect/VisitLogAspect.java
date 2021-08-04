@@ -1,8 +1,5 @@
 package com.danli.aspect;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONConverter;
 import cn.hutool.json.JSONObject;
 import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
@@ -14,12 +11,10 @@ import com.danli.service.VisitLogService;
 import com.danli.service.VisitorService;
 import com.danli.util.IpAddressUtils;
 import com.danli.util.UserAgentUtils;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

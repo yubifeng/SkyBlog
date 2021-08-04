@@ -9,7 +9,6 @@ import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.PageComment;
 import com.danli.entity.Comment;
-import com.danli.entity.Friend;
 import com.danli.service.CommentService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -76,10 +75,7 @@ public class CommentController {
 
             List<PageComment> repley = commentService.getPageCommentList(blogId, pageComment.getId());
             pageComment.setReplyComments(repley);
-
-
         }
-
         //Assert.notNull(blog, "该博客已删除！");
         return Result.succ(pageComments);
 

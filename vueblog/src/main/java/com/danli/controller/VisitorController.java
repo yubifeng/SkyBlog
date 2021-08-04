@@ -6,17 +6,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.VisitorNum;
-import com.danli.entity.Friend;
-import com.danli.entity.VisitLog;
 import com.danli.entity.Visitor;
 import com.danli.service.VisitorService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,6 +52,7 @@ public class VisitorController {
     }
 
     //查询所有游客
+    @RequiresPermissions("user:read")
     @RequiresAuthentication
     @RequestMapping("/visitor")
     public Result getAllVisiorList(){
@@ -105,7 +104,9 @@ public class VisitorController {
     }
 
     //删除某个游客
+    @RequiresRoles("role_root")
     @RequiresAuthentication
+    @RequiresPermissions("user:delete")
     @GetMapping("/visitor/delete/{id}")
     public Result delete(@PathVariable(name = "id") Long id) {
 

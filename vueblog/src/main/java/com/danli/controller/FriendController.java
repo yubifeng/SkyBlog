@@ -1,15 +1,12 @@
 package com.danli.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
-import com.danli.entity.Blog;
 import com.danli.entity.Friend;
-import com.danli.entity.Visitor;
 import com.danli.service.FriendService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -36,6 +33,7 @@ public class FriendController {
 
     @Autowired
     FriendService friendService;
+
     //查询所有友链
     @RequestMapping("/friend/all")
     public Result getFriendList(){
@@ -69,7 +67,7 @@ public class FriendController {
         return Result.succ(null);
     }
 
-
+    @RequiresAuthentication
     @RequiresPermissions("user:update")
     @RequestMapping("friend/publish/{id}")
     public Result publish(@PathVariable(name = "id")Long id){

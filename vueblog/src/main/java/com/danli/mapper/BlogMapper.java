@@ -14,11 +14,14 @@ import java.util.List;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 @Mapper
 @Repository
 public interface BlogMapper extends BaseMapper<Blog> {
+    /**
+     * 根据分类查询博客
+     */
     List<BlogInfo> getBlogByTypeName(String typeName);
 
 }

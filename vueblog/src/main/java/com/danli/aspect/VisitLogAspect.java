@@ -34,12 +34,11 @@ import java.util.UUID;
 
 
 /**
- * @Description: AOP记录访问日志
- * @Author: fanfanli
- * @Date: 2021-05-03
+ * AOP记录访问日志
+ *
+ * @author fanfanli
+ * @date  2021/5/3
  */
-
-
 @Component
 @Aspect
 public class VisitLogAspect {
@@ -54,50 +53,38 @@ public class VisitLogAspect {
     @Autowired
     RedisService redisService;
 
+
     ThreadLocal<Long> currentTime = new ThreadLocal<>();
-
-
 
 
     /**
      * 配置切入点
      */
-    //@Pointcut("execution(* com.danli.controller.BlogController.*(..))")
     @Pointcut("@annotation(visitLogger)")
     public void log(VisitLogger visitLogger){}
 
     /**
      * 配置环绕通知
      *
-     * @param joinPoint
-	 * @return
+     * @param joinPoint 连接点
+	 * @return 返回方法执行后的结果
 	 */
     @Around("log(visitLogger)")
     public Object logAround(ProceedingJoinPoint joinPoint,VisitLogger visitLogger) throws Throwable {
 
         currentTime.set(System.currentTimeMillis());
-
         //获取请求对象
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
         //让目标方法执行 获取返回的结果
         Object result = joinPoint.proceed();
         int times = (int) (System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
-
-
-
         //校验访客标识码
         String identification = checkIdentification(request);
-
-
         VisitLog visitLog = handleLog(joinPoint, visitLogger, request, result, times, identification);
         //保存至数据库
         visitLogService.saveOrUpdate(visitLog);
-
-
         return result;
-
     }
 
     /**
@@ -121,11 +108,6 @@ public class VisitLogAspect {
         Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(userAgent);
         String os = userAgentMap.get("os");
         String browser = userAgentMap.get("browser");
-
-
-
-
-
         //获取参数名和参数值
         Map<String, Object> requestParams = new LinkedHashMap<>();
         String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
@@ -136,10 +118,8 @@ public class VisitLogAspect {
             }
             requestParams.put(parameterNames[i], args[i]);
         }
-
         //根据访问内容和返回的结果判断访问的内容并进行备注
         Map<String, String> map = judgeBehavior(behavior, content, requestParams, result);
-
         VisitLog log = new VisitLog(null,identification, uri, method, new JSONObject(requestParams).toString(), behavior, map.get("content"),map.get("remark"), ip,ipSource,os,browser,LocalDateTime.now(),times, userAgent);
         return log;
     }
@@ -153,7 +133,7 @@ public class VisitLogAspect {
      * @param content
      * @param requestParams
      * @param result
-     * @return
+     * @return 返回内容和备注为主键的map
      */
     private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
         Map<String, String> map = new HashMap<>();
@@ -198,7 +178,7 @@ public class VisitLogAspect {
      * 校验访客标识码
      *
      * @param request
-     * @return
+     * @return 访客标识码UUID
      */
     private String checkIdentification(HttpServletRequest request) {
         String identification = request.getHeader("identification");
@@ -220,8 +200,6 @@ public class VisitLogAspect {
                     Visitor visitor = visitorService.getVisitorByUuid(identification);
                     visitor.setPv(visitor.getPv()+1);
                     visitor.setLastTime(LocalDateTime.now());
-                    //Visitor temp = new Visitor();
-                    //BeanUtil.copyProperties(visitor, temp);
                     visitorService.saveOrUpdate(visitor);
 
                 } else {
@@ -238,8 +216,6 @@ public class VisitLogAspect {
                     Visitor visitor = visitorService.getVisitorByUuid(identification);
                     visitor.setPv(visitor.getPv()+1);
                     visitor.setLastTime(LocalDateTime.now());
-                    //Visitor temp = new Visitor();
-                    //BeanUtil.copyProperties(visitor, temp);
                     visitorService.saveOrUpdate(visitor);
                 }
             }
@@ -251,7 +227,7 @@ public class VisitLogAspect {
      * 签发UUID，并保存至数据库和Redis
      *
      * @param request
-     * @return
+     * @return UUID
      */
     private String saveUUID(HttpServletRequest request) {
         //获取响应对象
@@ -276,8 +252,4 @@ public class VisitLogAspect {
         visitorService.saveOrUpdate(visitor);
         return uuid;
     }
-
-
-
-
 }

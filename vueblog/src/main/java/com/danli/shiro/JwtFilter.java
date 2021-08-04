@@ -20,6 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * shiro过滤器
+ *
+ * @author fanfanli
+ * @date  2021/5/28
+ */
 @Component
 public class JwtFilter extends AuthenticatingFilter {
     @Autowired

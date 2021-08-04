@@ -11,12 +11,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- *
- * </p>
+ * 评论实体类
  *
  * @author fanfanli
- * @since 2021-04-26
+ * @date  2021/4/26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -18,19 +18,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 访客记录前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @RestController
 public class VisitLogController {
     @Autowired
     VisitLogService visitLogService;
 
-    //查询所有游客浏览日志
+    /**
+     * 查询所有游客浏览日志
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @RequestMapping("/visitLog/all")
@@ -40,7 +40,9 @@ public class VisitLogController {
         return Result.succ(list);
     }
 
-    //分页查询所有游客
+    /**
+     * 分页查询所有游客
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/visitLogList")
@@ -51,7 +53,10 @@ public class VisitLogController {
         return Result.succ(pageData);
     }
 
-    //分页查询所有游客日志
+
+    /**
+     * 根据uuid 访问时间范围 分页查询所有游客日志
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/visitLog/part")
@@ -78,10 +83,12 @@ public class VisitLogController {
             return Result.succ(pageData);
         }
 
-
     }
 
-    //增改某个日志
+
+    /**
+     * 修改游客访问日志
+     */
     @RequiresAuthentication
     @PostMapping("/visitLog/update")
     public Result updateVisitLog(@Validated @RequestBody VisitLog visitLog){
@@ -98,7 +105,10 @@ public class VisitLogController {
         return Result.succ(null);
     }
 
-    //删除某个浏览日志
+
+    /**
+     * 删除某个浏览日志
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication
@@ -110,7 +120,5 @@ public class VisitLogController {
         } else {
             return Result.fail("删除失败");
         }
-
-
     }
 }

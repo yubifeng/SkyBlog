@@ -5,12 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 网站设置前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @RestController
 @RequestMapping("/site-setting")

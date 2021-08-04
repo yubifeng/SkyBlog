@@ -7,14 +7,17 @@ import com.danli.entity.User;
 import java.util.List;
 
 /**
- * <p>
  * 服务类
- * </p>
  *
  * @author fanfanli
- * @since 2021-04-05
+ * @date  2021/4/5
  */
 public interface UserService extends IService<User> {
+    /**
+     * 查询所有用户（只含有部分信息）
+     *
+     * @return 用户（只含有部分信息）list
+     */
     List<UserInfo> getUserInfoList();
 
 }

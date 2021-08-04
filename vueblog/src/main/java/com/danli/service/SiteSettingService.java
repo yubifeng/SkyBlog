@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.danli.entity.SiteSetting;
 
 /**
- * <p>
  * 服务类
- * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 public interface SiteSettingService extends IService<SiteSetting> {
 

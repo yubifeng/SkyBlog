@@ -2,6 +2,12 @@ package com.danli.shiro;
 
 import org.apache.shiro.authc.AuthenticationToken;
 
+/**
+ * Jwt
+ *
+ * @author fanfanli
+ * @date  2021/5/28
+ */
 public class JwtToken implements AuthenticationToken {
     private String token;
 

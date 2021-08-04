@@ -7,12 +7,10 @@ import com.danli.service.FriendService;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
  * 服务实现类
- * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 @Service
 public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> implements FriendService {

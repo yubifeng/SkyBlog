@@ -13,6 +13,12 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 登录认证和授权
+ *
+ * @author fanfanli
+ * @date  2021/5/28
+ */
 @Slf4j
 @Component
 public class AccountRealm extends AuthorizingRealm {

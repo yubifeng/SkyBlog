@@ -9,7 +9,7 @@ import com.danli.entity.SiteSetting;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 public interface SiteSettingMapper extends BaseMapper<SiteSetting> {
 

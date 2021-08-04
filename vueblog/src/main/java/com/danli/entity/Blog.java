@@ -11,12 +11,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- *
- * </p>
+ *  博客实体类
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -87,6 +85,9 @@ public class Blog implements Serializable {
 
     private Long userId;
 
+    /**
+     * 博客状态
+     */
     private Integer status;
 
 

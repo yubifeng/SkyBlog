@@ -4,6 +4,12 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 传给前端的分页视图对象
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @Data
 public class PageResult {
     private List<BlogInfo> records;

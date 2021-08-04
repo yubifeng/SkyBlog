@@ -19,30 +19,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 访客前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @RestController
 public class VisitorController {
     @Autowired
     VisitorService visitorService;
-//    @RequestMapping("/visitor")
-//    public Result visitorInfo(Visitor visitor) {
-//        System.out.println(visitor);
-//        if (visitor != null) {
-//            visitorService.saveOrUpdate(visitor);
-//            return Result.succ(null);
-//        } else {
-//         return Result.fail(null);
-//        }
-//
-//    }
 
-    //获取总uv和pv
+    /**
+     * 获取总uv和pv
+     */
     @GetMapping("/visitornum")
     public Result getPvAndUv(){
         int uv = visitorService.list().size();
@@ -51,7 +40,10 @@ public class VisitorController {
         return Result.succ(visitorNum);
     }
 
-    //查询所有游客
+
+    /**
+     * 查询所有游客
+     */
     @RequiresPermissions("user:read")
     @RequiresAuthentication
     @RequestMapping("/visitor")
@@ -61,7 +53,10 @@ public class VisitorController {
         return Result.succ(list);
     }
 
-    //分页查询所有游客
+
+    /**
+     * 分页查询所有游客
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/visitorList")
@@ -72,7 +67,10 @@ public class VisitorController {
         return Result.succ(pageData);
     }
 
-    //分页查询所有游客
+
+    /**
+     * 根据访问时间 分页查询所有游客
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/visitor/part")
@@ -86,7 +84,10 @@ public class VisitorController {
         return Result.succ(pageData);
     }
 
-    //增改某个游客
+
+    /**
+     * 修改某个游客信息
+     */
     @RequiresAuthentication
     @PostMapping("/visitor/update")
     public Result updateVisitLog(@Validated @RequestBody Visitor visitor){
@@ -103,7 +104,10 @@ public class VisitorController {
         return Result.succ(null);
     }
 
-    //删除某个游客
+
+    /**
+     * 删除某个游客
+     */
     @RequiresRoles("role_root")
     @RequiresAuthentication
     @RequiresPermissions("user:delete")
@@ -115,8 +119,6 @@ public class VisitorController {
         } else {
             return Result.fail("删除失败");
         }
-
-
     }
 
 

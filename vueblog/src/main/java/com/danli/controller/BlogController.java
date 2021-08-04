@@ -24,13 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 博客前端控制器
  *
- * @@Description 博客相关
- * @Author Danli
- * @Date 2021-04-05
+ * @author fanfanli
+ * @date 2021-04-05
  */
 @RestController
 public class BlogController {
@@ -38,14 +35,11 @@ public class BlogController {
     BlogService blogService;
 
     /**
-     * 按置顶、创建时间排序 分页查询博客简要信息列表
-     *
-     * @param currentPage 页码
-     * @return
+     * 按置顶、创建时间排序 分页查询公开的博客
      */
     @VisitLogger(behavior = "访问页面",content = "首页")
     @GetMapping("/blogs")
-    public Result blogs(@RequestParam(defaultValue = "1") Integer currentPage) {
+    public Result getBlogsByPage(@RequestParam(defaultValue = "1") Integer currentPage) {
 
         Page page = new Page(currentPage, 5);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 1).orderByDesc("create_time"));
@@ -53,6 +47,9 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
+    /**
+     * 按创建时间排序 分类 分页查询公开的博客简要信息列表
+     */
     @VisitLogger(behavior = "查看分类")
     @GetMapping("/blogsByType")
     public Result blogsByType(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam String typeName) {
@@ -68,12 +65,9 @@ public class BlogController {
         if (currentPage > maxPage) {
             currentPage = maxPage;
         }
-
         // 当前页第一条数据的下标
         int curIdx = currentPage > 1 ? (currentPage - 1) * pageSize : 0;
-
         List pageList = new ArrayList();
-
         // 将当前页的数据放进pageList
         for (int i = 0; i < pageSize && curIdx + i < size; i++) {
             pageList.add(list.get(curIdx + i));
@@ -82,6 +76,9 @@ public class BlogController {
         return Result.succ(page);
     }
 
+    /**
+     * 按创建时间排序 分页查询所有博客
+     */
     @RequiresPermissions("user:read")
     @GetMapping("/blogList")
     public Result blogList(@RequestParam(defaultValue = "1") Integer currentPage,@RequestParam(defaultValue = "10") Integer pageSize) {
@@ -91,12 +88,18 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
+    /**
+     * 查询所有博客
+     */
     @RequiresPermissions("user:read")
     @GetMapping("/blog/all")
     public Result blogAll() {
         List<Blog> list = blogService.lambdaQuery().list();
         return Result.succ(list);
     }
+    /**
+     * 查询友链的博客
+     */
     @VisitLogger(behavior = "访问页面",content = "友链")
     @GetMapping("/friends")
     public Result friends() {
@@ -104,7 +107,9 @@ public class BlogController {
 
         return Result.succ(list.get(0));
     }
-
+    /**
+     * 查询关于我的博客
+     */
     @VisitLogger(behavior = "访问页面",content = "关于我")
     @GetMapping("/about")
     public Result aboutMe() {
@@ -114,6 +119,9 @@ public class BlogController {
         return Result.succ(list.get(0));
     }
 
+    /**
+     * 按创建时间排序 分页查询所有博客
+     */
     @VisitLogger(behavior = "访问页面",content = "归档")
     @GetMapping("/blog/archives")
     public Result getBlogsArchives(@RequestParam(defaultValue = "1") Integer currentPage) {
@@ -122,6 +130,9 @@ public class BlogController {
         return Result.succ(pageData);
     }
 
+    /**
+     * 根据内容搜索公开博客
+     */
     @VisitLogger(behavior = "搜索博客")
     @GetMapping("/search")
     public Result search(@RequestParam String queryString) {
@@ -129,6 +140,9 @@ public class BlogController {
         return Result.succ(list);
     }
 
+    /**
+     * 查询某个博客详情
+     */
     @VisitLogger(behavior = "查看博客")
     @GetMapping("/blog/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
@@ -137,7 +151,9 @@ public class BlogController {
         return Result.succ(blog);
 
     }
-
+    /**
+     * 删除某个博客
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication
@@ -154,6 +170,9 @@ public class BlogController {
     }
 
 
+    /**
+     * 修改某个博客
+     */
     @RequiresPermissions("user:update")
     @RequiresAuthentication
     @PostMapping("/blog/update")
@@ -162,7 +181,7 @@ public class BlogController {
         Blog temp = null;
         if (blog.getId() != null) {
             temp = blogService.getById(blog.getId());
-//            Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
+            //Assert.isTrue(temp.getUserId() == ShiroUtil.getProfile().getId(), "没有权限编辑");
         } else {
             temp = new Blog();
             temp.setUserId(ShiroUtil.getProfile().getId());
@@ -175,7 +194,9 @@ public class BlogController {
         return Result.succ(null);
     }
 
-
+    /**
+     * 创建博客
+     */
     @RequiresPermissions("user:create")
     @RequiresAuthentication
     @PostMapping("/blog/create")
@@ -195,6 +216,9 @@ public class BlogController {
         return Result.succ(null);
     }
 
+    /**
+     * 修改博客状态
+     */
     @RequiresPermissions("user:update")
     @RequestMapping("blog/publish/{id}")
     public Result publish(@PathVariable(name = "id")String id){
@@ -211,7 +235,10 @@ public class BlogController {
 
     }
 
-    //博客浏览次数加一
+
+    /**
+     * 博客浏览次数加一
+     */
     @RequestMapping("/blog/view/{id}")
     public Result addView(@PathVariable(name = "id")String id){
         Blog blog = blogService.getById(id);

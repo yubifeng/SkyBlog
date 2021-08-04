@@ -5,12 +5,10 @@ import com.danli.entity.VisitLog;
 
 
 /**
- * <p>
  * 服务类
- * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 public interface VisitLogService extends IService<VisitLog> {
 

@@ -18,11 +18,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
+/**
+ * Redis配置类
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @Configuration
 @SuppressWarnings("all")
 @EnableCaching
 public class RedisConfig {
 
+    /**
+     * 缓存管理配置
+     */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
@@ -47,7 +56,9 @@ public class RedisConfig {
         return cacheManager;
     }
 
-
+    /**
+     * 自定义的redisTemplate
+     */
     @Bean(name="myredisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();

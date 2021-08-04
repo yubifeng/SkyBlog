@@ -9,7 +9,7 @@ import com.danli.entity.VisitLog;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 public interface VisitLogMapper extends BaseMapper<VisitLog> {
 

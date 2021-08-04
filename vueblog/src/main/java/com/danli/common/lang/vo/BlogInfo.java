@@ -14,12 +14,10 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- *
- * </p>
+ * 传给前端的blog的视图对象
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -87,11 +85,14 @@ public class BlogInfo {
     /**
      * 文章作者id
      */
-
     private Long userId;
-
+    /**
+     * 文章状态
+     */
     private Integer status;
-
+    /**
+     * 文章类型
+     */
     private Type type;
 
 

@@ -18,26 +18,31 @@ import java.io.IOException;
 
 /**
  * 全局异常处理
+ *
+ * @author fanfanli
+ * @date 2021/5/3
  */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-
-    // 捕捉shiro的授权异常
+    /**
+     * 捕捉shiro的授权异常
+     */
     @ExceptionHandler(value = UnauthorizedException.class)
     @ResponseBody
     public Result jsonExceptionHandler(HttpServletRequest req, Exception e) {
-
+        log.error("权限不足:-------------->{}", e.getMessage());
         return Result.fail(403, "你的级别还不够高,加油吧！少年。",null);
     }
 
-    // 捕捉shiro的认证异常
+    /**
+     * 捕捉shiro的认证异常
+     */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public Result handle401(ShiroException e) {
-
+        log.error("未登录访问:-------------->{}", e.getMessage());
         return Result.fail(401, e.getMessage(), null);
     }
 
@@ -52,17 +57,20 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * @Validated 校验错误异常处理
+     * @Validated 方法参数异常处理
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result handler(MethodArgumentNotValidException e) throws IOException {
-        log.error("运行时异常:-------------->", e);
+        log.error("方法参数异常:-------------->", e);
         BindingResult bindingResult = e.getBindingResult();
         ObjectError objectError = bindingResult.getAllErrors().stream().findFirst().get();
         return Result.fail(objectError.getDefaultMessage());
     }
 
+    /**
+     * @Validated 校验错误异常处理
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e) throws IOException {

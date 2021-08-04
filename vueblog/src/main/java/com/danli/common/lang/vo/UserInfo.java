@@ -11,6 +11,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
+
+/**
+ * 传给前端的User部分信息
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

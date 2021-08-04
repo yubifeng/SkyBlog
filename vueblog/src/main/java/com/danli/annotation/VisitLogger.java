@@ -7,8 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * 自定义注解
+ *
+ * @author fanfanli
+ * @date  2021/5/3
  */
-
 //注解用于方法
 @Target(ElementType.METHOD)
 //运行时使用

@@ -4,10 +4,17 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 传给前端的统一JSON对象
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @Data
 public class Result implements Serializable {
 
-    private int code; // 200是正常，非200表示异常
+    // 200是正常，非200表示异常
+    private int code;
     private String msg;
     private Object data;
 

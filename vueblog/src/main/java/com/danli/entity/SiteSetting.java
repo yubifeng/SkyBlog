@@ -9,12 +9,10 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * <p>
- *
- * </p>
+ * 网站设置实体类
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

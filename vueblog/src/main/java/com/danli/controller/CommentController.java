@@ -22,19 +22,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 评论前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021-04-08
  */
 @RestController
 public class CommentController {
     @Autowired
     CommentService commentService;
 
-    //分页查询评论
+
+    /**
+     * 分页查询所有评论
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/commentList")
@@ -49,7 +50,10 @@ public class CommentController {
 
     }
 
-    //分页查询博客对应评论
+
+    /**
+     * 分页查询某个博客下的根评论
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/comment/detail")
@@ -64,7 +68,10 @@ public class CommentController {
     }
 
 
-    //获取某个博客下的所有评论
+
+    /**
+     * 获取某个博客下的所有评论
+     */
     @GetMapping("/comment/{blogId}")
     public Result getCommentByBlogId(@PathVariable(name = "blogId") Long blogId) {
 
@@ -73,14 +80,17 @@ public class CommentController {
 
         for (PageComment pageComment : pageComments) {
 
-            List<PageComment> repley = commentService.getPageCommentList(blogId, pageComment.getId());
-            pageComment.setReplyComments(repley);
+            List<PageComment> reply = commentService.getPageCommentList(blogId, pageComment.getId());
+            pageComment.setReplyComments(reply);
         }
         //Assert.notNull(blog, "该博客已删除！");
         return Result.succ(pageComments);
 
     }
 
+    /**
+     * 修改评论的状态
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:update")
     @RequestMapping("comment/publish/{id}")
@@ -94,6 +104,9 @@ public class CommentController {
 
     }
 
+    /**
+     * 修改评论
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:update")
     @RequestMapping("comment/update")
@@ -108,7 +121,9 @@ public class CommentController {
 
     }
 
-
+    /**
+     * 删除评论
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication
@@ -122,6 +137,10 @@ public class CommentController {
         }
 
     }
+
+    /**
+     * 提交评论
+     */
     @VisitLogger(behavior = "提交评论")
     @PostMapping("/comment/add")
     public Result edit(@Validated @RequestBody Comment comment, HttpServletRequest request) {
@@ -137,6 +156,5 @@ public class CommentController {
         commentService.saveOrUpdate(temp);
         return Result.succ(null);
     }
-
 
 }

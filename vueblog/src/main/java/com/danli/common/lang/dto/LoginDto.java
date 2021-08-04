@@ -5,6 +5,12 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+/**
+ * 登录数据实体类
+ *
+ * @author: fanfanli
+ * @date:   2021/5/3
+ */
 @Data
 public class LoginDto implements Serializable {
     @NotBlank(message = "昵称不能为空")

@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 分类前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @RestController
-
 public class TypeController {
     @Autowired
     TypeService typeService;
 
+    /**
+     * 查询所有分类
+     */
     @GetMapping("/types")
     public Result blogs() {
         List<Type> list = typeService.list(new QueryWrapper<Type>());
@@ -37,7 +37,10 @@ public class TypeController {
     }
 
 
-    //分页查询分类
+
+    /**
+     * 分页查询分类
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/type/list")
@@ -48,7 +51,10 @@ public class TypeController {
         return Result.succ(pageData);
     }
 
-    //创建分类
+
+    /**
+     * 增加分类
+     */
     @RequiresPermissions("user:create")
     @RequiresAuthentication
     @PostMapping("/type/create")
@@ -63,7 +69,10 @@ public class TypeController {
     }
 
 
-    //创建分类
+
+    /**
+     * 修改分类
+     */
     @RequiresPermissions("user:update")
     @RequiresAuthentication
     @PostMapping("/type/update")
@@ -77,7 +86,10 @@ public class TypeController {
         return Result.succ(null);
     }
 
-    //删除分类
+
+    /**
+     * 删除分类
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication
@@ -91,8 +103,5 @@ public class TypeController {
         }
 
     }
-
-
-
 
 }

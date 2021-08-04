@@ -9,7 +9,7 @@ import com.danli.entity.Type;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 public interface TypeMapper extends BaseMapper<Type> {
 

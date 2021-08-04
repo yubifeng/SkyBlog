@@ -19,12 +19,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 友链前端控制器
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date  2021/4/8
  */
 @RestController
 
@@ -34,7 +32,10 @@ public class FriendController {
     @Autowired
     FriendService friendService;
 
-    //查询所有友链
+
+    /**
+     * 查询所有公开的友链
+     */
     @RequestMapping("/friend/all")
     public Result getFriendList(){
         List<Friend> list = friendService.lambdaQuery().eq(Friend::getIsPublished, 1).list();
@@ -42,7 +43,10 @@ public class FriendController {
         return Result.succ(list);
     }
 
-    //分页查询友链
+
+    /**
+     * 分页查询所有友链
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/friendList")
@@ -52,7 +56,11 @@ public class FriendController {
         IPage pageData = friendService.page(page, new QueryWrapper<Friend>().orderByDesc("create_time"));
         return Result.succ(pageData);
     }
-    //友链浏览次数加一
+
+
+    /**
+     * 友链浏览次数加一
+     */
     @VisitLogger(behavior = "点击友链")
     @RequestMapping("/friend/onclick")
     public Result addView(@RequestParam(name = "")String nickname ){
@@ -67,6 +75,10 @@ public class FriendController {
         return Result.succ(null);
     }
 
+
+    /**
+     * 修改友链的状态
+     */
     @RequiresAuthentication
     @RequiresPermissions("user:update")
     @RequestMapping("friend/publish/{id}")
@@ -81,7 +93,9 @@ public class FriendController {
     }
 
 
-    //增改
+    /**
+     * 修改友链
+     */
     @RequiresPermissions("user:update")
     @RequiresAuthentication
     @PostMapping("/friend/update")
@@ -99,7 +113,9 @@ public class FriendController {
         return Result.succ(null);
     }
 
-
+    /**
+     * 增加友链
+     */
     @RequiresPermissions("user:create")
     @RequiresAuthentication
     @PostMapping("/friend/create")
@@ -116,7 +132,10 @@ public class FriendController {
         return Result.succ(null);
     }
 
-    //删除
+
+    /**
+     * 删除友链
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication

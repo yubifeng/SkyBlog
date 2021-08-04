@@ -21,6 +21,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * shiro配置类
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @Configuration
 public class ShiroConfig {
 
@@ -78,7 +84,10 @@ public class ShiroConfig {
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }
-    //解决aop与shiro冲突问题
+
+    /**
+     * 解决aop与shiro冲突问题
+     */
     @Bean
     public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
 

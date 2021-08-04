@@ -15,12 +15,14 @@ import java.util.List;
  * </p>
  *
  * @author fanfanli
- * @since 2021-04-08
+ * @date 2021-04-08
  */
 @Mapper
 @Repository
 public interface UserMapper extends BaseMapper<User> {
-
+    /**
+     * 获取用户部分信息list
+     */
     @Select("select id, nickname, username, avatar, email, status, create_time, update_time, role  from user  order by create_time desc")
     List<UserInfo> getUserInfo();
 

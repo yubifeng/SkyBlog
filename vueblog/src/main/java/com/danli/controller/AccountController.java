@@ -16,7 +16,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * 登录登出控制器
+ *
+ * @author fanfanli
+ * @date  2021/4/8
+ */
 @RestController
 public class AccountController {
     @Autowired
@@ -25,7 +30,7 @@ public class AccountController {
     UserService userService;
 
     /**
-     * 默认账号密码：user / 111111
+     * 登录请求处理
      */
     @CrossOrigin
     @PostMapping("/login")
@@ -52,7 +57,9 @@ public class AccountController {
         );
     }
 
-    // 退出
+    /**
+     * 登出请求处理
+     */
     @GetMapping("/logout")
     @RequiresAuthentication
     public Result logout() {

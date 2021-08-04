@@ -19,12 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 用户前端控制器
  *
  * @author fanfanli
- * @since 2021-04-05
+ * @date  2021/4/5
  */
 
 
@@ -34,49 +32,39 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
-
-
-    //分页查询用户
+    /**
+     * 分页查询用户
+     */
     @RequiresRoles("role_root")
     @RequiresAuthentication
     @RequiresPermissions("user:read")
     @GetMapping("/list")
     public Result userList(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam(defaultValue = "10") Integer pageSize) {
-
-
         List<UserInfo> list = userService.getUserInfoList();
         int size = list.size();
-
         Page page = new Page(currentPage,pageSize);
-
         if (pageSize > size) {
             pageSize = size;
         }
         // 求出最大页数，防止currentPage越界
         int maxPage = size % pageSize == 0 ? size / pageSize : size / pageSize + 1;
-
         if (currentPage > maxPage) {
             currentPage = maxPage;
         }
-
         // 当前页第一条数据的下标
         int curIdx = currentPage > 1 ? (currentPage - 1) * pageSize : 0;
-
         List pageList = new ArrayList();
-
         // 将当前页的数据放进pageList
         for (int i = 0; i < pageSize && curIdx + i < size; i++) {
             pageList.add(list.get(curIdx + i));
         }
-
         page.setTotal(list.size()).setRecords(pageList);
-
-
         return Result.succ(page);
     }
 
-    //创建分类
+    /**
+     * 创建用户
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:create")
     @RequiresAuthentication
@@ -86,22 +74,21 @@ public class UserController {
             return Result.fail("不能为空");
         }
         else{
-
             if(user.getRole().contains("role_root")){
                 return Result.fail("禁止设置root用户");
             }
             user.setUpdateTime(LocalDateTime.now());
             user.setCreateTime(LocalDateTime.now());
             user.setPassword(SecureUtil.md5(user.getPassword()));
-
-
             userService.saveOrUpdate(user);
         }
         return Result.succ(null);
     }
 
 
-    //修改
+    /**
+     * 修改用户信息
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:update")
     @RequiresAuthentication
@@ -129,7 +116,9 @@ public class UserController {
         return Result.succ(null);
     }
 
-    //删除用户
+    /**
+     * 删除用户
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:delete")
     @RequiresAuthentication
@@ -147,12 +136,13 @@ public class UserController {
 
     }
 
+    /**
+     * 修改用户的状态
+     */
     @RequiresRoles("role_root")
     @RequiresPermissions("user:update")
     @RequestMapping("/publish/{id}")
     public Result publish(@PathVariable(name = "id")Long id){
-
-
         User user = userService.getById(id);
         if(user.getRole().equals("role_root")){
             return Result.fail("禁止禁用此用户");
@@ -164,11 +154,7 @@ public class UserController {
         else {
             user.setStatus(0);
         }
-
-//        Friend temp = new Friend();
-//        BeanUtil.copyProperties(friend, temp);
         userService.saveOrUpdate(user);
         return Result.succ(null);
-
     }
 }

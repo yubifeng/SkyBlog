@@ -8,12 +8,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.BlogInfo;
+import com.danli.config.RedisKeyConfig;
 import com.danli.entity.Blog;
 import com.danli.service.BlogService;
+import com.danli.service.RedisService;
 import com.danli.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +37,9 @@ import java.util.List;
 public class BlogController {
     @Autowired
     BlogService blogService;
+    @Autowired
+    RedisService redisService;
+    Logger logger = LoggerFactory.getLogger(BlogController.class);
 
     /**
      * 按置顶、创建时间排序 分页查询公开的博客
@@ -40,10 +47,13 @@ public class BlogController {
     @VisitLogger(behavior = "访问页面",content = "首页")
     @GetMapping("/blogs")
     public Result getBlogsByPage(@RequestParam(defaultValue = "1") Integer currentPage) {
-
+        //有缓存直接返回
+        if(redisService.hasHashKey(RedisKeyConfig.BLOG_INFO_CACHE,currentPage)){
+           return   Result.succ(redisService.getValueByHashKey(RedisKeyConfig.BLOG_INFO_CACHE,currentPage));
+        }
         Page page = new Page(currentPage, 5);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 1).orderByDesc("create_time"));
-
+        redisService.saveKVToHash(RedisKeyConfig.BLOG_INFO_CACHE, currentPage,pageData);
         return Result.succ(pageData);
     }
 
@@ -53,8 +63,12 @@ public class BlogController {
     @VisitLogger(behavior = "查看分类")
     @GetMapping("/blogsByType")
     public Result blogsByType(@RequestParam(defaultValue = "1") Integer currentPage, @RequestParam String typeName) {
+        if (redisService.hasHashKey(RedisKeyConfig.CATEGORY_BLOG_CACHE, typeName+currentPage)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.CATEGORY_BLOG_CACHE, typeName+currentPage));
+        }
+
         List<BlogInfo> list = blogService.getBlogInfoListByCategoryName(typeName);
-        int pageSize = 5;
+        int pageSize = 10;
         Page page = new Page();
         int size = list.size();
         if (pageSize > size) {
@@ -73,6 +87,8 @@ public class BlogController {
             pageList.add(list.get(curIdx + i));
         }
         page.setCurrent(currentPage).setSize(pageSize).setTotal(list.size()).setRecords(pageList);
+
+        redisService.saveKVToHash(RedisKeyConfig.CATEGORY_BLOG_CACHE, typeName+currentPage, page);
         return Result.succ(page);
     }
 
@@ -85,6 +101,7 @@ public class BlogController {
 
         Page page = new Page(currentPage, pageSize);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("create_time"));
+
         return Result.succ(pageData);
     }
 
@@ -100,11 +117,15 @@ public class BlogController {
     /**
      * 查询友链的博客
      */
+
     @VisitLogger(behavior = "访问页面",content = "友链")
     @GetMapping("/friends")
     public Result friends() {
+        if (redisService.hasHashKey(RedisKeyConfig.BLOG_INFO_CACHE,RedisKeyConfig.FRIEND_BLOG_CACHE)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.BLOG_INFO_CACHE,RedisKeyConfig.FRIEND_BLOG_CACHE));
+        }
         List<Blog> list = blogService.lambdaQuery().eq(Blog::getTitle, "友情链接").list();
-
+        redisService.saveKVToHash(RedisKeyConfig.BLOG_INFO_CACHE, RedisKeyConfig.FRIEND_BLOG_CACHE, list.get(0));
         return Result.succ(list.get(0));
     }
     /**
@@ -113,9 +134,11 @@ public class BlogController {
     @VisitLogger(behavior = "访问页面",content = "关于我")
     @GetMapping("/about")
     public Result aboutMe() {
+        if (redisService.hasHashKey(RedisKeyConfig.BLOG_INFO_CACHE,RedisKeyConfig.ABOUT_INFO_CACHE)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.BLOG_INFO_CACHE,RedisKeyConfig.ABOUT_INFO_CACHE));
+        }
         List<Blog> list = blogService.lambdaQuery().eq(Blog::getTitle, "关于我！！").list();
-
-
+        redisService.saveKVToHash(RedisKeyConfig.BLOG_INFO_CACHE,RedisKeyConfig.ABOUT_INFO_CACHE, list.get(0));
         return Result.succ(list.get(0));
     }
 
@@ -125,8 +148,14 @@ public class BlogController {
     @VisitLogger(behavior = "访问页面",content = "归档")
     @GetMapping("/blog/archives")
     public Result getBlogsArchives(@RequestParam(defaultValue = "1") Integer currentPage) {
-        Page page = new Page(currentPage, 15);
+        if(redisService.hasHashKey(RedisKeyConfig.ARCHIVE_INFO_CACHE,currentPage)){
+            return   Result.succ(redisService.getValueByHashKey(RedisKeyConfig.ARCHIVE_INFO_CACHE,currentPage));
+        }
+        Integer pageSize = 15;
+        Page page = new Page(currentPage, pageSize);
         IPage pageData = blogService.page(page, new QueryWrapper<Blog>().eq("status", 1).orderByDesc("create_time"));
+        //进行缓存
+        redisService.saveKVToHash(RedisKeyConfig.ARCHIVE_INFO_CACHE, currentPage,pageData);
         return Result.succ(pageData);
     }
 
@@ -141,13 +170,42 @@ public class BlogController {
     }
 
     /**
-     * 查询某个博客详情
+     * 查询某个公开博客详情
      */
     @VisitLogger(behavior = "查看博客")
     @GetMapping("/blog/{id}")
-    public Result detail(@PathVariable(name = "id") Long id) {
+    public Result detail(@PathVariable(name = "id") Integer id) {
+
+
         Blog blog = blogService.getById(id);
         Assert.notNull(blog, "该博客已删除！");
+        if (blog.getStatus()!=1){
+            return Result.fail("你没有权限查阅此博客");
+        }
+
+
+        if (redisService.getMapByHash(RedisKeyConfig.BLOG_VIEWS_MAP).containsKey(id)) {
+            redisService.incrementByHashKey(RedisKeyConfig.BLOG_VIEWS_MAP, id, 1);
+        } else {
+            redisService.saveKVToHash(RedisKeyConfig.BLOG_VIEWS_MAP, id, 1);
+        }
+
+        return Result.succ(blog);
+
+    }
+
+
+    /**
+     * 查询某个博客详情
+     */
+    @RequiresPermissions("user:read")
+    @GetMapping("/blog/detail/{id}")
+    public Result getDetail(@PathVariable(name = "id") Long id) {
+
+
+        Blog blog = blogService.getById(id);
+        Assert.notNull(blog, "该博客已删除！");
+
         return Result.succ(blog);
 
     }
@@ -161,6 +219,9 @@ public class BlogController {
     public Result delete(@PathVariable(name = "id") Long id) {
 
         if (blogService.removeById(id)) {
+            redisService.deleteCacheByKey(RedisKeyConfig.BLOG_INFO_CACHE);
+            redisService.deleteCacheByKey(RedisKeyConfig.ARCHIVE_INFO_CACHE);
+            redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_BLOG_CACHE);
             return Result.succ(null);
         } else {
             return Result.fail("删除失败");
@@ -191,6 +252,9 @@ public class BlogController {
         temp.setUpdateTime(LocalDateTime.now());
         BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime", "updateTime");
         blogService.saveOrUpdate(temp);
+        redisService.deleteCacheByKey(RedisKeyConfig.BLOG_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.ARCHIVE_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_BLOG_CACHE);
         return Result.succ(null);
     }
 
@@ -213,6 +277,9 @@ public class BlogController {
         temp.setUpdateTime(LocalDateTime.now());
         BeanUtil.copyProperties(blog, temp, "id", "userId", "createTime", "updateTime");
         blogService.saveOrUpdate(temp);
+        redisService.deleteCacheByKey(RedisKeyConfig.BLOG_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.ARCHIVE_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_BLOG_CACHE);
         return Result.succ(null);
     }
 
@@ -231,20 +298,23 @@ public class BlogController {
             blog.setStatus(0);
         }
         blogService.saveOrUpdate(blog);
+        redisService.deleteCacheByKey(RedisKeyConfig.BLOG_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.ARCHIVE_INFO_CACHE);
+        redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_BLOG_CACHE);
         return Result.succ(null);
 
     }
 
 
-    /**
-     * 博客浏览次数加一
-     */
-    @RequestMapping("/blog/view/{id}")
-    public Result addView(@PathVariable(name = "id")String id){
-        Blog blog = blogService.getById(id);
-        blog.setViews(blog.getViews()+1);
-        blogService.saveOrUpdate(blog);
-        return Result.succ(null);
-    }
+//    /**
+//     * 博客浏览次数加一
+//     */
+//    @RequestMapping("/blog/view/{id}")
+//    public Result addView(@PathVariable(name = "id")String id){
+//        Blog blog = blogService.getById(id);
+//        blog.setViews(blog.getViews()+1);
+//        blogService.saveOrUpdate(blog);
+//        return Result.succ(null);
+//    }
 }
 

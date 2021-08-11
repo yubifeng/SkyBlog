@@ -61,7 +61,7 @@
           <el-col :span="12">
             <el-form-item label="是否公开" prop="publised">
               <el-tooltip :content="'Switch value: ' + ruleForm.status" placement="top">
-                <el-switch v-model="ruleForm.status" :active-value="0" :inactive-value="1"></el-switch>
+                <el-switch v-model="ruleForm.status" :active-value="1" :inactive-value="0"></el-switch>
               </el-tooltip>
             </el-form-item>
           </el-col>
@@ -178,7 +178,7 @@ export default {
       const blogId = this.$route.params.blogId
       const _this = this
       if (blogId) {
-        this.$axios.get('/blog/' + blogId).then(res => {
+        this.$axios.get('/blog/detail/' + blogId).then(res => {
           const blog = res.data.data
           _this.ruleForm.id = blog.id
           _this.ruleForm.title = blog.title

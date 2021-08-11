@@ -253,12 +253,20 @@ CREATE TABLE `friend`  (
                            `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
                            `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
                            `is_published` bit(1) NOT NULL COMMENT '公开或隐藏',
-                           `views` int(0) NOT NULL COMMENT '点击次数',
+                           `views` int(0) NULL DEFAULT NULL  COMMENT '点击次数',
                            `create_time` datetime(0) NOT NULL COMMENT '创建时间',
                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 
+INSERT INTO `friend` VALUES ('1','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/favicon.png',1,'0','2020-05-05 08:05:49');
+INSERT INTO `friend` VALUES ('2','听得入迷空间','记录，感受，表达','https://blog.tdrme.cn','https://cdn.jsdelivr.net/gh/tdrme/tdrme.github.io@master/20210504090204404.png',1,'0','2020-05-05 08:05:49');
+
+INSERT INTO `friend` VALUES ('3','夕阳皎月的个人博客','When KobeBryant died,a piece of me died.','http://www.twilightjy.com/','https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/website/friend/myavatar.jpg',1,'0','2020-05-05 08:05:49');
+
+INSERT INTO `friend` VALUES ('4','空山柠语','歲時艱，行路難。形將破，意且存，勿忘我','http://www.lemjuice.cn/','http://www.lemjuice.cn/00000147.png',1,'0','2020-05-05 08:05:49');
+
+INSERT INTO `friend` VALUES ('5','ZhaoQuinn''s Blog','热爱科技，热爱生活.','https://zhaoq.me','https://zhaoq.me/usr/uploads/2020/03/2395074381.jpg',1,'0','2020-05-05 08:05:49');
 
 
 

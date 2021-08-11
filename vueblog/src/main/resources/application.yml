@@ -10,6 +10,11 @@ spring:
   redis:
       host: localhost
       timeout: 5000
+  mail:
+      host:  smtp.163.com
+      username: skymomail@163.com
+      password: your
+      default-encoding: UTF-8
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 fanli:

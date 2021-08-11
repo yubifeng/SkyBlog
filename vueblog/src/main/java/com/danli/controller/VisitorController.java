@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
 import com.danli.common.lang.vo.VisitorNum;
+import com.danli.config.RedisKeyConfig;
 import com.danli.entity.Visitor;
+import com.danli.service.RedisService;
 import com.danli.service.VisitorService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,15 +30,23 @@ import java.util.List;
 public class VisitorController {
     @Autowired
     VisitorService visitorService;
+    @Autowired
+    RedisService redisService;
 
     /**
      * 获取总uv和pv
      */
     @GetMapping("/visitornum")
     public Result getPvAndUv(){
+        if (redisService.hasKey(RedisKeyConfig.PV_UV)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.PV_UV, RedisKeyConfig.All));
+        }
+
         int uv = visitorService.list().size();
         int pv = visitorService.getPv();
         VisitorNum visitorNum = new VisitorNum(uv,pv);
+
+        redisService.saveKVToHash(RedisKeyConfig.PV_UV, RedisKeyConfig.All, visitorNum);
         return Result.succ(visitorNum);
     }
 

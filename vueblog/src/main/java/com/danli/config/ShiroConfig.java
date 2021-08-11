@@ -2,6 +2,8 @@ package com.danli.config;
 
 import com.danli.shiro.AccountRealm;
 import com.danli.shiro.JwtFilter;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -39,6 +41,7 @@ public class ShiroConfig {
 
         // inject redisSessionDAO
         sessionManager.setSessionDAO(redisSessionDAO);
+
         return sessionManager;
     }
 
@@ -51,6 +54,15 @@ public class ShiroConfig {
 
         //inject sessionManager
         securityManager.setSessionManager(sessionManager);
+
+
+        //关闭shiro自带的session
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+        securityManager.setSubjectDAO(subjectDAO);
+
 
         // inject redisCacheManager
         securityManager.setCacheManager(redisCacheManager);
@@ -96,4 +108,7 @@ public class ShiroConfig {
 
         return defaultAdvisorAutoProxyCreator;
     }
+
+
+
 }

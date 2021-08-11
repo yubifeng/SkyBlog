@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item prop="email">
-            <el-popover ref="emailPopover" content="用于接收回复邮件(暂未实现)" placement="bottom" trigger="focus"></el-popover>
+            <el-popover ref="emailPopover" content="用于接收回复邮件" placement="bottom" trigger="focus"></el-popover>
             <el-input v-model="commentForm.email" v-popover:emailPopover :validate-event="false" placeholder="邮箱（必填）">
               <i slot="prefix" class="el-input__icon el-icon-message"></i>
             </el-input>

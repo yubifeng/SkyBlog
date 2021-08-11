@@ -5,7 +5,7 @@
     <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card" :key="blog.id">
       <div class="home-title">
         <h2>
-          <router-link @click.native ="addViews(blog.id)" :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}
+          <router-link  :to="{name: 'Blog', params: {blogId: blog.id}}" class="blog-link">{{ blog.title }}
           </router-link>
         </h2>
         <span style="font-size: small;color: blue">创建时间：{{ blog.createTime.split(' ')[0] }}  </span>
@@ -53,11 +53,11 @@ export default {
     }
   },
   methods: {
-    //增加浏览次数
-    addViews(id){
-      this.$axios.get('/blog/view/'+id).then(res => {
-      })
-    },
+    // //增加浏览次数
+    // addViews(id){
+    //   this.$axios.get('/blog/view/'+id).then(res => {
+    //   })
+    // },
     //跳转到博客详情页
     toBlog(blog) {
       this.addViews(blog.id)

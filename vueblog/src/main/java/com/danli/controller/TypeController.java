@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.common.lang.Result;
+import com.danli.config.RedisKeyConfig;
 import com.danli.entity.Type;
+import com.danli.service.RedisService;
 import com.danli.service.TypeService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,13 +28,19 @@ import java.util.List;
 public class TypeController {
     @Autowired
     TypeService typeService;
+    @Autowired
+    RedisService redisService;
 
     /**
      * 查询所有分类
      */
     @GetMapping("/types")
     public Result blogs() {
+        if (redisService.hasHashKey(RedisKeyConfig.CATEGORY_NAME_CACHE, RedisKeyConfig.All)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.CATEGORY_NAME_CACHE, RedisKeyConfig.All));
+        }
         List<Type> list = typeService.list(new QueryWrapper<Type>());
+        redisService.saveKVToHash(RedisKeyConfig.CATEGORY_NAME_CACHE, RedisKeyConfig.All, list);
         return Result.succ(list);
     }
 
@@ -64,6 +72,7 @@ public class TypeController {
         }
         else{
             typeService.saveOrUpdate(type);
+            redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_NAME_CACHE);
         }
         return Result.succ(null);
     }
@@ -82,6 +91,7 @@ public class TypeController {
         }
         else{
             typeService.saveOrUpdate(type);
+            redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_NAME_CACHE);
         }
         return Result.succ(null);
     }
@@ -97,6 +107,7 @@ public class TypeController {
     public Result delete(@PathVariable(name = "id") Long id) {
 
         if (typeService.removeById(id)) {
+            redisService.deleteCacheByKey(RedisKeyConfig.CATEGORY_NAME_CACHE);
             return Result.succ(null);
         } else {
             return Result.fail("删除失败");

@@ -3,6 +3,7 @@ package com.danli.aspect;
 import cn.hutool.json.JSONObject;
 import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
+import com.danli.config.RedisKeyConfig;
 import com.danli.entity.Blog;
 import com.danli.entity.VisitLog;
 import com.danli.entity.Visitor;
@@ -19,6 +20,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -81,14 +83,22 @@ public class VisitLogAspect {
         currentTime.remove();
         //校验访客标识码
         String identification = checkIdentification(request);
-        VisitLog visitLog = handleLog(joinPoint, visitLogger, request, result, times, identification);
-        //保存至数据库
-        visitLogService.saveOrUpdate(visitLog);
+        //异步保存至数据库
+        saveVisitLog(joinPoint, visitLogger, request, result, times, identification);
+
         return result;
     }
 
+
+
+    void saveVisitLog(){
+
+    }
+
+
+
     /**
-     * 设置VisitLogger对象属性
+     * 异步设置VisitLogger对象属性并保存到数据库中
      *
      * @param joinPoint
      * @param visitLogger
@@ -96,18 +106,24 @@ public class VisitLogAspect {
      * @param times
      * @return
      */
-    private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
+    @Async
+    void saveVisitLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
                                int times, String identification) {
         String uri = request.getRequestURI();
         String method = request.getMethod();
         String behavior = visitLogger.behavior();
         String content = visitLogger.content();
         String ip = request.getHeader("x-forwarded-for");
+
+
         String ipSource = IpAddressUtils.getCityInfo(ip);
         String userAgent = request.getHeader("User-Agent");
         Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(userAgent);
         String os = userAgentMap.get("os");
         String browser = userAgentMap.get("browser");
+
+
+
         //获取参数名和参数值
         Map<String, Object> requestParams = new LinkedHashMap<>();
         String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
@@ -121,7 +137,8 @@ public class VisitLogAspect {
         //根据访问内容和返回的结果判断访问的内容并进行备注
         Map<String, String> map = judgeBehavior(behavior, content, requestParams, result);
         VisitLog log = new VisitLog(null,identification, uri, method, new JSONObject(requestParams).toString(), behavior, map.get("content"),map.get("remark"), ip,ipSource,os,browser,LocalDateTime.now(),times, userAgent);
-        return log;
+
+        visitLogService.saveOrUpdate(log);
     }
 
 
@@ -184,10 +201,11 @@ public class VisitLogAspect {
         String identification = request.getHeader("identification");
         if (identification == null) {
             //第一次访问，签发uuid并保存到数据库和Redis
-            identification = saveUUID(request);
+            identification =   UUID.randomUUID().toString();
+            saveUUID(identification,request);
         } else {
             //校验Redis中是否存在uuid
-            boolean redisHas = redisService.hasValueInSet("identificationSet", identification);
+            boolean redisHas = redisService.hasValueInSet(RedisKeyConfig.IDENTIFICATION_SET, identification);
 
             //Redis中不存在uuid
             if (!redisHas) {
@@ -197,59 +215,66 @@ public class VisitLogAspect {
                     //数据库存在，保存至Redis
                     redisService.saveValueToSet("identificationSet", identification);
                     //更新最后访问时间和pv
-                    Visitor visitor = visitorService.getVisitorByUuid(identification);
-                    visitor.setPv(visitor.getPv()+1);
-                    visitor.setLastTime(LocalDateTime.now());
-                    visitorService.saveOrUpdate(visitor);
+                    updateVistor(identification);
 
                 } else {
                     //数据库不存在，签发新的uuid
-                    identification = saveUUID(request);
+                    identification =   UUID.randomUUID().toString();
+                    //异步保存
+                    saveUUID(identification,request);
                 }
             }
             else{
-                boolean mysqlHas = visitorService.hasUUID(identification);
-                if (mysqlHas) {
-                    //数据库存在，保存至Redis
-                    redisService.saveValueToSet("identificationSet", identification);
-                    //更新最后时间和pv
-                    Visitor visitor = visitorService.getVisitorByUuid(identification);
-                    visitor.setPv(visitor.getPv()+1);
-                    visitor.setLastTime(LocalDateTime.now());
-                    visitorService.saveOrUpdate(visitor);
-                }
+                //更新最后时间和pv
+                updateVistor(identification);
             }
         }
         return identification;
     }
 
+
+
+
+
+    @Async
+    void updateVistor(String identification) {
+        //更新最后访问时间和pv
+        Visitor visitor = visitorService.getVisitorByUuid(identification);
+        visitor.setPv(visitor.getPv()+1);
+        visitor.setLastTime(LocalDateTime.now());
+        visitorService.saveOrUpdate(visitor);
+    }
+
+
     /**
-     * 签发UUID，并保存至数据库和Redis
+     * 异步保存UUID至数据库和Redis
      *
      * @param request
      * @return UUID
      */
-    private String saveUUID(HttpServletRequest request) {
+    @Async
+    void saveUUID(String uuid,HttpServletRequest request) {
+
+        //保存至Redis
+        redisService.saveValueToSet(RedisKeyConfig.IDENTIFICATION_SET, uuid);
         //获取响应对象
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        //生成UUID
-        String uuid = UUID.randomUUID().toString();
+
         //添加访客标识码UUID至响应头
         response.addHeader("identification", uuid);
         //暴露自定义header供页面资源使用
         response.addHeader("Access-Control-Expose-Headers", "identification");
-        //保存至Redis
-        redisService.saveValueToSet("identificationSet", uuid);
+
         //获取访问者基本信息
         String ip = request.getHeader("x-forwarded-for");
+
         String userAgent = request.getHeader("User-Agent");
         String ipSource = IpAddressUtils.getCityInfo(ip);
         Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(userAgent);
         String os = userAgentMap.get("os");
         String browser = userAgentMap.get("browser");
-        Visitor visitor = new Visitor(null,uuid, ip,ipSource,os,browser,LocalDateTime.now(),LocalDateTime.now(),0, userAgent);
+        Visitor visitor = new Visitor(null,uuid, ip,ipSource,os,browser,LocalDateTime.now(),LocalDateTime.now(),1, userAgent);
         //保存至数据库
         visitorService.saveOrUpdate(visitor);
-        return uuid;
     }
 }

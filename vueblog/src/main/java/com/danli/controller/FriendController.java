@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.danli.annotation.VisitLogger;
 import com.danli.common.lang.Result;
+import com.danli.config.RedisKeyConfig;
 import com.danli.entity.Friend;
 import com.danli.service.FriendService;
+import com.danli.service.RedisService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -31,6 +33,8 @@ public class FriendController {
 
     @Autowired
     FriendService friendService;
+    @Autowired
+    RedisService redisService;
 
 
     /**
@@ -38,8 +42,11 @@ public class FriendController {
      */
     @RequestMapping("/friend/all")
     public Result getFriendList(){
+        if (redisService.hasHashKey(RedisKeyConfig.FRIEND_INFO_CACHE, RedisKeyConfig.All)) {
+            return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.FRIEND_INFO_CACHE, RedisKeyConfig.All));
+        }
         List<Friend> list = friendService.lambdaQuery().eq(Friend::getIsPublished, 1).list();
-
+        redisService.saveKVToHash(RedisKeyConfig.FRIEND_INFO_CACHE, RedisKeyConfig.All,list);
         return Result.succ(list);
     }
 
@@ -88,6 +95,7 @@ public class FriendController {
 //        Friend temp = new Friend();
 //        BeanUtil.copyProperties(friend, temp);
         friendService.saveOrUpdate(friend);
+        redisService.deleteCacheByKey(RedisKeyConfig.FRIEND_INFO_CACHE);
         return Result.succ(null);
 
     }
@@ -109,6 +117,7 @@ public class FriendController {
                 friend.setCreateTime(LocalDateTime.now());
             }
             friendService.saveOrUpdate(friend);
+            redisService.deleteCacheByKey(RedisKeyConfig.FRIEND_INFO_CACHE);
         }
         return Result.succ(null);
     }
@@ -128,6 +137,7 @@ public class FriendController {
                 friend.setCreateTime(LocalDateTime.now());
             }
             friendService.saveOrUpdate(friend);
+            redisService.deleteCacheByKey(RedisKeyConfig.FRIEND_INFO_CACHE);
         }
         return Result.succ(null);
     }
@@ -143,6 +153,7 @@ public class FriendController {
     public Result delete(@PathVariable(name = "id") Long id) {
 
         if (friendService.removeById(id)) {
+            redisService.deleteCacheByKey(RedisKeyConfig.FRIEND_INFO_CACHE);
             return Result.succ(null);
         } else {
             return Result.fail("删除失败");

@@ -55,7 +55,7 @@ export default {
       this.scrollToTop()
     }
   },
-  mounted() {
+  created() {
     this.getData(1)
 
   }

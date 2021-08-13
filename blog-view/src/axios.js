@@ -8,18 +8,23 @@ axios.defaults.baseURL = "https://api.skymo.top/"
 axios.interceptors.request.use(config => {
     //console.log("前置拦截")
 
-    //如果有token，统一带上
-    const token = window.localStorage.getItem('token')
-    if (token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config.headers.Authorization = `${token}`;
+
+    if (!config.url.includes("usuuu.com")) {
+        //如果有token，统一带上
+        const token = window.localStorage.getItem('token')
+        if (token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
+            config.headers.Authorization = `${token}`;
+        }
+
+        // identification存在，可以统一设置请求头
+        const identification = window.localStorage.getItem('identification')
+
+        if (identification && !(config.url.startsWith('http://') || config.url.startsWith('https://'))) {
+            config.headers.identification = identification
+        }
+
     }
 
-    // identification存在，可以统一设置请求头
-    const identification = window.localStorage.getItem('identification')
-
-    if (identification && !(config.url.startsWith('http://') || config.url.startsWith('https://'))) {
-        config.headers.identification = identification
-    }
 
 
 

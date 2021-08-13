@@ -137,7 +137,7 @@ export default {
       //判断是否是qq号码
       const _this = this
       var qq = this.commentForm.nickname
-      if (!isNaN(Number(qq)) && qq.length > 4 && qq.length < 11) {
+      if (!isNaN(Number(qq)) && qq.length > 4 && qq.length < 12) {
         this.$axios.get('https://api.usuuu.com/qq/' + qq).then(res => {
           if (res.data) {
             _this.commentForm.nickname = res.data.data.name

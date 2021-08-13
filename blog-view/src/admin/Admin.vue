@@ -5,7 +5,7 @@
       <!--标题-->
       <div>
         <img alt="" height="60" src="../assets/logo.png">
-        <span>Fanli博客后台管理  </span>
+        <span> 博客后台管理  </span>
         <span style="margin-left: 20px">   {{ user.username }}</span>
         <el-divider direction="vertical"></el-divider>
         <span><el-link href="/" style="color: white">主页</el-link></span>
@@ -33,10 +33,10 @@
                  :default-openeds="defaultOpeneds"
                  :router="true" :unique-opened="false" active-text-color="#409eff"
                  background-color="honeydew" text-color="black">
-          <el-menu-item index="/dashboard">
-            <i class="iconfont ali-iconfont icon-dashboard"></i>
-            <span>仪表盘</span>
-          </el-menu-item>
+<!--          <el-menu-item index="/dashboard">-->
+<!--            <i class="iconfont ali-iconfont icon-dashboard"></i>-->
+<!--            <span>仪表盘</span>-->
+<!--          </el-menu-item>-->
           <!-- 一级菜单 -->
           <el-submenu v-for="item in menuList" :key="item.id" :index="item.id + ''">
             <!-- 一级菜单的模板区域 -->
@@ -225,7 +225,7 @@ export default {
       //是否折叠
       isCollapse: false,
       //默认打开的菜单
-      defaultOpeneds: ['1', '2', '3', '4', '5'],
+      defaultOpeneds: ['1', '2', '4', '5'],
       user: {},
     }
   },

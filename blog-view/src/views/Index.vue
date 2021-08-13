@@ -91,8 +91,8 @@ export default {
 
         $("body").click(function (e) {
 
-          var a = new Array("❤富强❤", "❤民主❤", "❤文明❤", "❤和谐❤", "❤自由❤", "❤平等❤", "❤公正❤", "❤法治❤", "❤爱国❤", "❤敬业❤", "❤诚信❤", "❤友善❤");
-
+          // var a = new Array("❤富强❤", "❤民主❤", "❤文明❤", "❤和谐❤", "❤自由❤", "❤平等❤", "❤公正❤", "❤法治❤", "❤爱国❤", "❤敬业❤", "❤诚信❤", "❤友善❤");
+          var a = new Array("❤Java❤","❤C++❤","❤PHP❤","❤Mysql❤","❤Oracle❤","❤.NET❤","❤JavaScript❤","❤H5❤","❤Python❤","❤Json❤","❤Ruby❤","❤Go❤");
           var $i = $("<span></span>").text(a[a_idx]);
 
           a_idx = (a_idx + 1) % a.length;
@@ -167,6 +167,10 @@ export default {
 <style scoped>
 .index-container {
   min-height: 100vh;
+  /*background-image: url("https://cdn.jsdelivr.net/gh/yubifeng/blog-resource/bloghosting/2021/04/23/first87.png") ;*/
+  /*background-repeat: repeat-x;*/
+  /*background-attachment:fixed;*/
+
 
 }
 
@@ -177,6 +181,8 @@ export default {
 
   margin-left: auto !important;
   margin-right: auto !important;
+
+  /*opacity: 90%;*/
 
 }
 

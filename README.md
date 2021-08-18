@@ -11,7 +11,7 @@
 
 后台：https://www.skymo.top/login 账号`Visitor` 密码`111111`
 
-
+本项目长期维护，欢迎fork代码和star！。
 
 
 ## 简介

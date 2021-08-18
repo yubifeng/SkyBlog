@@ -1,13 +1,13 @@
 <template>
-  <div class="blog-navbar">
+  <div class="blog-navbar" :class="{'transparent':$route.name==='Home' }">
 
-    <router-link style="text-decoration-line: none;color: #333333" to="/">
+    <router-link style="text-decoration-line: none;color: white" to="/">
       <h3 :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}"
-          class="ui header item m-blue" style="display: inline;padding-left: 60px;padding-right: 20px">Skymo's
+          class="ui header item m-blue" style="display: inline;padding:20px 20px 20px 60px">Skymo's
         Blog</h3>
     </router-link>
 
-    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Index'}" class="item" style="text-decoration-line: none;color: #333333;margin-left: 30px;padding-left: 0px;padding-right: 20px"
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Index'}" class="item" style="text-decoration-line: none;color: white;padding:20px;"
                  to="/">
       首页
     </router-link>
@@ -16,12 +16,12 @@
     <el-dropdown trigger="click" @mousedown.native="getTypes">
 
 				<span :class="{'m-mobile-show': mobileHide,'active':$route.name==='Category'}" class="el-dropdown-link item"
-              style="text-decoration-line: none;color: #333333; font-size: 16px;padding-left: 20px;padding-right: 20px">
+              style="text-decoration-line: none;color: white; font-size: 16px;padding:20px">
 					分类<i class="el-icon-arrow-down el-icon--right"></i>
 				</span>
 
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="(type,index) in types" :key="index" @click.native="categoryRoute(type.typeName)">
+      <el-dropdown-menu slot="dropdown" style="background-color: #333333;padding: 20px">
+        <el-dropdown-item v-for="(type,index) in types" :key="index" @click.native="categoryRoute(type.typeName)" style="color: white">
           {{ type.typeName }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -29,22 +29,22 @@
     </el-dropdown>
 
 
-    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Archives'}" class="item" style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px"
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Archives'}" class="item" style="text-decoration-line: none;color: white;padding:20px"
                  to="/archives">
       归档
     </router-link>
 
-    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Friends'}" class="item" style="text-decoration-line: none;color: #333333;;padding-left: 20px;padding-right: 20px"
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='Friends'}" class="item" style="text-decoration-line: none;color: white;padding:20px"
                  to="/friends">
       友链
     </router-link>
-    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}" class="item" style="text-decoration-line: none;color: #333333;padding-left: 20px;padding-right: 20px"
+    <router-link :class="{'m-mobile-show': mobileHide,'active':$route.name==='About'}" class="item" style="text-decoration-line: none;color: white;padding: 20px"
                  to="/about">
       关于我
     </router-link>
 
     <!--自带防抖-->
-    <el-autocomplete v-model="queryString" :class="{'m-mobile-hide': mobileHide}" :fetch-suggestions="debounceQuery"
+    <el-autocomplete  v-model="queryString" :class="{'m-mobile-hide': mobileHide}" :fetch-suggestions="debounceQuery"
                      class="right item m-search"
                      placeholder="请输入内容" popper-class="m-search-item" style="margin-left: 500px; "
                      suffix-icon="el-icon-search" @select="handleSelect">
@@ -70,6 +70,7 @@ export default {
       queryResult: [],
       timer: null,
       mobileHide: false,
+      ifShowInput: false
 
 
     };
@@ -153,6 +154,13 @@ export default {
 
 <style scoped>
 
+/deep/ .el-popper .popper__arrow::after {
+  content: none !important;
+}
+
+/deep/  .popper__arrow {
+  display: none !important;
+}
 
 .el-dropdown-link {
   outline-style: none !important;
@@ -162,10 +170,10 @@ export default {
 }
 
 .el-dropdown-menu {
-  margin: 7px 0 0 0 !important;
+  margin: 20px 0 0 0 !important;
   padding: 0 !important;
   border: 0 !important;
-
+  background: #1b1c1d !important;
 }
 
 
@@ -175,7 +183,7 @@ export default {
 }
 
 .el-dropdown-menu__item:hover {
-
+   background-color: #399BDD!important;
 }
 
 
@@ -186,11 +194,11 @@ export default {
 .blog-navbar {
 
 
-  height: 70px;
-  padding: 0;
-  background-color: white;
+  height: 50px;
+  padding-top:  20px;
+  background-color: #333333;
 
-  margin-bottom: 20px;
+
 
   margin-left: auto !important;
   margin-right: auto !important;
@@ -201,24 +209,23 @@ export default {
 .m-search {
   min-width: 220px;
   padding: 0 !important;
-  margin-top: 10px;
+  margin-top: -5px;
 }
 
 .m-search input {
   color: rgba(255, 255, 255, .9);;
   border: 0px !important;
   background-color: inherit;
-  padding: .67857143em 2.1em .67857143em 1em;
+
+
 
 }
 
 .m-search i {
   color: rgba(255, 255, 255, .9) !important;
-
 }
 
 .m-search-item {
-
 
   min-width: 350px !important;
 
@@ -255,5 +262,11 @@ export default {
   margin: 20px 1px 0px 1px;
 
 }
+/deep/ .el-autocomplete {
+  position: absolute;
+  right: 100px;
+}
+
+
 </style>
 

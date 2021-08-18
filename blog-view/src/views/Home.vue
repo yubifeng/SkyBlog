@@ -1,7 +1,6 @@
 <template>
   <div class="home-container">
 
-
     <el-card v-for="blog in blogs" :body-style="{padding: '0px'}" class="home-main-column-middle-card" :key="blog.id">
       <div class="home-title">
         <h2>
@@ -14,7 +13,7 @@
         <span style="font-size: small;color: blue">  字数：{{ blog.words }}</span>
 
       </div>
-      <img :src=blog.firstPicture class="image" v-viewer="{movable: false}">
+      <img :src=blog.firstPicture class="image " v-viewer="{movable: false}">
 
 <!--      <div class="home-description-markdown-body" v-html="blog.descriptionMd"  v-viewer="{movable: false}"></div>-->
       <markdown-it-vue-light class="home-description-markdown-body" :content="blog.description" v-viewer="{movable: false}"/>
@@ -40,6 +39,8 @@
 <script>
 
 
+
+
 export default {
   name: "Home",
   data() {
@@ -53,11 +54,6 @@ export default {
     }
   },
   methods: {
-    // //增加浏览次数
-    // addViews(id){
-    //   this.$axios.get('/blog/view/'+id).then(res => {
-    //   })
-    // },
     //跳转到博客详情页
     toBlog(blog) {
       this.addViews(blog.id)
@@ -73,6 +69,13 @@ export default {
     },
     //分页获取博客
     getData(currentPage) {
+      if(currentPage!==1){
+        $('#waypoint').hide();
+        $('#header-photo').hide();
+      }else {
+        $('#waypoint').show();
+        $('#header-photo').show();
+      }
       const _this = this
       this.$axios.get('/blogs?currentPage=' + currentPage).then((res) => {
 
@@ -93,8 +96,15 @@ export default {
         }
       })
 
+
       //改变页号后返回顶部
       this.scrollToTop()
+
+
+
+
+
+
 
     }
   },
@@ -102,7 +112,14 @@ export default {
     this.getTypes()
     this.getData(1);
     //console.log(this.blogs)
-  }
+  },
+
+  mounted() {
+
+  },
+  watch: {
+  },
+
 }
 </script>
 

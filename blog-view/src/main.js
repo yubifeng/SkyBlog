@@ -21,6 +21,9 @@ import Viewer from 'v-viewer'
 //directive
 import './util/directive.js'
 
+//waypoints.js
+import 'waypoints/lib/jquery.waypoints.min'
+
 //markdown-it-vue-light (markdown-it的精简版 去掉流程图渲染)
 import MarkdownItVueLight from 'markdown-it-vue/dist/markdown-it-vue-light.umd.min.js'
 import 'markdown-it-vue/dist/markdown-it-vue-light.css'
@@ -31,6 +34,12 @@ Vue.config.productionTip = false
 Vue.use(mavonEditor)
 Vue.use(Viewer)
 Vue.use(MarkdownItVueLight)
+
+
+
+
+
+
 
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value => value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;

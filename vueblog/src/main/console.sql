@@ -242,6 +242,21 @@ CREATE TABLE `visit_log`  (
                               PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+# -- ----------------------------
+# -- Table structure for friend
+# -- ----------------------------
+# DROP TABLE IF EXISTS `friend`;
+# CREATE TABLE `friend`  (
+#                            `id` bigint(0) NOT NULL AUTO_INCREMENT,
+#                            `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '昵称',
+#                            `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '描述',
+#                            `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
+#                            `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
+#                            `is_published` bit(1) NOT NULL COMMENT '公开或隐藏',
+#                            `views` int(0) NULL DEFAULT NULL  COMMENT '点击次数',
+#                            `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+#                            PRIMARY KEY (`id`) USING BTREE
+# ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 -- ----------------------------
 -- Table structure for friend
 -- ----------------------------
@@ -252,11 +267,12 @@ CREATE TABLE `friend`  (
                            `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '描述',
                            `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
                            `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
-                           `is_published` bit(1) NOT NULL COMMENT '公开或隐藏',
-                           `views` int(0) NULL DEFAULT NULL  COMMENT '点击次数',
-                           `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+                           `is_published` bit(1) NOT NULL DEFAULT 1 COMMENT '公开或隐藏',
+                           `views` int(0) NOT NULL DEFAULT 0 COMMENT '点击次数',
+                           `create_time` datetime(0)  NULL  DEFAULT NULL COMMENT '创建时间',
                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
 
 
 INSERT INTO `friend` VALUES ('1','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/favicon.png',1,'0','2020-05-05 08:05:49');
@@ -270,7 +286,23 @@ INSERT INTO `friend` VALUES ('5','ZhaoQuinn''s Blog','热爱科技，热爱生�
 
 
 
-
+-- ----------------------------
+-- Table structure for visitor
+-- ----------------------------
+DROP TABLE IF EXISTS `visitor`;
+CREATE TABLE `visitor`  (
+                            `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                            `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '访客标识码',
+                            `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
+                            `ip_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip来源',
+                            `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
+                            `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
+                            `create_time` datetime(0) NOT NULL COMMENT '首次访问时间',
+                            `last_time` datetime(0) NOT NULL COMMENT '最后访问时间',
+                            `pv` int(0) NULL DEFAULT NULL COMMENT '访问页数统计',
+                            `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
+                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 
 
@@ -404,46 +436,13 @@ INSERT INTO `friend` VALUES ('5','ZhaoQuinn''s Blog','热爱科技，热爱生�
 
 
 
--- ----------------------------
--- Table structure for friend
--- ----------------------------
-DROP TABLE IF EXISTS `friend`;
-CREATE TABLE `friend`  (
-                           `id` bigint(0) NOT NULL AUTO_INCREMENT,
-                           `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '昵称',
-                           `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '描述',
-                           `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点',
-                           `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '头像',
-                           `is_published` bit(1) NOT NULL DEFAULT 1 COMMENT '公开或隐藏',
-                           `views` int(0) NOT NULL DEFAULT 0 COMMENT '点击次数',
-                           `create_time` datetime(0)  NULL  DEFAULT NULL COMMENT '创建时间',
-                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 
 
 
 
+# INSERT INTO `friend` VALUES ('1','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/icon-fa-gem.png',1,'0','2020-05-05 08:05:49');
+# INSERT INTO `friend` VALUES ('2','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/icon-fa-gem.png',1,'0','2020-05-05 08:05:49');
+# INSERT INTO `friend` VALUES ('3','听得入迷空间','记录，感受，表达','https://blog.tdrme.cn','https://cdn.jsdelivr.net/gh/tdrme/tdrme.github.io@master/20210504090204404.png',1,'0','2020-05-05 08:05:49');
+# INSERT INTO `friend` VALUES ('4','听得入迷空间','记录，感受，表达','https://blog.tdrme.cn','https://cdn.jsdelivr.net/gh/tdrme/tdrme.github.io@master/20210504090204404.png',1,'0','2020-05-05 08:05:49');
 
-INSERT INTO `friend` VALUES ('1','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/icon-fa-gem.png',1,'0','2020-05-05 08:05:49');
-INSERT INTO `friend` VALUES ('2','SuiNian\'s Blog','你歪头眯眼一笑 我便沉溺无法逃离','https://blog.nianbroken.top','https://blog.nianbroken.top/icon-fa-gem.png',1,'0','2020-05-05 08:05:49');
-INSERT INTO `friend` VALUES ('3','听得入迷空间','记录，感受，表达','https://blog.tdrme.cn','https://cdn.jsdelivr.net/gh/tdrme/tdrme.github.io@master/20210504090204404.png',1,'0','2020-05-05 08:05:49');
-INSERT INTO `friend` VALUES ('4','听得入迷空间','记录，感受，表达','https://blog.tdrme.cn','https://cdn.jsdelivr.net/gh/tdrme/tdrme.github.io@master/20210504090204404.png',1,'0','2020-05-05 08:05:49');
-
--- ----------------------------
--- Table structure for visitor
--- ----------------------------
-DROP TABLE IF EXISTS `visitor`;
-CREATE TABLE `visitor`  (
-                            `id` bigint(0) NOT NULL AUTO_INCREMENT,
-                            `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '访客标识码',
-                            `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
-                            `ip_source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip来源',
-                            `os` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
-                            `browser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
-                            `create_time` datetime(0) NOT NULL COMMENT '首次访问时间',
-                            `last_time` datetime(0) NOT NULL COMMENT '最后访问时间',
-                            `pv` int(0) NULL DEFAULT NULL COMMENT '访问页数统计',
-                            `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;

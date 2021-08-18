@@ -37,11 +37,10 @@ public class VisitorController {
      * 获取总uv和pv
      */
     @GetMapping("/visitornum")
-    public Result getPvAndUv(){
+    public Result getPvAndUv() {
         if (redisService.hasKey(RedisKeyConfig.PV_UV)) {
             return Result.succ(redisService.getValueByHashKey(RedisKeyConfig.PV_UV, RedisKeyConfig.All));
         }
-
         int uv = visitorService.list().size();
         int pv = visitorService.getPv();
         VisitorNum visitorNum = new VisitorNum(uv,pv);

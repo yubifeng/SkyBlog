@@ -186,6 +186,7 @@ export default {
       this.specialEffect()
       this.snowSpecial()
     }
+
   },
 
 }
@@ -210,16 +211,17 @@ export default {
   top: 0;
   z-index:9999;
   width: 100%;
+  opacity: 0.9;
 }
 .head-photo {
 
 }
 
 
-.footer {
+.index-foot {
   background-color: #333333;
-
   color: white!important;
+  opacity: 0.9;
 
 }
 
@@ -231,7 +233,7 @@ export default {
   margin-left: auto !important;
   margin-right: auto !important;
 
-  /*opacity: 90%;*/
+  opacity: 0.97;
 
 }
 

@@ -130,20 +130,20 @@ CREATE TABLE `user`
 
 INSERT INTO `user`
 VALUES ('1', 'root', '96e79218965eb72c92a549dd5a330112', 'root',
-        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
+        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '1', '2020-04-20 10:44:01',
         '2020-04-20 10:44:01', 'role_root');
 INSERT INTO `user`
 VALUES ('2', 'admin', '96e79218965eb72c92a549dd5a330112', 'Admin',
         'https://image-1300566513.cos.ap-guangzhou.myqcloud.com/upload/images/5a9f48118166308daba8b6da7e466aab.jpg',
-        'admin@naccl.top', '0', '2020-04-20 10:44:01', '2020-04-20 10:44:01', 'ROLE_admin');
+        'admin@naccl.top', '1', '2020-04-20 10:44:01', '2020-04-20 10:44:01', 'role_admin');
 INSERT INTO `user`
 VALUES ('3', 'user', '96e79218965eb72c92a549dd5a330112', 'User',
-        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
-        '2020-04-20 10:44:01', 'ROLE_user');
+        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '1', '2020-04-20 10:44:01',
+        '2020-04-20 10:44:01', 'role_user');
 
 INSERT INTO `user`
-VALUES ('4', 'visitor', '96e79218965eb72c92a549dd5a330112', 'vistor',
-        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '0', '2020-04-20 10:44:01',
+VALUES ('4', 'Visitor', '96e79218965eb72c92a549dd5a330112', 'vistor',
+        'https://img.lanrentuku.com/img/allimg/1612/14831720501619.jpg', 'admin@naccl.top', '1', '2020-04-20 10:44:01',
         '2020-04-20 10:44:01', 'role_guest');
 -- ----------------------------
 -- Table structure for comment

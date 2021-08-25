@@ -29,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -44,7 +41,6 @@ import java.util.UUID;
 @Component
 @Aspect
 public class VisitLogAspect {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     VisitLogService visitLogService;

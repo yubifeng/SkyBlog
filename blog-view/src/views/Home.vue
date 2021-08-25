@@ -56,7 +56,6 @@ export default {
   methods: {
     //跳转到博客详情页
     toBlog(blog) {
-      this.addViews(blog.id)
       this.$router.push(`/blog/${blog.id}`)
     },
     //获取分类表

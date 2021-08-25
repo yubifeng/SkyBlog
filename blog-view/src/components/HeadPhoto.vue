@@ -93,7 +93,7 @@ export default {
             } else {
               $('#nav').hide(500);
             }
-            console.log('Scrolled to waypoint!  ' + direction);
+            // console.log('Scrolled to waypoint!  ' + direction);
 
           }
 
